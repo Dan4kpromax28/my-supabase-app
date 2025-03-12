@@ -17,24 +17,24 @@ function Card({ id, name, description, price, additional_price}) {
             </p>
       )}
     </div>
-    <div className="bg-gray-200 rounded-b-lg p-4">
-      {price && (
-        <p className="pt-3 pb-3 font-normal text-gray-700 text-center">
-          Cena: {price}
-        </p>
-      )}
-      {additional_price && (
-        <p className="pb-3 font-normal text-gray-700 text-center">
-             Par katru nakamo stundu: {additional_price} eiro.
-        </p>
-      )}
-      <div className="flex justify-center items-center">
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3 mb-3">
-            Izveleties
-        </button>
-      </div>
+        <div className="bg-gray-200 rounded-b-lg p-4">
+            {price && (
+                <p className="pt-3 pb-3 font-normal text-gray-700 text-center">
+                Cena: {price}
+                </p>
+            )}
+            {additional_price && (
+                <p className="pb-3 font-normal text-gray-700 text-center">
+                    Par katru nakamo stundu: {additional_price} eiro.
+                </p>
+            )}
+            <div className="flex justify-center items-center">
+                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3 mb-6">
+                    Izveleties
+                </button>
+            </div>
+        </div>
     </div>
-  </div>
 </li>
   );
 }
