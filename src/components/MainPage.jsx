@@ -4,6 +4,7 @@ import { supabase } from '../utils/supabase';
 
 import "../styles/MainPage.css";
 import Card from './Card';
+import CustomSlider from '../helpComponents/CustomSlider';
 
 
 function MainPage() {
@@ -43,18 +44,7 @@ function MainPage() {
           {subscriptions.length === 0 ? (
             <p className="text-center">Notiek ielade</p>
           ) : (
-            <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto px-4 justify-items-center">
-                {subscriptions.map((sub) => (
-                    <Card 
-                    key={sub.id}
-                    id={sub.id}
-                    name={sub.name}
-                    description={sub.description}
-                    price={sub.price}
-                    additional_price={sub.additional_hour_price}
-                    />
-                ))}
-            </ul>
+           <CustomSlider subscriptions={subscriptions} />
           )}
         </main>
       
