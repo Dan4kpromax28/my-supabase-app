@@ -9,7 +9,7 @@ import MainHeader from '../components/MainHeader'
 import MainFooter from '../components/MainFooter';
 
 
-function MainPage() {
+export default function MainPage() {
     
     const [subscriptions, setSubscriptions] = useState([]);
   
@@ -51,4 +51,3 @@ function MainPage() {
     );
   }
   
-  export default MainPage;

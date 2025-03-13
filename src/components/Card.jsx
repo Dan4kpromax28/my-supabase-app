@@ -1,7 +1,17 @@
 import React from 'react';
 import '../styles/Card.css'
+import { useNavigate } from 'react-router-dom'
 
-function Card({ id, name, description, price, additional_price}) {
+export default function Card({ id, name, description, price, additional_price}) {
+
+    const navigation = useNavigate();
+
+    const handleClick = () => {
+        navigation('/pakalpojums/${id}', {
+            state: {id}
+        });
+    };
+
   return (
     <li key={id} className="card-item h-95 w-full">
     <div className="flex flex-col h-full">
@@ -29,8 +39,10 @@ function Card({ id, name, description, price, additional_price}) {
                 </p>
             )}
             <div className="flex justify-center items-center">
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3 mb-6">
-                    Izveleties
+                <button
+                    onClick={handleClick}
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3 mb-6">
+                        Izveleties
                 </button>
             </div>
         </div>
@@ -38,5 +50,3 @@ function Card({ id, name, description, price, additional_price}) {
 </li>
   );
 }
-
-export default Card;
