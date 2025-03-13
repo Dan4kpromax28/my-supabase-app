@@ -7,9 +7,9 @@ export default function Card({ id, name, description, price, additional_price}) 
     const navigation = useNavigate();
 
     const handleClick = () => {
-        navigation('/pakalpojums/${id}', {
-            state: {id}
-        });
+        navigation(`/pakalpojums/${id}`, {
+            state: { id }
+          });
     };
 
   return (
