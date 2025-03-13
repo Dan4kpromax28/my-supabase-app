@@ -3,24 +3,24 @@ import '../styles/Card.css'
 
 function Card({ id, name, description, price, additional_price}) {
   return (
-    <li key={id} className="card-item h-96 w-full">
-  <div className="flex flex-col h-full">
-    <div className="bg-white border border-gray-100 rounded-t-lg shadow-t-lg p-4 flex-grow">
-      {name && (
-        <h3 className="mb-2 text-2xl font-bold text-gray-900 text-center">
-          {name}
-        </h3>
-      )}
-      {description && (
-        <p className="mb-3 font-normal text-gray-700">
-          {description}
+    <li key={id} className="card-item h-95 w-full">
+    <div className="flex flex-col h-full">
+        <div className="bg-white border border-gray-100 rounded-t-lg shadow-t-lg p-4 flex-grow">
+        {name && (
+            <h3 className="mb-2 text-2xl font-bold text-gray-900 text-center">
+                {name}
+            </h3>
+        )}
+        {description && (
+            <p className="mb-3 font-normal text-gray-700">
+                {description}
             </p>
-      )}
-    </div>
+        )}
+        </div>
         <div className="bg-gray-200 rounded-b-lg p-4">
             {price && (
                 <p className="pt-3 pb-3 font-normal text-gray-700 text-center">
-                Cena: {price}
+                    Cena: {price}
                 </p>
             )}
             {additional_price && (

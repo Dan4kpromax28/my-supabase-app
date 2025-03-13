@@ -1,6 +1,6 @@
 import React from 'react';
 import Slider from 'react-slick';
-import Card from '../components/Card';
+import Card from './Card';
 
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
@@ -14,7 +14,7 @@ export default function CustomSlider({subscriptions}){
         slidesToScroll: 1,
         autoplay: true,
         speed: 1000,
-        autoplaySpeed: 2000,
+        autoplaySpeed: 3000,
         cssEase: "linear",
         responsive: [
             {
@@ -35,7 +35,7 @@ export default function CustomSlider({subscriptions}){
     };
 
     return (
-        <div className="max-w-6xl mx-auto px-4">
+        <div className="max-w-8xl mx-auto px-4 pr-10 pl-10 md:pr-15 md:pl-15 sm:pr-8 sm:pl-8 xl:pr-30 xl:pl-30">
             <Slider {...settings}>
                 {subscriptions.map((sub) => (
                     <div key={sub.id} className="px-2">
