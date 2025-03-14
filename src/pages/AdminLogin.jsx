@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Navigate } from 'react-router-dom';
 import { supabase } from '../utils/supabase';
 import MainFooter from '../components/MainFooter';
 import MainHeader from '../components/MainHeader';
 import InputComponent from '../components/InputComponent';
 export default function AdminLogin(){
 
+    
+
     const navigate = useNavigate();
+    const [error, setError] = useState(null);
 
     const [loginData, setLoginData] = useState({
         email: '',
@@ -15,7 +18,7 @@ export default function AdminLogin(){
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({
+        setLoginData(prev => ({
             ...prev,
             [name]: value
         }));
@@ -24,10 +27,16 @@ export default function AdminLogin(){
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            
-            console.log('Viss ok:', formData);
-            
-            navigate('/');
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email: loginData.email,
+                password: loginData.password,
+            });
+            if (error) {
+                setError("Nepareizais logins vai parole");
+            } else {    
+                navigate('/');
+            }
+           
         } catch (error) {
             console.error('Kluda:', error);
         }
@@ -52,11 +61,13 @@ export default function AdminLogin(){
 
                         <InputComponent 
                             label="Parole"
+                            type="password"
                             id="password"
                             placeholder="Ievadiet paroli"
                             value={loginData.password}
                             onChange={handleInputChange}
                         />
+                        {error && (<p>{error}</p>)}
 
                         <div className="flex justify-center items-center">
                             <button type='submit' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3 mb-1'>

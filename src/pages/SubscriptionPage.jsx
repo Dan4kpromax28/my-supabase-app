@@ -119,15 +119,15 @@ export default function SubscriptionPage() {
                         onChange={handleInputChange}
                     />
                     <div>
-                        <label htmlFor="additionalInfo" className="block text-gray-700 mb-2">Papildu informacija:</label>
-                        <textarea
-                            id="additionalInfo"
-                            name="additionalInfo"
-                            value={formData.additionalInfo}
-                            onChange={handleInputChange}
-                            className="w-full border border-gray-300 rounded-md p-2 min-h-[100px]"
-                            placeholder="Ievadiet papildu informaciju"
-                        />
+                            <label htmlFor="additionalInfo" className="block text-gray-700 mb-2">Papildu informacija:</label>
+                            <textarea
+                                id="additionalInfo"
+                                name="additionalInfo"
+                                value={formData.additionalInfo}
+                                onChange={handleInputChange}
+                                className="w-full border border-gray-300 rounded-md p-2 min-h-[100px]"
+                                placeholder="Ievadiet papildu informaciju"
+                            />
                     </div>
 
                     <div className="flex justify-center items-center">
