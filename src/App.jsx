@@ -6,6 +6,7 @@ import AdminLogin from './pages/admin/AdminLogin';
 import Dashboard from './pages/admin/Dashboard';
 import Wrapper from './wrappers/Wrapper';
 import LoginWrapper from './wrappers/LoginWrapper';
+import AdminProfile from './pages/admin/AdminProfile'
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
         <Route path="/pakalpojums/:id" element={<SubscriptionPage />} />
         <Route path="/admin/login" element={<LoginWrapper><AdminLogin /></LoginWrapper>} />
         <Route path="/admin/dashboard" element={<Wrapper><Dashboard /></Wrapper>}/>
+        <Route path="/admin/profils" element={<Wrapper><AdminProfile /></Wrapper>} />
 
       </Routes>
     </BrowserRouter>

@@ -1,55 +1,14 @@
-import { Link } from 'react-router-dom';
-import { supabase } from '../../utils/supabase';
-import { useNavigate } from 'react-router-dom'
+
+
+import AdminHeader from '../../components/AdminHeader';
 
 
 
 export default function Dashboard(){
 
-    const navigate = useNavigate();
-
-    const signOut = async () => {
-        const { error } = await supabase.auth.signOut();
-        if (error) console.log("Notika kluda");
-        navigate("/admin/login");
-
-    };
+    
 
     return (
-        <header className='bg-sky-800 text-white'>
-            <div className='mx-auto px-4 sm:px-6 lg:px-8'>
-                <div className='flex items-center justify-between h-16'>
-                    <div className="flex items-center">
-                        <Link to="/" className="text-3xl font-bold">
-                            MOOMENTUM
-                        </Link>
-                        <nav className="hidden md:flex space-x-4 ml-10">
-                            <Link to="/admin.dashboard" className="hover:bg-sky-700 px-3 py-2 rounded-md text-sm font-medium">
-                                Kkas
-                            </Link>
-                            <Link to="/admin/statisctic" className="hover:bg-sky-700 px-3 py-2 rounded-md text-sm font-medium">
-                                Kkas
-                            </Link>
-                            <Link to="/admin/something" className="hover:bg-sky-700 px-3 py-2 rounded-md text-sm font-medium">
-                                Kkas
-                            </Link>
-                        </nav>
-                    </div>
-                    <div className="flex items-center">
-                        <Link to='/admin/profils' className='bg-sky-700 hover:bg-sky-900 px-3 py-2 rounded-md text-sm font-medium mr-3'>
-                            Profils
-                        </Link>
-
-                        
-                        <button onClick={signOut} className='bg-sky-950 hover:bg-red-400 px-3 py-2 rounded-md text-sm font-medium'>
-                            Iziet
-                        </button>
-                    </div>
-            
-                </div>
-
-            </div>
-
-        </header>
+        <AdminHeader />  
     );
 }
