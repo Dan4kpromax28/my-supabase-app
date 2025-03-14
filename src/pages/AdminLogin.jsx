@@ -10,6 +10,7 @@ export default function AdminLogin(){
 
     const navigate = useNavigate();
     const [error, setError] = useState(null);
+    const [session, setSession] = useState(null);
 
     const [loginData, setLoginData] = useState({
         email: '',
@@ -34,7 +35,7 @@ export default function AdminLogin(){
             if (error) {
                 setError("Nepareizais logins vai parole");
             } else {    
-                navigate('/');
+                navigate('/admin/dashboard');
             }
            
         } catch (error) {
