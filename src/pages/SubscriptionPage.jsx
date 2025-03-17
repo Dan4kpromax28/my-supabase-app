@@ -4,17 +4,26 @@ import { supabase } from '../utils/supabase';
 import MainHeader from '../components/MainHeader'
 import MainFooter from '../components/MainFooter';
 import InputComponent from '../components/InputComponent';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 export default function SubscriptionPage() {
+
     const { state } = useLocation();
     const navigate = useNavigate();
     const subId = state?.id;
     const [subscription, setSubscription] = useState(null);
+    const [availability, setAvailability] = useState({ dates: [], times: [] });
+
+    const [showCalendar, setShowCalendar] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
         surname: '',
         email: '',
-        phone: ''
+        phone: '',
+        additionalInfo: '',
+        date: '',
+        time: ''
     });
 
     useEffect(() => {
@@ -52,6 +61,16 @@ export default function SubscriptionPage() {
             ...prev,
             [name]: value
         }));
+    };
+    const handleDateChange = (date) => {
+        setFormData(prev => ({ ...prev, date }));
+        if (subscription.time_restriction) {
+            fetchTimeAvailability(date);
+        }
+    };
+    const fetchTimeAvailability = async (date) => {
+        const { data } = await supabase.rpc('get_available_times', { selected_date: date });
+        setAvailability(prev => ({ ...prev, times: data }));
     };
 
     const handleSubmit = async (e) => {
@@ -129,6 +148,34 @@ export default function SubscriptionPage() {
                                 placeholder="Ievadiet papildu informaciju"
                             />
                     </div>
+
+                    {!(subscription.name === '8 Reižu') && (
+                        <div className="mt-4">
+                            <label className="block mb-2">Izvēlieties datumu:</label>
+                            <Calendar
+                                value={formData.date}
+                                onChange={handleDateChange}
+                                minDate={new Date()}
+                                tileDisabled={({ date }) => availability.dates.includes(date.toISOString().slice(0,10))}
+                            />
+                        </div>
+                    ) }
+
+                    {subscription.time_restriction &&  (
+                        <div className="mt-4">
+                        <label className="block mb-2">Izvēlieties laiku:</label>
+                        <select
+                            className="border p-2 w-full"
+                            value={formData.time}
+                            onChange={(e) => setFormData(prev => ({ ...prev, time: e.target.value }))}
+                        >
+                            <option value="">Izvēlieties pieejamo laiku</option>
+                            {availability.times.map(time => (
+                                <option key={time} value={time}>{time}</option>
+                            ))}
+                        </select>
+                    </div>
+                    )}
 
                     <div className="flex justify-center items-center">
                         <button type='submit' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3 mb-6'>
