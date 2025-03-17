@@ -23,13 +23,13 @@ export default function AdminHeader(){
                         MOOMENTUM
                     </Link>
                     <nav className="hidden md:flex space-x-4 ml-10">
-                        <Link to="/admin.dashboard" className="hover:bg-sky-700 px-3 py-2 rounded-md text-sm font-medium">
+                        <Link to="/admin/dashboard" className="hover:bg-sky-700 px-3 py-2 rounded-md text-sm font-medium">
                             Kkas
                         </Link>
-                        <Link to="/admin/statisctic" className="hover:bg-sky-700 px-3 py-2 rounded-md text-sm font-medium">
+                        <Link to="/admin/all_subscriptions" className="hover:bg-sky-700 px-3 py-2 rounded-md text-sm font-medium">
                             Kkas
                         </Link>
-                        <Link to="/admin/something" className="hover:bg-sky-700 px-3 py-2 rounded-md text-sm font-medium">
+                        <Link to="/admin/statistic" className="hover:bg-sky-700 px-3 py-2 rounded-md text-sm font-medium">
                             Kkas
                         </Link>
                     </nav>

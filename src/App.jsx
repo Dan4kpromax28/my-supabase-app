@@ -9,6 +9,8 @@ import LoginWrapper from './wrappers/LoginWrapper';
 import AdminProfile from './pages/admin/AdminProfile'
 import CreateClient from './pages/admin/CreateClient';
 import Subscription from './pages/admin/Subscription';
+import AllSub from './components/SubComp';
+import AllSubscriptions from './pages/admin/AllSubscriptions';
 
 export default function App() {
   return (
@@ -22,6 +24,7 @@ export default function App() {
         <Route path="/admin/profils" element={<Wrapper><AdminProfile /></Wrapper>} />
         <Route path="/admin/clients/createClient" element={<Wrapper><CreateClient /></Wrapper>} />
         <Route path="/admin/clients/subscriptions/:id" element={<Wrapper><Subscription /></Wrapper>} />
+        <Route path="/admin/all_subscriptions" element={<Wrapper><AllSubscriptions /></Wrapper>} />
 
       </Routes>
     </BrowserRouter>

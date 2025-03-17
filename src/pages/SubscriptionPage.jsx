@@ -73,6 +73,9 @@ export default function SubscriptionPage() {
         setAvailability(prev => ({ ...prev, times: data }));
     };
 
+    const handleBack = () => {
+        navigate(-1);
+    }
     const handleSubmit = async (e) => {
         e.preventDefault();
    
@@ -113,105 +116,111 @@ export default function SubscriptionPage() {
     return (
         <div className='min-h-screen bg-stone-100'>
             <MainHeader />
+            
             <div className='max-w-2xl mx-auto p-4'>
-                <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-6">
-                    <h1 className='font-extrabold text-2xl text-center mb-6'>
-                        {subscription.name}
-                    </h1>
-                    <hr className="mb-4"/>
-                    <h2 className='m-4 text-m text-justify'>
-                        {subscription.description}
-                    </h2>
-                    
-                    <InputComponent 
-                        label="Vards"
-                        id="name"
-                        placeholder="Ievadiet vardu"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                    />
-                    
-                    <InputComponent 
-                        label="Uzvards"
-                        id="surname"
-                        placeholder="Ievadiet uzvardu"
-                        value={formData.surname}
-                        onChange={handleInputChange}
-                    />
-                    
-                    <InputComponent 
-                        label="E-pasts"
-                        type="email"
-                        id="email"
-                        placeholder="email@email.com"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                    />
-                    
-                    <InputComponent 
-                        label="Telefona numurs"
-                        type="tel"
-                        id="phone"
-                        placeholder="+371 xxxxxxxx"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                    />
-                    <div>
-                            <label htmlFor="additionalInfo" className="block text-gray-700 mb-2">Papildu informacija:</label>
-                            <textarea
-                                id="additionalInfo"
-                                name="additionalInfo"
-                                value={formData.additionalInfo}
-                                onChange={handleInputChange}
-                                className="w-full border border-gray-300 rounded-md p-2 min-h-[100px]"
-                                placeholder="Ievadiet papildu informaciju"
-                            />
-                    </div>
-
-                    {!(subscription.name === '8 Reižu') && (
-                        <div className="mt-4">
-                            <button type="button"
-                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3 "
-                                onClick={() => setShowCalendar(prev => !prev)}>
-                                {formData.date ? `Datums: ${formData.date}` : "Izvēlieties datumu"}
-                            </button>
-
-                            {showCalendar && (
-                                <Calendar
-                                    className="mt-2"
-                                    value={formData.date ? new Date(formData.date) : null}
-                                    onChange={handleDateChange}
-                                    minDate={new Date()}
-                                    tileDisabled={({ date }) => availability.dates.includes(date.toISOString().slice(0, 10))}
+                <div className='bg-sky-50 shadow-md rounded-lg p-4 mb-4 flex items-center hover:bg-sky-100' onClick={() => handleBack()}>
+                
+                    <h2 className='font-bold text-center'>Atpakaļ</h2>
+                
+                </div>
+                    <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-6">
+                        <h1 className='font-extrabold text-2xl text-center mb-6'>
+                            {subscription.name}
+                        </h1>
+                        <hr className="mb-4"/>
+                        <h2 className='m-4 text-m text-justify'>
+                            {subscription.description}
+                        </h2>
+                        
+                        <InputComponent 
+                            label="Vards"
+                            id="name"
+                            placeholder="Ievadiet vardu"
+                            value={formData.name}
+                            onChange={handleInputChange}
+                        />
+                        
+                        <InputComponent 
+                            label="Uzvards"
+                            id="surname"
+                            placeholder="Ievadiet uzvardu"
+                            value={formData.surname}
+                            onChange={handleInputChange}
+                        />
+                        
+                        <InputComponent 
+                            label="E-pasts"
+                            type="email"
+                            id="email"
+                            placeholder="email@email.com"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                        />
+                        
+                        <InputComponent 
+                            label="Telefona numurs"
+                            type="tel"
+                            id="phone"
+                            placeholder="+371 xxxxxxxx"
+                            value={formData.phone}
+                            onChange={handleInputChange}
+                        />
+                        <div>
+                                <label htmlFor="additionalInfo" className="block text-gray-700 mb-2">Papildu informacija:</label>
+                                <textarea
+                                    id="additionalInfo"
+                                    name="additionalInfo"
+                                    value={formData.additionalInfo}
+                                    onChange={handleInputChange}
+                                    className="w-full border border-gray-300 rounded-md p-2 min-h-[100px]"
+                                    placeholder="Ievadiet papildu informaciju"
                                 />
-                            )}
                         </div>
-                    ) }
 
-                    {(subscription.name === 'Konferenču zāle' || subscription.name === 'Atpūtas zona') && (
-                        <div className="mt-4">
-                            <label className="block mb-2">Izvēlieties laiku:</label>
-                            <select
-                                className="border p-2 w-full"
-                                value={formData.time}
-                                onChange={(e) => setFormData(prev => ({ ...prev, time: e.target.value }))}
-                            >
-                                <option value="">Izvēlieties pieejamo laiku</option>
-                                {availability.times.map(time => (
-                                    <option key={time} value={time}>{time}</option>
-                                ))}
-                            </select>
+                        {!(subscription.name === '8 Reižu') && (
+                            <div className="mt-4">
+                                <button type="button"
+                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3 "
+                                    onClick={() => setShowCalendar(prev => !prev)}>
+                                    {formData.date ? `Datums: ${formData.date}` : "Izvēlieties datumu"}
+                                </button>
+
+                                {showCalendar && (
+                                    <Calendar
+                                        className="mt-2"
+                                        value={formData.date ? new Date(formData.date) : null}
+                                        onChange={handleDateChange}
+                                        minDate={new Date()}
+                                        tileDisabled={({ date }) => availability.dates.includes(date.toISOString().slice(0, 10))}
+                                    />
+                                )}
+                            </div>
+                        ) }
+
+                        {(subscription.name === 'Konferenču zāle' || subscription.name === 'Atpūtas zona') && (
+                            <div className="mt-4">
+                                <label className="block mb-2">Izvēlieties laiku:</label>
+                                <select
+                                    className="border p-2 w-full"
+                                    value={formData.time}
+                                    onChange={(e) => setFormData(prev => ({ ...prev, time: e.target.value }))}
+                                >
+                                    <option value="">Izvēlieties pieejamo laiku</option>
+                                    {availability.times.map(time => (
+                                        <option key={time} value={time}>{time}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        )}
+
+
+                        <div className="flex justify-center items-center">
+                            <button type='submit' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3 mb-6'>
+                                Pieteikties
+                            </button>
                         </div>
-                    )}
-
-
-                    <div className="flex justify-center items-center">
-                        <button type='submit' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3 mb-6'>
-                            Pieteikties
-                        </button>
-                    </div>
-                </form>
-            </div>
+                    </form>
+                </div>
             <MainFooter />
         </div>
     );
