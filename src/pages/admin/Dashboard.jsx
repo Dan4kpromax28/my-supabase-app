@@ -60,6 +60,11 @@ export default function Dashboard(){
     const handleViewSubscriptions = (clientId) => {
         navigate(`/admin/clients/${clientId}/subscriptions`);
     };
+
+
+    const handleCreateClient = () => {
+        navigate(`/admin/clients/createClient`);
+    }
     
 
     return (
@@ -71,6 +76,13 @@ export default function Dashboard(){
                 className="w-full p-2 border rounded-md mb-4">
 
             </input>
+            
+            <div className='bg-sky-50 shadow-md rounded-lg p-4 mb-4 flex items-center hover:bg-sky-100'>
+                <div className='cursor-pointer' onClick={() => handleCreateClient()}>
+                    <h2 className='font-bold text-center'>Izveidot jaunu klientu</h2>
+                </div>
+            </div>
+
             {clients.map(client => (
                 <div key={client.id} className="bg-white shadow-md rounded-lg p-4 mb-4 flex justify-between items-center hover:bg-gray-50">
                     <div className="cursor-pointer" onClick={() => handleViewSubscriptions(client.id)}>
@@ -95,6 +107,7 @@ export default function Dashboard(){
                     </div>
                 </div>
             ))}
+            
         </div>
         </>
         

@@ -7,6 +7,7 @@ import Dashboard from './pages/admin/Dashboard';
 import Wrapper from './wrappers/Wrapper';
 import LoginWrapper from './wrappers/LoginWrapper';
 import AdminProfile from './pages/admin/AdminProfile'
+import CreateClient from './pages/admin/CreateClient';
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="/admin/login" element={<LoginWrapper><AdminLogin /></LoginWrapper>} />
         <Route path="/admin/dashboard" element={<Wrapper><Dashboard /></Wrapper>}/>
         <Route path="/admin/profils" element={<Wrapper><AdminProfile /></Wrapper>} />
+        <Route path="/admin/clients/createClient" element={<Wrapper><CreateClient /></Wrapper>} />
 
       </Routes>
     </BrowserRouter>
