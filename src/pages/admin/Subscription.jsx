@@ -52,11 +52,12 @@ export default function Subscription() {
   return (
     <>
         <AdminHeader />
-        <button
-            onClick={handleBack}
-            className="mb-6 bg-gray-100 text-gray-700 px-4 py-2 rounded hover:bg-gray-200 transition-colors duration-200 flex items-center">
-            ← Atgriezties
-        </button>
+        <div className="max-w-3xl mx-auto p-4">
+        <div className='bg-sky-50 shadow-md rounded-lg p-4 mb-4 flex items-center hover:bg-sky-100'>
+            <div className='cursor-pointer' onClick={() => handleBack()}>
+                <h2 className='font-bold text-center'>Atpakaļ</h2>
+            </div>
+        </div>
         <ul className="list-none p-4">
             {subscriptions.map((sub) => (
             <li key={sub.id} className="bg-white shadow-md rounded-lg p-4 mb-4 flex justify-between items-center hover:bg-gray-50">
@@ -68,6 +69,7 @@ export default function Subscription() {
             </li>
             ))}
         </ul>
+        </div>
         </>
     );
 }
