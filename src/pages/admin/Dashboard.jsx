@@ -1,4 +1,6 @@
-
+import React, { useEffect, useState } from 'react';
+import { supabase } from '../../utils/supabase';
+import { useNavigate } from 'react-router-dom';
 
 import AdminHeader from '../../components/AdminHeader';
 
@@ -6,9 +8,96 @@ import AdminHeader from '../../components/AdminHeader';
 
 export default function Dashboard(){
 
+
+    const [search, setSearch] = useState('');
+    const [clients, setClients] = useState([]);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        fetchClients();
+    }, []);
+
+    const fetchClients = async (find) => {
+        let query = supabase.from('client').select('*');
+
+        if (find) {
+            if (find) {
+                query = query.or(
+                    `name.ilike.%${find}%,surname.ilike.%${find}%,email.ilike.%${find}%,phone_number.ilike.%${find}%`
+                );
+            }
+        }
+        const {data, error} = await query;
+                      
+        if (error) {
+            console.error('Kluda:', error);
+            return;
+        }
+        setClients(data);
+    };
+
+    useEffect(() => {
+        fetchClients(search);
+    }, [search]);
+
+    const handleEdit = (clientId) => {
+        navigate(`/admin/clients/edit/${clientId}`);
+    };
+
+    const handleDelete = async (clientId) => {
+        if (window.confirm('Vai jus gribat nodzest clientu')) {
+            const { error } = await supabase.from('client').delete().eq('id', clientId);
+            if (error) {
+                console.error(error);
+                return;
+            }
+            fetchClients();
+        }
+    };
+
+    
+
+    const handleViewSubscriptions = (clientId) => {
+        navigate(`/admin/clients/${clientId}/subscriptions`);
+    };
     
 
     return (
-        <AdminHeader />  
+        <>
+        <AdminHeader /> 
+        <div className="max-w-3xl mx-auto p-4">
+            <input 
+                type='text' placeholder='Meklēt pec paramietrem' value={search} onChange={(e) => setSearch(e.target.value)}
+                className="w-full p-2 border rounded-md mb-4">
+
+            </input>
+            {clients.map(client => (
+                <div key={client.id} className="bg-white shadow-md rounded-lg p-4 mb-4 flex justify-between items-center hover:bg-gray-50">
+                    <div className="cursor-pointer" onClick={() => handleViewSubscriptions(client.id)}>
+                        <h3 className="font-bold text-lg">{client.name} {client.surname}</h3>
+                        <p className="text-sm text-gray-600">{client.email}</p>
+                        <p className="text-sm text-gray-600">{client.phone_number}</p>
+                        <span className="inline-block mt-1 bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+                            Abonementi: {}
+                        </span>
+                    </div>
+                    <div className="flex gap-2">
+                        <button
+                            onClick={() => handleEdit(client.id)}
+                            className="bg-green-500 text-white py-1 px-3 rounded hover:bg-green-600">
+                            Rediģēt
+                        </button>
+                        <button
+                            onClick={() => handleDelete(client.id)}
+                            className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600">
+                            Dzēst
+                        </button>
+                    </div>
+                </div>
+            ))}
+        </div>
+        </>
+        
+        
     );
 }

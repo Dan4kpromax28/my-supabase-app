@@ -75,12 +75,31 @@ export default function SubscriptionPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            //TODO: Supabase logika 
-            navigate('/');
-        } catch (error) {
-            console.error('Notika kluda:', error);
+   
+        if (!formData.name || !formData.surname || !formData.email || !formData.phone) {
+            alert('Lūdzu aizpildiet visus obligātos laukus');
+            return;
         }
+    
+        const { error } = await supabase.rpc('create_user_subscription', {
+            cl_name: formData.name,
+            cl_surname: formData.surname,
+            cl_email: formData.email,
+            cl_phone: formData.phone,
+            cl_subscription: subId,
+            cl_information: formData.additionalInfo,
+            cl_start_date: formData.date ? new Date(formData.date).toISOString() : null,
+            cl_time: formData.time || null
+        });
+    
+        if (error) {
+            console.error('RPC Kļūda:', error);
+            alert(error.message);
+            return;
+        }
+    
+        alert('Pieteikums veiksmīgi nosūtīts!');
+        navigate('/');
     };
 
     if (!subscription) {
@@ -151,31 +170,40 @@ export default function SubscriptionPage() {
 
                     {!(subscription.name === '8 Reižu') && (
                         <div className="mt-4">
-                            <label className="block mb-2">Izvēlieties datumu:</label>
-                            <Calendar
-                                value={formData.date}
-                                onChange={handleDateChange}
-                                minDate={new Date()}
-                                tileDisabled={({ date }) => availability.dates.includes(date.toISOString().slice(0,10))}
-                            />
+                            <button type="button"
+                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3 "
+                                onClick={() => setShowCalendar(prev => !prev)}>
+                                {formData.date ? `Datums: ${formData.date}` : "Izvēlieties datumu"}
+                            </button>
+
+                            {showCalendar && (
+                                <Calendar
+                                    className="mt-2"
+                                    value={formData.date ? new Date(formData.date) : null}
+                                    onChange={handleDateChange}
+                                    minDate={new Date()}
+                                    tileDisabled={({ date }) => availability.dates.includes(date.toISOString().slice(0, 10))}
+                                />
+                            )}
                         </div>
                     ) }
 
-                    {subscription.time_restriction &&  (
+                    {(subscription.name === 'Konferenču zāle' || subscription.name === 'Atpūtas zona') && (
                         <div className="mt-4">
-                        <label className="block mb-2">Izvēlieties laiku:</label>
-                        <select
-                            className="border p-2 w-full"
-                            value={formData.time}
-                            onChange={(e) => setFormData(prev => ({ ...prev, time: e.target.value }))}
-                        >
-                            <option value="">Izvēlieties pieejamo laiku</option>
-                            {availability.times.map(time => (
-                                <option key={time} value={time}>{time}</option>
-                            ))}
-                        </select>
-                    </div>
+                            <label className="block mb-2">Izvēlieties laiku:</label>
+                            <select
+                                className="border p-2 w-full"
+                                value={formData.time}
+                                onChange={(e) => setFormData(prev => ({ ...prev, time: e.target.value }))}
+                            >
+                                <option value="">Izvēlieties pieejamo laiku</option>
+                                {availability.times.map(time => (
+                                    <option key={time} value={time}>{time}</option>
+                                ))}
+                            </select>
+                        </div>
                     )}
+
 
                     <div className="flex justify-center items-center">
                         <button type='submit' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3 mb-6'>
