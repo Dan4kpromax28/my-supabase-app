@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../../utils/supabase';
 import { useNavigate } from 'react-router-dom';
-
 import AdminHeader from '../../components/AdminHeader';
 
-
-
 export default function Dashboard(){
-
-
     const [search, setSearch] = useState('');
     const [clients, setClients] = useState([]);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -18,22 +14,37 @@ export default function Dashboard(){
     }, []);
 
     const fetchClients = async (find) => {
-        let query = supabase.from('client').select('*');
+        try {
+            setLoading(true);
+            let query = supabase
+                .from('client')
+                .select('*, user_subscription(id)');
 
-        if (find) {
             if (find) {
                 query = query.or(
                     `name.ilike.%${find}%,surname.ilike.%${find}%,email.ilike.%${find}%,phone_number.ilike.%${find}%`
                 );
             }
-        }
-        const {data, error} = await query;
+
+            const { data, error } = await query;
                       
-        if (error) {
-            console.error('Kluda:', error);
-            return;
+            if (error) {
+                console.error('Kļūda:', error);
+                return;
+            }
+
+           
+            const clientsSubscriptionCount = data.map(client => ({
+                ...client,
+                subscriptionCount: client.user_subscription ? client.user_subscription.length : 0
+            }));
+
+            setClients(clientsSubscriptionCount);
+        } catch (error) {
+            console.error('Kļūda:', error);
+        } finally {
+            setLoading(false);
         }
-        setClients(data);
     };
 
     useEffect(() => {
@@ -55,17 +66,24 @@ export default function Dashboard(){
         }
     };
 
-    
-
     const handleViewSubscriptions = (clientId) => {
-        navigate(`/admin/clients/${clientId}/subscriptions`);
+        navigate(`/admin/clients/subscriptions/${clientId}`);
     };
 
-
     const handleCreateClient = () => {
-        navigate(`/admin/clients/createClient`);
+        navigate('/admin/clients/createClient');
+    };
+
+    if (loading) {
+        return (
+            <>
+                <AdminHeader />
+                <div className="max-w-3xl mx-auto p-4 flex justify-center items-center min-h-screen">
+                    <p className="text-gray-600">Ielādē...</p>
+                </div>
+            </>
+        );
     }
-    
 
     return (
         <>
@@ -76,7 +94,7 @@ export default function Dashboard(){
                 className="w-full p-2 border rounded-md mb-4">
 
             </input>
-            
+
             <div className='bg-sky-50 shadow-md rounded-lg p-4 mb-4 flex items-center hover:bg-sky-100'>
                 <div className='cursor-pointer' onClick={() => handleCreateClient()}>
                     <h2 className='font-bold text-center'>Izveidot jaunu klientu</h2>
@@ -90,7 +108,7 @@ export default function Dashboard(){
                         <p className="text-sm text-gray-600">{client.email}</p>
                         <p className="text-sm text-gray-600">{client.phone_number}</p>
                         <span className="inline-block mt-1 bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
-                            Abonementi: {}
+                            Abonementi: {client.subscriptionCount}
                         </span>
                     </div>
                     <div className="flex gap-2">

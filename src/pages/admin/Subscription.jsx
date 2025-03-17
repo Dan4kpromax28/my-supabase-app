@@ -1,42 +1,50 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../../utils/supabase";
+import AdminHeader from "../../components/AdminHeader";
 
-
-export default function Subscribtion(){
-    const [message, setMessage] = useState();
-
+export default function Subscription() {
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [subscriptions, setSubscriptions] = useState([]);
-
+    const [clientInfo, setClientInfo] = useState(null);
+    
     const navigate = useNavigate();
-
-    const { state } = useLocation();
-
-    const subId = state.id;
-
-    const handleBack = () => {
-        navigate(`/admin/dashboard`);
-    }
+    const { id: clientId } = useParams();
 
     useEffect(() => {
-        if (!subId) {
-            navigate('/');
+        if (!clientId) {
+            navigate('/admin/dashboard');
             return;
         }
-        const fetchData = async (subId) => {
-            
-            const { data: user_subscription, error } = await supabase
-                .from('user_subscription')
-                .select('*')
-                .eq('client_id', subId)
-            if (error) {
-                console.error('Notika kluda:', error);
-                navigate('/admin/dashboard');
-            } else {
-                setSubscriptions(data);
+        const fetchSubscriptions = async () => {
+            try {
+                const { data, error } = await supabase
+                    .from('user_subscriptions')
+                    .select('*')
+                    .eq('client_id',subId); 
+        
+                if (error) {
+                    console.error('Notika kluda:', error);
+                } else {
+                    setSubscriptions(data);
+                }
+            } catch (err) {
+                console.error('Kluda:', err);
             }
-            
+        };
+  
+        fetchSubscriptions(); 
+    }, []);
 
-        } 
-    })
-}
+    return (
+        <>
+        <AdminHeader />
+        
+        </>
+    );
+
+
+
+
+};
