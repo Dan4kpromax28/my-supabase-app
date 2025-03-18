@@ -6,7 +6,6 @@ import AdminHeader from '../../components/AdminHeader';
 export default function Dashboard(){
     const [search, setSearch] = useState('');
     const [clients, setClients] = useState([]);
-    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -15,7 +14,7 @@ export default function Dashboard(){
 
     const fetchClients = async (find) => {
         try {
-            setLoading(true);
+            
             let query = supabase
                 .from('client')
                 .select('*, user_subscription(id)');
@@ -43,7 +42,7 @@ export default function Dashboard(){
         } catch (error) {
             console.error('Kļūda:', error);
         } finally {
-            setLoading(false);
+            
         }
     };
 
@@ -70,20 +69,13 @@ export default function Dashboard(){
         navigate(`/admin/clients/subscriptions/${clientId}`);
     };
 
+    
+
     const handleCreateClient = () => {
         navigate('/admin/clients/createClient');
     };
 
-    if (loading) {
-        return (
-            <>
-                <AdminHeader />
-                <div className="max-w-3xl mx-auto p-4 flex justify-center items-center min-h-screen">
-                    <p className="text-gray-600">Ielādē...</p>
-                </div>
-            </>
-        );
-    }
+    
 
     return (
         <>
@@ -104,7 +96,7 @@ export default function Dashboard(){
             {clients.map(client => (
                 <div key={client.id} className="bg-white shadow-md rounded-lg p-4 mb-4 flex justify-between items-center hover:bg-gray-50">
                     <div className="cursor-pointer" onClick={() => handleViewSubscriptions(client.id)}>
-                        <h3 className="font-bold text-lg">{client.name} {client.surname}</h3>
+                        <h3 className="font-bold text-lg" >{client.name} {client.surname}</h3>
                         <p className="text-sm text-gray-600">{client.email}</p>
                         <p className="text-sm text-gray-600">{client.phone_number}</p>
                         <span className="inline-block mt-1 bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">

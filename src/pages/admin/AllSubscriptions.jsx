@@ -17,13 +17,17 @@ export default function AllSubscriptions(){
         const fetchSubscriptions = async () => {
         try {
             const { data, error } = await supabase
-            .from('user_subscription')
+            .from('invoice')
             .select(`
                 *,
-                subscription:subscription_id (
-                    id,
-                    name,
-                    description
+                user_subscription:user_subscription_id (
+                    *,
+                    subscriptions:subscription_id (
+                        id,
+                        name,
+                        price
+                    ),
+                    client:client_id(*)
                 )
             `);
 
@@ -44,6 +48,9 @@ export default function AllSubscriptions(){
     const handleBack = () => {
         navigate(-1);
     }
+    const handleSubscriptions = (subId) => {
+        navigate(`/admin/clients/subscriptions/${subId}`);
+    };
 
     return (
         <>
@@ -56,11 +63,22 @@ export default function AllSubscriptions(){
         </div>
         <ul className="list-none p-4">
             {subscriptions.map((sub) => (
-            <li key={sub.id} className="bg-white shadow-md rounded-lg p-4 mb-4 flex justify-between items-center hover:bg-gray-50">
-                <div>
-                <h3 className="font-bold text-lg">{sub.id}</h3>
-                <p className="text-sm text-gray-600">{sub.subscription?.name}</p>
+            <li key={sub.id} className="bg-white shadow-md rounded-lg p-4 mb-4 flex justify-between items-center hover:bg-gray-50"onClick={() => handleSubscriptions(sub.id)}>
+                <div className="">
+                <h3 className="font-bold text-lg">{sub.user_subscription?.subscriptions?.name} </h3>
+                <p className="text-sm text-gray-600">{sub.user_subscription?.client?.name+" "+sub.user_subscription?.client?.surname}</p>
+                <p className="text-sm text-gray-600">{sub.full_price} eiro</p>
                 <p className="text-sm text-gray-600">{sub.time}</p>
+               
+                <p className="text-sm text-gray-600">{sub.user_subscription?.start_date} - {sub.user_subscription?.end_date}</p>
+                {!(sub.user_subscription?.information && sub.user_subscription?.information.trim() !== "") && (
+                
+                    <span className="inline-block w-3 h-3 rounded-full bg-green-500" />
+               
+                )}
+                {sub.user_subscription?.information && sub.user_subscription?.information.trim() !== "" && (
+                    <span className="inline-block w-3 h-3 rounded-full bg-red-500" />
+                )}
                 </div>
             </li>
             ))}

@@ -11,6 +11,7 @@ import CreateClient from './pages/admin/CreateClient';
 import Subscription from './pages/admin/Subscription';
 import AllSub from './components/SubComp';
 import AllSubscriptions from './pages/admin/AllSubscriptions';
+import EditClient from './pages/admin/EditClient';
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
         <Route path="/admin/clients/createClient" element={<Wrapper><CreateClient /></Wrapper>} />
         <Route path="/admin/clients/subscriptions/:id" element={<Wrapper><Subscription /></Wrapper>} />
         <Route path="/admin/all_subscriptions" element={<Wrapper><AllSubscriptions /></Wrapper>} />
+        <Route path="/admin/clients/edit/:id" element={<Wrapper><EditClient /></Wrapper>} />
 
       </Routes>
     </BrowserRouter>
