@@ -96,7 +96,6 @@ export default function SubscriptionPage() {
         });
     
         if (error) {
-            console.error('RPC Kļūda:', error);
             alert(error.message);
             return;
         }

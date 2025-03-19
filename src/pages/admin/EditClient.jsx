@@ -20,7 +20,6 @@ export default function EditClient(){
         const fetchClient = async () => {
             try {
                 setLoading(true);
-                setError('');
                 
                 const { data, error } = await supabase
                     .from('client')
@@ -40,7 +39,6 @@ export default function EditClient(){
                 setClient(data);
             } catch (err) {
                 console.error('Kļūda:', err);
-                setError(err.message || 'Notika kļūda, lūdzu mēģiniet vēlreiz');
             } finally {
                 setLoading(false);
             }
@@ -62,7 +60,6 @@ export default function EditClient(){
     return (
 
             <Users 
-                id={client.id}
                 name={client.name}
                 surname={client.surname}
                 email={client.email}

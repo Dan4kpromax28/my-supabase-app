@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSubmit } from "react-router-dom";
 import AdminHeader from "../../components/AdminHeader";
 import { supabase } from "../../utils/supabase";
-
+import Dropdown from "../../components/Dropdown";
 
 
 export default function AllSubscriptions(){
@@ -61,6 +61,7 @@ export default function AllSubscriptions(){
             <h2 className='font-bold text-center'>Atpakaļ</h2>
             
         </div>
+        <Dropdown />
         <ul className="list-none p-4">
             {subscriptions.map((sub) => (
             <li key={sub.id} className="bg-white shadow-md rounded-lg p-4 mb-4 flex justify-between items-center hover:bg-gray-50"onClick={() => handleSubscriptions(sub.id)}>
