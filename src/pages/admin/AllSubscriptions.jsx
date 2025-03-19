@@ -23,7 +23,9 @@ export default function AllSubscriptions(){
         "Ar informāciju",
         "Bez informācijas",
         "Jaunie",
-        "Rejected"
+        "Rejected",
+        "Accepted",
+        "Invalid"
     ]
 
     const handleFilter = (filterOption) => {
@@ -48,7 +50,13 @@ export default function AllSubscriptions(){
                 break;
             case "Rejected":
                 filtered = subscriptions.filter(sub => sub.status === "rejected");
-                break;    
+                break;
+            case "Accepted":
+                filtered = subscriptions.filter(sub => sub.status === "accepted");
+                break;
+            case "Invalid":
+                filtered = subscriptions.filter(sub => sub.status === "invalid");
+                break;            
             default:
                 filtered = subscriptions;
         }
@@ -114,6 +122,29 @@ export default function AllSubscriptions(){
         navigate(`/admin/clients/subscriptions/${subId}`);
     };
 
+
+    const handleInvoice = () => {
+
+    };
+
+    const handleReject = async (id) => {
+        try {
+            const {error} = await supabase
+                .from('invoice')
+                .update({
+                    status: 'rejected'
+                })
+                .eq('id', id);
+            
+            if (error){
+                alert('Notika kluda');
+            }
+            alert('Status izmainits')
+
+        } catch{
+            alert('Notika kluda');
+        }
+    }
     return (
         <>
         <AdminHeader />
@@ -131,8 +162,8 @@ export default function AllSubscriptions(){
         
         <ul className="list-none p-4">
             {filtSubscriptions.map((sub) => (
-            <li key={sub.id} className="bg-white shadow-md rounded-lg p-4 mb-4 flex justify-between items-center hover:bg-gray-50"onClick={() => handleSubscriptions(sub.id)}>
-                <div className="">
+            <li key={sub.id} className="bg-white shadow-md rounded-lg p-4 mb-4 flex justify-between items-center hover:bg-gray-50">
+                <div className="" onClick={() => handleSubscriptions(sub.id)}>
                     <h3 className="font-bold text-lg">{sub.user_subscription?.subscriptions?.name} </h3>
                     <p className="text-sm text-gray-600">{sub.user_subscription?.client?.name+" "+sub.user_subscription?.client?.surname}</p>
                     <p className="text-sm text-gray-600">{sub.full_price} eiro</p>
@@ -149,16 +180,36 @@ export default function AllSubscriptions(){
                     )}
                 </div>
                 <div className="flex gap-2">
-                    <button
-                        onClick={() => handleEdit(client.id)}
-                        className="bg-green-500 text-white py-1 px-3 rounded hover:bg-green-600">
-                        Rediģēt
-                    </button>
-                    <button
-                        onClick={() => handleDelete(client.id)}
-                        className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600">
-                        Dzēst
-                    </button>
+                    {sub.status === 'new' && (
+                    <>
+                        <button
+                            onClick={() => handleReject(sub.id)}
+                            className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600">
+                            Atteikt
+                        </button>
+                    </>
+                    )}
+                     {sub.status === 'accepted' && (
+                    <>
+                        <button
+                            onClick={() => handleInvoice(sub.id)}
+                            className="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600">
+                            Apmaksa atnaca
+                        </button>
+                    </>
+
+                    )}
+                     {sub.status === 'accepted' && (
+                    <>
+                        <button
+                            onClick={() => handleInvoice(sub.id)}
+                            className="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600">
+                            Apmaksa atnaca
+                        </button>
+                    </>
+
+                    )}
+                    
                 </div>
             </li>
             ))}
