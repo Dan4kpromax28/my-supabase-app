@@ -50,7 +50,7 @@ export default function EditClient(){
     if (loading) {
         return (
             <div className="min-h-screen bg-stone-100 flex items-center justify-center">
-                <div className="text-xl">Ielāde...</div>
+                <div className="text-xl animate-bounce"></div>
             </div>
         );
     }
