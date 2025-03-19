@@ -4,15 +4,32 @@ import { supabase } from "../../utils/supabase";
 import AdminHeader from "../../components/AdminHeader";
 import Back from "../../components/Back";
 import InputComponent from "../../components/InputComponent";
+import { formatDate } from "../../utils/helpers/helpers";
 
 export default function Subscription() {
 
     const [invoice, setInvoice] = useState();
+    const [chooseOption, setChooseOption] = useState();
+    const [message, setMessage] = useState('');
+    const [formData, setFormData] = useState({
+        invoice_number: "",
+        price: "",
+        additionalInfo: "",
+        myStatus: ""
+    });
 
-    const formData = {
-        invoice_number: invoice?.number_id,
-        price: invoice?.full_price
-    };
+    useEffect(() => {
+        if (invoice) {
+            setFormData({
+                invoice_number: invoice.number_id || "",
+                price: invoice.full_price || "",
+                additionalInfo: invoice.user_subscription?.information || "",
+                myStatus: chooseOption
+            });
+        }
+    }, [invoice]);
+
+    
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -20,6 +37,55 @@ export default function Subscription() {
             ...prev,
             [name]: value
         }));
+    };
+
+    const status = [
+        'new',
+        'rejected',
+        'accepted',
+        'invalid'
+    ];
+
+
+    const handleUpdate = async () => {
+        if (!invoice) return;
+    
+        try {
+            
+            const { error: invoiceError } = await supabase
+                .from("invoice")
+                .update({
+                    status: formData.myStatus,
+                    full_price: formData.price,
+                    number_id: formData.invoice_number
+                })
+                .eq("id", invoice.id);
+    
+            if (invoiceError) {
+                setMessage("Kļuda atjauninot rēķinu!");
+                return;
+            }
+    
+            
+            if (invoice.user_subscription?.id) {
+                const { error: subscriptionError } = await supabase
+                    .from("user_subscription")
+                    .update({
+                        information: formData.additionalInfo
+                    })
+                    .eq("id", invoice.user_subscription.id);
+    
+                if (subscriptionError) {
+                    setMessage("Kļuda atjauninot abonementa informāciju!");
+                    return;
+                }
+            }
+    
+            setMessage("Ieraksts veiksmīgi atjaunināts!");
+        } catch (error) {
+            
+            setMessage("Notika kļūda!");
+        }
     };
 
 
@@ -30,7 +96,7 @@ export default function Subscription() {
 
     useEffect(() => {
         
-        const fetchSubscriptions = async () => {
+        const fetchInvoice = async () => {
         try {
             const { data, error } = await supabase
             .from('invoice')
@@ -53,7 +119,8 @@ export default function Subscription() {
             console.error('Notika kluda:', error);
             } else {
             setInvoice(data);
-            setFiltSubscriptions(data);
+            //setFiltSubscriptions(data);
+            setChooseOption(data.status);
             }
         } catch (err) {
             console.error('Kluda:', err);
@@ -61,8 +128,12 @@ export default function Subscription() {
         };
 
 
-        fetchSubscriptions(); 
+        fetchInvoice(); 
     }, [inId, navigate]);
+
+    const selectOption = (option) =>{
+        setChooseOption(option);
+    }
 
 
 
@@ -79,17 +150,27 @@ export default function Subscription() {
                 
                 <li key={invoice?.id} className="bg-white shadow-md rounded-lg p-4 mb-4">
                     <div>
-                        <h3 className="font-bold text-lg">{invoice?.user_subscription?.subscriptions?.name}</h3>
+                        <h1 className="font-bold text-xl underline">{invoice?.user_subscription?.subscriptions?.name}</h1>
                         <h2 className="font-bold text-lg">{invoice?.user_subscription?.client?.name} {invoice?.user_subscription?.client?.surname}</h2>
-                        <h2 className="font-bold text-sm">Izveidots: {invoice?.user_subscription?.created_at}</h2>
+                        <h2 className="font-bold text-sm">Izveidots: {formatDate(invoice?.user_subscription?.created_at)}</h2>
                         {invoice?.user_subscription?.start_date && invoice?.user_subscription?.end_date && <p>Datums: {invoice?.user_subscription?.start_date} - {invoice?.user_subscription?.end_date}</p>}
                         {invoice?.user_subscription?.start_date && <p>Datums: {invoice?.user_subscription?.start_date}</p>}
                         {invoice?.user_subscription?.time && <p>Laiks: {invoice?.user_subscription?.time}</p>}
-                        {invoice?.user_subscription?.information && <p>Informācija: {invoice?.user_subscription?.information}</p>}
+                        {invoice?.user_subscription?.information && <div>
+                            <label htmlFor="additionalInfo" className="block text-gray-700 mb-2">Papildu informacija:</label>
+                            <textarea
+                                id="additionalInfo"
+                                name="additionalInfo"
+                                value={formData.additionalInfo}
+                                onChange={handleInputChange}
+                                className="w-full border border-gray-300 rounded-md p-2 min-h-[100px]"
+                                placeholder="Ievadiet papildu informaciju"
+                            />
+                        </div>}
                         {invoice?.number_id && 
                         <InputComponent
                             label="Ivoice number"
-                            id="invoice"
+                            id="invoice_number"
                             placeholder="Invoice number"
                             value={formData.invoice_number}
                             onChange={handleInputChange}
@@ -102,12 +183,29 @@ export default function Subscription() {
                             value={formData.price}
                             onChange={handleInputChange}
                         />}
-                        {invoice?.status && <p>Status: {invoice?.status}</p>}
+                        {invoice?.status && 
+                        <><h3>Status:</h3>
+                            <select 
+                                name="myStatus" 
+                                id="myStatus" 
+                                value={formData.myStatus} 
+                                onChange={(e) => setFormData(prev => ({ ...prev, myStatus: e.target.value }))}
+                            >
+                                {status.map((st, index) => 
+                                    <option key={index} value={st}>
+                                        {st}
+                                    </option>
+                                )}
+                            </select> 
+                        </>
+                        }
                         
                     </div>
+                    {message && (<h2 className="text-center">{message}</h2>)}
+                    {}
                     <div className="flex justify-center items-center">
-                        <button type='submit' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3 mb-6'>
-                            Izveidot
+                        <button type='submit' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3 mb-6' onClick={() => handleUpdate()}>
+                            Atjaunot
                         </button>
                     </div>
                 </li>
