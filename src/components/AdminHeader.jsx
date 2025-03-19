@@ -24,13 +24,13 @@ export default function AdminHeader(){
                     </Link>
                     <nav className="hidden md:flex space-x-4 ml-10">
                         <Link to="/admin/dashboard" className="hover:bg-sky-700 px-3 py-2 rounded-md text-sm font-medium">
-                            Kkas
+                            Lietotaji
                         </Link>
                         <Link to="/admin/all_subscriptions" className="hover:bg-sky-700 px-3 py-2 rounded-md text-sm font-medium">
-                            Kkas
+                            Pasutijumi
                         </Link>
                         <Link to="/admin/statistic" className="hover:bg-sky-700 px-3 py-2 rounded-md text-sm font-medium">
-                            Kkas
+                            Statistika
                         </Link>
                     </nav>
                 </div>

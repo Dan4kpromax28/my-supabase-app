@@ -11,6 +11,7 @@ export default function AllSubscriptions(){
     const [subscriptions, setSubscriptions] = useState([]);
     const [filtSubscriptions, setFiltSubscriptions] = useState([]);
     const [filter, setFilter] = useState("Visi abonimenti");
+    const [search, setSearch] = useState('');
 
     const navigate = useNavigate();
 
@@ -54,12 +55,21 @@ export default function AllSubscriptions(){
         setFiltSubscriptions(filtered);
     }
 
+    useEffect(() => {
+        let filtered = subscriptions.filter(sub => 
+            sub.number_id.toLowerCase().includes(search.toLowerCase())
+        );
+        setFiltSubscriptions(filtered);
+    }, [search, subscriptions]);
+
 
     useEffect(() => {
         
-        const fetchSubscriptions = async () => {
+        const fetchSubscriptions = async (find) => {
+
         try {
-            const { data, error } = await supabase
+
+            let query = supabase
             .from('invoice')
             .select(`
                 *,
@@ -74,9 +84,17 @@ export default function AllSubscriptions(){
                 )
             `);
 
+            if (find){
+                query = query.or(
+                    `number_id.ilike.%${find}%`
+                );
+            }
+            const { data, error } = await query;
+
             if (error) {
             console.error('Notika kluda:', error);
             } else {
+                
             setSubscriptions(data);
             setFiltSubscriptions(data);
             }
@@ -99,7 +117,13 @@ export default function AllSubscriptions(){
     return (
         <>
         <AdminHeader />
+        
         <div className="max-w-3xl mx-auto p-4">
+        <input 
+                type='text' placeholder='Meklēt pec maksajuma numura' value={search} onChange={(e) => setSearch(e.target.value)}
+                className="w-full p-2 border rounded-md mb-4">
+
+            </input>
             <Back />
         <div className="mb-6">
             <Dropdown options={filterOptions} onSelect={handleFilter} selected={filter}/>

@@ -3,10 +3,27 @@ import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../../utils/supabase";
 import AdminHeader from "../../components/AdminHeader";
 import Back from "../../components/Back";
+import InputComponent from "../../components/InputComponent";
 
 export default function Subscription() {
 
     const [invoice, setInvoice] = useState();
+
+    const formData = {
+        invoice_number: invoice?.number_id,
+        price: invoice?.full_price
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+
+    
 
     const navigate = useNavigate();
     const { id: inId } = useParams();
@@ -60,7 +77,7 @@ export default function Subscription() {
             <Back />
             <ul className="list-none p-4">
                 
-                <li key={invoice?.id} className="bg-white shadow-md rounded-lg p-4 mb-4 flex justify-between items-center hover:bg-gray-50">
+                <li key={invoice?.id} className="bg-white shadow-md rounded-lg p-4 mb-4">
                     <div>
                         <h3 className="font-bold text-lg">{invoice?.user_subscription?.subscriptions?.name}</h3>
                         <h2 className="font-bold text-lg">{invoice?.user_subscription?.client?.name} {invoice?.user_subscription?.client?.surname}</h2>
@@ -69,12 +86,32 @@ export default function Subscription() {
                         {invoice?.user_subscription?.start_date && <p>Datums: {invoice?.user_subscription?.start_date}</p>}
                         {invoice?.user_subscription?.time && <p>Laiks: {invoice?.user_subscription?.time}</p>}
                         {invoice?.user_subscription?.information && <p>Informācija: {invoice?.user_subscription?.information}</p>}
-                        {invoice?.number_id && <p>Maksajuma ID: {invoice?.number_id}</p>}
-                        {invoice?.full_price && <p>Maksajums: {invoice?.full_price}</p>}
+                        {invoice?.number_id && 
+                        <InputComponent
+                            label="Ivoice number"
+                            id="invoice"
+                            placeholder="Invoice number"
+                            value={formData.invoice_number}
+                            onChange={handleInputChange}
+                        />}
+                        {invoice?.full_price &&
+                        <InputComponent
+                            label="Cena"
+                            id="price"
+                            placeholder="Ievadiet cenu"
+                            value={formData.price}
+                            onChange={handleInputChange}
+                        />}
                         {invoice?.status && <p>Status: {invoice?.status}</p>}
                         
                     </div>
+                    <div className="flex justify-center items-center">
+                        <button type='submit' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3 mb-6'>
+                            Izveidot
+                        </button>
+                    </div>
                 </li>
+                
                
             </ul>
         </div>

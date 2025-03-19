@@ -16,9 +16,14 @@ export default function Dashboard(){
         try {
             
             let query = supabase
-                .from('client')
-                .select('*, user_subscription(id)');
-
+                .from("client")
+                .select(`
+                    *,
+                    user_subscription (
+                        *,
+                        invoice (*)
+                    )
+                `);
             if (find) {
                 query = query.or(
                     `name.ilike.%${find}%,surname.ilike.%${find}%,email.ilike.%${find}%,phone_number.ilike.%${find}%`
