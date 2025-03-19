@@ -3,21 +3,30 @@
 // This enables autocomplete, go to definition, etc.
 
 // Setup type definitions for built-in Supabase Runtime APIs
-import "jsr:@supabase/functions-js/edge-runtime.d.ts"
+import { SMTPClient } from "https://deno.land/x/denomailer/mod.ts";
 
-console.log("Hello from Functions!")
 
-Deno.serve(async (req) => {
-  const { name } = await req.json()
-  const data = {
-    message: `Hello ${name}!`,
-  }
+const client = new SMTPClient({
+  connection: {
+    hostname: "smtp.gmail.com",
+    port: 465,
+    tls: true,
+    auth: {
+      username: Deno.env.get('MY_EMAIL'),
+      password: Deno.env.get('MY_EMAIL_PASSWORD'),
+    },
+  },
+});
 
-  return new Response(
-    JSON.stringify(data),
-    { headers: { "Content-Type": "application/json" } },
-  )
-})
+await client.send({
+  from: "MOOMENTUM <danilobaliko@gmail.com>",
+  to: "danikbalik@gmail.com",
+  subject: "example",
+  content: "test",
+  html: "<p>test</p>",
+});
+
+await client.close();
 
 /* To invoke locally:
 
