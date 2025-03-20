@@ -41,7 +41,55 @@ Deno.serve(async (req) => {
       to: {email},
       subject: "example",
       content: "test",
-      html: "<p>test</p>",
+      html: `<!DOCTYPE html>
+              <html>
+              <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Jūsu QR</title>
+                <style>
+                
+                  body {
+                    background-color: #d8d8d8;
+                    font-family: Arial, sans-serif;
+                    
+                  }
+                  .container {
+                    max-width: 600px;
+                    background: rgb(255, 255, 255);
+                    padding: 20px;
+                    border-radius: 8px;
+                    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+                    text-align: center;
+                  }
+                  header {
+                    background-color: #3068c3;
+                    color: white;
+                    border-radius: 8px;
+                    padding: 5px 0;
+                    text-align: center;
+                    margin-bottom: 5px;
+                  }
+                  img {
+                    width: 100%;
+                    max-width: 400px;
+                    margin-top: 20px;
+                  }
+                </style>
+              </head>
+              <body>
+              <header>
+                <div class="myheader">
+                  <h1>MOOMENTUM</h1>
+                </div>
+              </header>
+                <div class="container">
+                  <h1 class="text-xl font-bold text-gray-800">Jūsu QR Kods</h1>
+                  <p>Varāt izmantot QR kodu</p>
+                  <img src="${data}" alt="QR Code" class="mt-4">
+                </div>
+              </body>
+              </html>`,
       attachments: [attachment],
     });
 
