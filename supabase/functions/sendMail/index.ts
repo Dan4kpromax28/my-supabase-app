@@ -3,45 +3,63 @@
 // This enables autocomplete, go to definition, etc.
 
 // Setup type definitions for built-in Supabase Runtime APIs
+
 import { SMTPClient } from "https://deno.land/x/denomailer/mod.ts";
 import { qrcode } from "https://deno.land/x/qrcode/mod.ts";
-import { decodeBase64 } from "https://deno.land/std/encoding/base64.ts";
+import "jsr:@supabase/functions-js/edge-runtime.d.ts"
+import { corsHeaders } from "../_shared/cors.ts";
+Deno.serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders })
+  }
+  try {
+    const { qrData, email } = await req.json();
+    const data = await qrcode(qrData);
+    const base64 = data.split(',')[1];
 
-const qrData = '1234567';
-const data = await qrcode(qrData);
+    const client = new SMTPClient({
+      connection: {
+        hostname: "smtp.gmail.com",
+        port: 465,
+        tls: true,
+        auth: {
+          username: Deno.env.get('MY_EMAIL'),
+          password: Deno.env.get('MY_EMAIL_PASSWORD'),
+        },
+      },
+    });
 
-const base64 = data.split(',')[1];
+    const attachment = {
+      filename: "qrcode.png",
+      content: base64,
+      contentType: "image/png",
+      encoding: "base64"
+    };
 
+    await client.send({
+      from: "MOOMENTUM <danilobaliko@gmail.com>",
+      to: {email},
+      subject: "example",
+      content: "test",
+      html: "<p>test</p>",
+      attachments: [attachment],
+    });
 
+    await client.close();
 
-const client = new SMTPClient({
-  connection: {
-    hostname: "smtp.gmail.com",
-    port: 465,
-    tls: true,
-    auth: {
-      username: Deno.env.get('MY_EMAIL'),
-      password: Deno.env.get('MY_EMAIL_PASSWORD'),
-    },
-  },
+    
+    return new Response(JSON.stringify(data), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      status: 200,
+    });
+  } catch (error) {
+    
+      return new Response(JSON.stringify({ error: error.message }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 400,
+      });
+  }
 });
-const attachment = {
-  filename: "qrcode.png",
-  content: base64,
-  contentType: "image/png",
-  encoding: "base64"
-};
-
-await client.send({
-  from: "MOOMENTUM <danilobaliko@gmail.com>",
-  to: "danikbalik@gmail.com",
-  subject: "example",
-  content: "test",
-  html: "<p>test</p>",
-  attachments: [attachment],
-});
-
-await client.close();
 
 /* To invoke locally:
 

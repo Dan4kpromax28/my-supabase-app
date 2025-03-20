@@ -4,6 +4,7 @@ import AdminHeader from "../../components/AdminHeader";
 import { supabase } from "../../utils/supabase";
 import Dropdown from "../../components/Dropdown";
 import Back from "../../components/Back";
+import { createClient } from '@supabase/supabase-js'
 
 
 export default function AllSubscriptions(){
@@ -123,8 +124,10 @@ export default function AllSubscriptions(){
     };
 
 
-    const handleInvoice = () => {
-
+    const handleInvoice = async () => {
+        const { data, error } = await supabase.functions.invoke('sendMail', {
+            body: { 'qrData': '111111', 'email': 'danikbalik@icloud.com'},
+        })
     };
 
     const handleReject = async (id) => {
