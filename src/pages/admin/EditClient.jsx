@@ -64,6 +64,7 @@ export default function EditClient(){
                 surname={client.surname}
                 email={client.email}
                 phone={client.phone_number}
+                tips="update"
             />
     );
 }

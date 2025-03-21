@@ -6,7 +6,7 @@ import MainFooter from '../components/MainFooter';
 import InputComponent from '../components/InputComponent';
 
 
-export default function Users({name ='', surname = '', email = '', phone = ''}){
+export default function Users({name ='', surname = '', email = '', phone = '', tips=''}){
     const [message, setMessage] = useState('');
 
 
@@ -77,7 +77,7 @@ export default function Users({name ='', surname = '', email = '', phone = ''}){
     }
 
     return (
-        <div className='min-h-screen bg-stone-100'>
+        <div >
             <MainHeader />
             <div className='max-w-2xl mx-auto p-4'>
                 <div className='bg-sky-50 shadow-md rounded-lg p-4 mb-4 flex items-center hover:bg-sky-100 cursor-pointer' onClick={() => handleBack()}>
@@ -123,7 +123,7 @@ export default function Users({name ='', surname = '', email = '', phone = ''}){
                     
                     <div className="flex justify-center items-center">
                         <button type='submit' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3 mb-6'>
-                            Izveidot
+                            {tips === '' ? 'Izveidot' : 'Atjaunot'}
                         </button>
                     </div>
                 </form>
