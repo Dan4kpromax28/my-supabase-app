@@ -124,10 +124,15 @@ export default function AllSubscriptions(){
     };
 
 
-    const handleInvoice = async () => {
+    const handleInvoice = async (datas, email ) => {
+        const d = String(datas);
+        const e = String(email);
         const { data, error } = await supabase.functions.invoke('sendMail', {
-            body: { 'qrData': '111111', 'email': 'danikbalik@icloud.com'},
-        })
+            body: { 'qrData': d, 'email': e},
+        });
+    
+        if (error) console.error(error);
+        else console.log('Success:', data);
     };
 
     const handleReject = async (id) => {
@@ -165,7 +170,7 @@ export default function AllSubscriptions(){
         
         <ul className="list-none p-4">
             {filtSubscriptions.map((sub) => (
-            <li key={sub.id} className="bg-white shadow-md rounded-lg p-4 mb-4 flex justify-between items-center hover:bg-gray-50">
+            <li key={sub.id} className="bg-white shadow-md rounded-lg p-4 mb-4 flex justify-between items-center hover:bg-gray-50" >
                 <div className="" onClick={() => handleSubscriptions(sub.id)}>
                     <h3 className="font-bold text-lg">{sub.user_subscription?.subscriptions?.name} </h3>
                     <p className="text-sm text-gray-600">{sub.user_subscription?.client?.name+" "+sub.user_subscription?.client?.surname}</p>
@@ -195,7 +200,7 @@ export default function AllSubscriptions(){
                      {sub.status === 'accepted' && (
                     <>
                         <button
-                            onClick={() => handleInvoice(sub.id)}
+                            onClick={() => handleInvoice(sub.user_subscription?.client?.email, sub.user_subscription?.client?.email)}
                             className="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600">
                             Apmaksa atnaca
                         </button>
@@ -205,7 +210,7 @@ export default function AllSubscriptions(){
                      {sub.status === 'accepted' && (
                     <>
                         <button
-                            onClick={() => handleInvoice(sub.id)}
+                            onClick={() => handleInvoice(sub.user_subscription?.client?.email, sub.user_subscription?.client?.email)}
                             className="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600">
                             Apmaksa atnaca
                         </button>

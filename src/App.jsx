@@ -12,6 +12,7 @@ import Subscription from './pages/admin/Subscription';
 import AllSub from './components/SubComp';
 import AllSubscriptions from './pages/admin/AllSubscriptions';
 import EditClient from './pages/admin/EditClient';
+import SubscriptionTypes from './pages/admin/SubscriptionsTypes';
 
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
         <Route path="/admin/clients/subscriptions/:id" element={<Wrapper><Subscription /></Wrapper>} />
         <Route path="/admin/all_subscriptions" element={<Wrapper><AllSubscriptions /></Wrapper>} />
         <Route path="/admin/clients/edit/:id" element={<Wrapper><EditClient /></Wrapper>} />
+        <Route path="/admin/subscriptions" element={<Wrapper><SubscriptionTypes /></Wrapper>} />
 
       </Routes>
     </BrowserRouter>

@@ -92,9 +92,9 @@ export default function SubscriptionPage() {
             cl_phone: formData.phone,
             cl_subscription: subId,
             cl_information: formData.additionalInfo,
-            cl_start_date: formData.date ? new Date(formData.date).toISOString() : null,
-            cl_timeStart: formData.startTime || null,
-            cl_timeEnd: formData.endTime || null
+            cl_start_date: formData.date ? formData.date.toISOString().split('T')[0] : null,
+            cl_start_time: formData.startTime ? `${formData.startTime}:00+02:00` : null,
+            cl_end_time: formData.endTime ? `${formData.endTime}:00+02:00` : null,
         });
     
         if (error) {
@@ -105,14 +105,6 @@ export default function SubscriptionPage() {
         alert('Pieteikums veiksmīgi nosūtīts!');
         navigate('/');
     };
-
-    const setStartTime = () => {
-
-    }
-
-    const setEndTime = () => {
-
-    }
 
     if (!subscription) {
         return (
@@ -208,31 +200,19 @@ export default function SubscriptionPage() {
                         ) }
 
                         {(subscription.name === 'Konferenču zāle' || subscription.name === 'Atpūtas zona') && (
-                            <div className="grid grid-cols-2 gap-4">
-                            <div>
-                              <label className="block mb-1">Sākuma laiks:</label>
-                              <select
-                                value={formData.startTime}
-                                onChange={(e) => setStartTime(e.target.value)}
-                                className="border p-2 w-full"
-                              >
-                                <option value="">Izvēlieties</option>
-                                
-                              </select>
+                            <div className="mt-4">
+                                <label className="block mb-2">Izvēlieties laiku:</label>
+                                <select
+                                    className="border p-2 w-full"
+                                    value={formData.time}
+                                    onChange={(e) => setFormData(prev => ({ ...prev, time: e.target.value }))}
+                                >
+                                    <option value="">Izvēlieties pieejamo laiku</option>
+                                    {availability.times.map(time => (
+                                        <option key={time} value={time}>{time}</option>
+                                    ))}
+                                </select>
                             </div>
-                      
-                            <div>
-                              <label className="block mb-1">Beigu laiks:</label>
-                              <select
-                                value={formData.endTime}
-                                onChange={(e) => setEndTime(e.target.value)}
-                                className="border p-2 w-full"
-                              >
-                                <option value="">Izvēlieties</option>
-                                
-                              </select>
-                            </div>
-                          </div>
                         )}
 
 

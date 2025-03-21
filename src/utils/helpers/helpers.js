@@ -13,4 +13,4 @@ export function formatDate(myDate){
             second: "2-digit"
         }
     );
-}
+};

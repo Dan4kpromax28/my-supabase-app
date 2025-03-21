@@ -39,8 +39,8 @@ Deno.serve(async (req) => {
     await client.send({
       from: "MOOMENTUM <danilobaliko@gmail.com>",
       to: {email},
-      subject: "example",
-      content: "test",
+      subject: "Jūsu kods",
+      content: "QR kods",
       html: `<!DOCTYPE html>
 <html>
 <head>

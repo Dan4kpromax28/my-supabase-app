@@ -32,6 +32,9 @@ export default function AdminHeader(){
                         <Link to="/admin/statistic" className="hover:bg-sky-700 px-3 py-2 rounded-md text-sm font-medium">
                             Statistika
                         </Link>
+                        <Link to="/admin/subscriptions" className="hover:bg-sky-700 px-3 py-2 rounded-md text-sm font-medium">
+                            Piedavajums
+                        </Link>
                     </nav>
                 </div>
                 <div className="flex items-center">
