@@ -61,6 +61,11 @@ export default function UserSubscriptions(){
         }
     }, [userId, navigate]);
 
+
+    const handleSubscriptions = (subId) => {
+        navigate(`/admin/clients/subscriptions/${subId}`);
+    }
+
     return (<>
             <AdminHeader />
             

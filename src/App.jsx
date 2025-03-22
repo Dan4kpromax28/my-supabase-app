@@ -17,11 +17,13 @@ import SubscriptionTypes from './pages/admin/SubscriptionsTypes';
 import CreateType from './pages/admin/CreateType';
 import UpdateSubscriptionType from './pages/admin/UpdateSubscriptionType';
 import UserSubscriptions from './pages/admin/UserSubscriptions';
+import Test from './pages/admin/Test';
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/test" element={<Test />} />
         
         <Route path="/" element={<MainPage />} />
         <Route path="/pakalpojums/:id" element={<SubscriptionPage />} />
