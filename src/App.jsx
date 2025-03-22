@@ -13,7 +13,7 @@ import AllSub from './components/SubComp';
 import AllSubscriptions from './pages/admin/AllSubscriptions';
 import EditClient from './pages/admin/EditClient';
 import SubscriptionTypes from './pages/admin/SubscriptionsTypes';
-import CreateSubscriptionType from './pages/admin/CreateSubscriptionType';
+import CreateSubscriptionType from './pages/admin/UpdateSubscriptionType';
 
 export default function App() {
   return (
