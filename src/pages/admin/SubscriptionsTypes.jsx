@@ -37,7 +37,7 @@ export default function SubscriptionTypes(){
     }, []);
 
 
-    const handleUpdate = (id) => {
+    const handleCreateSubscription = () => {
         navigate('/admin/subscription/create');
 
     };
@@ -68,6 +68,8 @@ export default function SubscriptionTypes(){
         navigate(`/admin/subscriptions/${id}`);
     };
 
+    
+
 
 
     return(
@@ -75,20 +77,20 @@ export default function SubscriptionTypes(){
          <AdminHeader />
          <div className="max-w-3xl mx-auto p-4">
          <div className='bg-sky-50 shadow-md rounded-lg p-4 mb-4 flex items-center hover:bg-sky-100'>
-                <div className='cursor-pointer' onClick={() => handleCreateClient()}>
+                <div className='cursor-pointer' onClick={() => handleCreateSubscription()}>
                     <h2 className='font-bold text-center'>Izveidot jaunu piedavajumu</h2>
                 </div>
             </div>
          <ul>
          {subscriptions.map((sub) => (
                 <li key={sub.id} className="bg-white shadow-md rounded-lg p-4 mb-4 flex justify-between items-center hover:bg-gray-50" >
-                    <div onClick={() => handleClick(sub.id)}>
+                    <div>
                         <h3 className="font-bold text-lg">{sub.name} </h3>
                     </div>
                      
                      <div className="flex gap-2">
                         <button
-                            onClick={() => handleUpdate(sub.id)}
+                            onClick={() => handleClick(sub.id)}
                             className="bg-green-500 text-white py-1 px-3 rounded hover:bg-green-600">
                             Atjaunot 
                         </button>

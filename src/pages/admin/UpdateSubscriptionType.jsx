@@ -6,7 +6,7 @@ import InputComponent from "../../components/InputComponent";
 import Back from "../../components/Back";
 import Tips from "../../components/Type";
 
-export default function CreateSubscriptionType() {
+export default function UpdateSubscriptionType() {
 
     const { id: tyoeId} = useParams();
     

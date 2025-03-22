@@ -36,7 +36,7 @@ export default function Tips({id}){
 
     useEffect(() => {
         const fetchSubType = async () => {
-            if(id !== ''){
+            if(id){
                 try {
                     const { data, error } = await supabase
                         .from('subscriptions')
@@ -157,14 +157,14 @@ export default function Tips({id}){
                         value={formData.price}
                         onChange={handleInputChange}
                     />
-                    {formData.additionalHourPrice && (<InputComponent
+                    <InputComponent
                         label="additional hour price"
                         id="additionalHourPrice"
                         name="additionalHourPrice"
                         placeholder="Cena par nakamo stundu"
                         value={formData.additionalHourPrice}
                         onChange={handleInputChange}
-                    />)}
+                    />
 
                     <InputComponent
                         label="durationValue"
@@ -202,7 +202,7 @@ export default function Tips({id}){
                     />
                     <div className="flex justify-center items-center">
                             <button type='submit' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3 mb-6'>
-                                {id === '' ? 'Izveidot' : 'Atjaunot' }
+                                {!id ? 'Izveidot' : 'Atjaunot' }
                             </button>
                         </div>
                 </form>
