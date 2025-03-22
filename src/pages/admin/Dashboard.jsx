@@ -71,7 +71,7 @@ export default function Dashboard(){
     };
 
     const handleViewSubscriptions = (clientId) => {
-        navigate(`/admin/clients/subscriptions/${clientId}`);
+        navigate(`/admin/clients/userSubscriptions/${clientId}`);
     };
 
     

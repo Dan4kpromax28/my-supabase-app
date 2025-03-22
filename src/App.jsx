@@ -16,6 +16,7 @@ import SubscriptionTypes from './pages/admin/SubscriptionsTypes';
 
 import CreateType from './pages/admin/CreateType';
 import UpdateSubscriptionType from './pages/admin/UpdateSubscriptionType';
+import UserSubscriptions from './pages/admin/UserSubscriptions';
 
 export default function App() {
   return (
@@ -34,7 +35,8 @@ export default function App() {
         <Route path="/admin/subscriptions" element={<Wrapper><SubscriptionTypes /></Wrapper>} />
         <Route path="/admin/subscriptions/:id" element={<Wrapper><UpdateSubscriptionType /></Wrapper>} />
         <Route path='/admin/subscription/create' element={<Wrapper><CreateType /></Wrapper>} />
-      </Routes>
+        <Route path='/admin/clients/userSubscriptions/:id' element={<Wrapper><UserSubscriptions /></Wrapper>} />
+       </Routes>
     </BrowserRouter>
   );
 }
