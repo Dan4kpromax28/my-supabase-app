@@ -13,42 +13,37 @@ export default function Dashboard(){
     }, []);
 
     const fetchClients = async (find) => {
-        try {
+        
             
-            let query = supabase
-                .from("client")
-                .select(`
+        let query = supabase
+            .from("client")
+            .select(`
+                *,
+                user_subscription (
                     *,
-                    user_subscription (
-                        *,
-                        invoice (*)
-                    )
-                `);
-            if (find) {
-                query = query.or(
-                    `name.ilike.%${find}%,surname.ilike.%${find}%,email.ilike.%${find}%,phone_number.ilike.%${find}%`
-                );
-            }
-
-            const { data, error } = await query;
-                      
-            if (error) {
-                console.error('Kļūda:', error);
-                return;
-            }
-
-           
-            const clientsSubscriptionCount = data.map(client => ({
-                ...client,
-                subscriptionCount: client.user_subscription ? client.user_subscription.length : 0
-            }));
-
-            setClients(clientsSubscriptionCount);
-        } catch (error) {
-            console.error('Kļūda:', error);
-        } finally {
-            
+                    invoice (*)
+                )
+            `);
+        if (find) {
+            query = query.or(
+                `name.ilike.%${find}%,surname.ilike.%${find}%,email.ilike.%${find}%,phone_number.ilike.%${find}%`
+            );
         }
+
+        const { data, error } = await query;
+                    
+        if (error) {
+            console.error('Kļūda:', error);
+            return;
+        }
+
+        
+        const clientsSubscriptionCount = data.map(client => ({
+            ...client,
+            subscriptionCount: client.user_subscription ? client.user_subscription.length : 0
+        }));
+
+        setClients(clientsSubscriptionCount);
     };
 
     useEffect(() => {

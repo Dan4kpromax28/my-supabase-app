@@ -34,23 +34,20 @@ export default function SubscriptionPage() {
         }
 
         const fetchSubscription = async () => {
-            try {
-                const { data, error } = await supabase
-                    .from('subscriptions')
-                    .select('*')
-                    .eq('id', subId)
-                    .single(); 
-        
-                if (error) {
-                    console.error('Notika kluda:', error);
-                    navigate('/');
-                } else {
-                    setSubscription(data);
-                }
-            } catch (err) {
-                console.error('Kluda:', err);
+           
+            const { data, error } = await supabase
+                .from('subscriptions')
+                .select('*')
+                .eq('id', subId)
+                .single(); 
+    
+            if (error) {
+                console.error('Notika kluda:', error);
                 navigate('/');
+            } else {
+                setSubscription(data);
             }
+            
         };
   
         fetchSubscription(); 
@@ -70,7 +67,11 @@ export default function SubscriptionPage() {
         }
     };
     const fetchTimeAvailability = async (date) => {
-        const { data } = await supabase.rpc('get_available_times', { selected_date: date });
+        const { data, error } = await supabase.rpc('get_available_times', { selected_date: date });
+        if (error) {
+            console.error('Notika kluda:');
+            return;
+        }
         setAvailability(prev => ({ ...prev, times: data }));
     };
 
@@ -101,7 +102,6 @@ export default function SubscriptionPage() {
             alert(error.message);
             return;
         }
-    
         alert('Pieteikums veiksmīgi nosūtīts!');
         navigate('/');
     };

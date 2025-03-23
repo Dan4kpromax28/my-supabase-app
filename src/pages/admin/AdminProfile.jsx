@@ -30,21 +30,18 @@ export default function AdminPanel(){
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            const { data, error } = await supabase.auth.updateUser(
-                { password: newPassword.password }
-            )
+        
+        const { data, error } = await supabase.auth.updateUser(
+            { password: newPassword.password }
+        )
 
-            if (error) {
-                setMessage("Notika kluda");
-            } else {    
-                setMessage("Parole vieksmigi izmainita")
-            }
-            setNewPassword({password: ''});
-           
-        } catch (error) {
-            console.error('Kluda:', error);
+        if (error) {
+            setMessage("Notika kluda");
+        } else {    
+            setMessage("Parole vieksmigi izmainita")
         }
+        setNewPassword({password: ''});
+           
     };
 
     return(

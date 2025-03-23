@@ -76,7 +76,7 @@ export default function AllSubscriptions(){
         
         const fetchSubscriptions = async (find) => {
 
-        try {
+        
 
             let query = supabase
             .from('invoice')
@@ -99,7 +99,6 @@ export default function AllSubscriptions(){
                 );
             }
             const { data, error } = await query;
-
             if (error) {
             console.error('Notika kluda:', error);
             } else {
@@ -107,9 +106,7 @@ export default function AllSubscriptions(){
             setSubscriptions(data);
             setFiltSubscriptions(data);
             }
-        } catch (err) {
-            console.error('Kluda:', err);
-        }
+       
         };
 
 
@@ -136,22 +133,18 @@ export default function AllSubscriptions(){
     };
 
     const handleReject = async (id) => {
-        try {
-            const {error} = await supabase
-                .from('invoice')
-                .update({
-                    status: 'rejected'
-                })
-                .eq('id', id);
-            
-            if (error){
-                alert('Notika kluda');
-            }
-            alert('Status izmainits')
-
-        } catch{
+        
+        const {error} = await supabase
+            .from('invoice')
+            .update({
+                status: 'rejected'
+            })
+            .eq('id', id);
+        
+        if (error){
             alert('Notika kluda');
         }
+        alert('Status izmainits');
     }
     return (
         <>

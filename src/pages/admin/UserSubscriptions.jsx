@@ -20,40 +20,38 @@ export default function UserSubscriptions(){
 
     useEffect(() => {
         const fetchUserSubscriptions = async () => {
-            try{
-                const { data, error } = await supabase
-                    .from('user_subscription')
-                    .select(`
-                        *,
-                        subscriptions:subscription_id(*),
-                        client:client_id(*),
-                        invoice(*)
-                    `)
-                    .eq('client_id', userId);
-                
-                if(error){
-                    console.log('Notikak kluda');
-                    return;
-                }
-                
-                console.log("Notika kluda");
-                
-                const invoices = [];
-                data.forEach(subscription => {
-                    if (subscription.invoice && subscription.invoice.length > 0) {
-                        subscription.invoice.forEach(inv => {
-                            invoices.push({
-                                ...inv,
-                                user_subscription: subscription
-                            });
-                        });
-                    }
-                });
-                
-                setSubscriptions(invoices);
-            } catch(err){
-                console.error('Notika kluda');
+            
+            const { data, error } = await supabase
+                .from('user_subscription')
+                .select(`
+                    *,
+                    subscriptions:subscription_id(*),
+                    client:client_id(*),
+                    invoice(*)
+                `)
+                .eq('client_id', userId);
+            
+            if(error){
+                console.log('Notikak kluda');
+                return;
             }
+            
+            console.log("Notika kluda");
+            
+            const invoices = [];
+            data.forEach(subscription => {
+                if (subscription.invoice && subscription.invoice.length > 0) {
+                    subscription.invoice.forEach(inv => {
+                        invoices.push({
+                            ...inv,
+                            user_subscription: subscription
+                        });
+                    });
+                }
+            });
+            
+            setSubscriptions(invoices);
+            
         };
         
         if (userId) {

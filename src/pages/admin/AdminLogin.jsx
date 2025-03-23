@@ -27,19 +27,14 @@ export default function AdminLogin(){
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            const { data, error } = await supabase.auth.signInWithPassword({
-                email: loginData.email,
-                password: loginData.password,
-            });
-            if (error) {
-                setError("Nepareizais logins vai parole");
-            } else {    
-                navigate('/admin/dashboard');
-            }
-           
-        } catch (error) {
-            console.error('Kluda:', error);
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email: loginData.email,
+            password: loginData.password,
+        });
+        if (error) {
+            setError("Nepareizais logins vai parole");
+        } else {    
+            navigate('/admin/dashboard');
         }
     };
 

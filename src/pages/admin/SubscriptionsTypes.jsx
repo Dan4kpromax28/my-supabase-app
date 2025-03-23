@@ -18,20 +18,18 @@ export default function SubscriptionTypes(){
 
     useEffect(() => {
         const fetchSubscriptions = async () => {
-            try {
-                const { data, error } = await supabase
-                    .from('subscriptions')
-                    .select('*'); 
-        
-                if (error) {
-                    console.error('Notika kluda:', error);
-                } else {
-                    setSubscriptions(data);
-                }
-            } catch (err) {
-                console.error('Kluda:', err);
+           
+            const { data, error } = await supabase
+                .from('subscriptions')
+                .select('*'); 
+    
+            if (error) {
+                console.error('Notika kluda:', error);
+            } else {
+                setSubscriptions(data);
             }
-        };
+        
+    };
   
         fetchSubscriptions(); 
     }, []);
@@ -47,20 +45,18 @@ export default function SubscriptionTypes(){
 
         if (!confirm) return;
 
-        try{
-            const {error} = await supabase
-                .from('subscriptions')
-                .delete()
-                .eq('id', id);
+       
+        const {error} = await supabase
+            .from('subscriptions')
+            .delete()
+            .eq('id', id);
 
-            if (error) {
-                alert('Notika kluda');
-            }
-            alert('Veiksmigi nodzests');
-            setSubscriptions(prev => prev.filter(sub => sub.id !== id)); // lai atjaunot
-        }catch{
+        if (error) {
             alert('Notika kluda');
         }
+        alert('Veiksmigi nodzests');
+        setSubscriptions(prev => prev.filter(sub => sub.id !== id)); // lai atjaunot
+       
     };
 
 

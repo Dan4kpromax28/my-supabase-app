@@ -16,19 +16,17 @@ export default function MainPage() {
     
     useEffect(() => {
         const fetchSubscriptions = async () => {
-            try {
-                const { data, error } = await supabase
-                    .from('subscriptions')
-                    .select('*'); 
-        
-                if (error) {
-                    console.error('Notika kluda:', error);
-                } else {
-                    setSubscriptions(data);
-                }
-            } catch (err) {
-                console.error('Kluda:', err);
+            
+            const { data, error } = await supabase
+                .from('subscriptions')
+                .select('*'); 
+    
+            if (error) {
+                console.error('Notika kluda:', error);
+            } else {
+                setSubscriptions(data);
             }
+            
         };
   
         fetchSubscriptions(); 

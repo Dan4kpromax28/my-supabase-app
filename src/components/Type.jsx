@@ -37,25 +37,21 @@ export default function Tips({id}){
     useEffect(() => {
         const fetchSubType = async () => {
             if(id){
-                try {
-                    const { data, error } = await supabase
-                        .from('subscriptions')
-                        .select()
-                        .eq('id', id)
-                        .single();
-    
-                    if (error) {
-                        console.log('Notika kluda');
-                        navigate(-1);
-                        return;
-                    }
-    
-                    UpdateForm(data);
-                } catch (err) {
-                    console.error('Notika kluda');
+               
+                const { data, error } = await supabase
+                    .from('subscriptions')
+                    .select()
+                    .eq('id', id)
+                    .single();
+
+                if (error) {
+                    console.log('Notika kluda');
                     navigate(-1);
-            
+                    return;
                 }
+
+                UpdateForm(data);
+               
            
             }else return;
         };

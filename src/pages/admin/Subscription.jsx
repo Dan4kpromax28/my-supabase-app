@@ -97,34 +97,32 @@ export default function Subscription() {
     useEffect(() => {
         
         const fetchInvoice = async () => {
-        try {
+        
             const { data, error } = await supabase
-            .from('invoice')
-            .select(`
-                *,
-                user_subscription:user_subscription_id (
+                .from('invoice')
+                .select(`
                     *,
-                    subscriptions:subscription_id (
-                        id,
-                        name,
-                        price
-                    ),
-                    client:client_id(*)
-                )
-            `)
-            .eq('id', inId)
-            .single();
+                    user_subscription:user_subscription_id (
+                        *,
+                        subscriptions:subscription_id (
+                            id,
+                            name,
+                            price
+                        ),
+                        client:client_id(*)
+                    )
+                `)
+                .eq('id', inId)
+                .single();
 
             if (error) {
-            console.error('Notika kluda:', error);
+                console.error('Notika kluda:', error);
             } else {
-            setInvoice(data);
-            //setFiltSubscriptions(data);
-            setChooseOption(data.status);
+                setInvoice(data);
+                //setFiltSubscriptions(data);
+                setChooseOption(data.status);
             }
-        } catch (err) {
-            console.error('Kluda:', err);
-        }
+        
         };
 
 

@@ -18,30 +18,26 @@ export default function EditClient(){
         }
 
         const fetchClient = async () => {
-            try {
-                setLoading(true);
-                
-                const { data, error } = await supabase
-                    .from('client')
-                    .select('*')
-                    .eq('id', clientId)
-                    .single();
-        
-                if (error) {
-                    throw error;
-                }
-
-                if (!data) {
-                    setError('Klients nav atrasts');
-                    return;
-                }
-
-                setClient(data);
-            } catch (err) {
-                console.error('Kļūda:', err);
-            } finally {
-                setLoading(false);
+           
+            setLoading(true);
+            
+            const { data, error } = await supabase
+                .from('client')
+                .select('*')
+                .eq('id', clientId)
+                .single();
+    
+            if (error) {
+                throw error;
             }
+
+            if (!data) {
+                setError('Klients nav atrasts');
+                return;
+            }
+
+            setClient(data);
+            setLoading(false);
         };
   
         fetchClient();

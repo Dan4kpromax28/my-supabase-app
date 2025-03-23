@@ -8,22 +8,20 @@ export default function TimePicker({ date }) {
 
     useEffect(() => {
         const fetchTimes = async () => {
-            try {
-                const { data, error } = await supabase
-                    .from('user_subscription')
-                    .select('start_time, end_time')
-                    .eq('start_date', date)
-                    .not('start_time', 'is', null);
+            
+            const { data, error } = await supabase
+                .from('user_subscription')
+                .select('start_time, end_time')
+                .eq('start_date', date)
+                .not('start_time', 'is', null);
 
-                if (error) {
-                    console.error('Notika kluda:', error.message);
-                    return;
-                }
-
-                setTimes(data);
-            } catch (err) {
-                console.error('Ņotika kluda:', err.message);
+            if (error) {
+                console.error('Notika kluda:', error.message);
+                return;
             }
+
+            setTimes(data);
+           
         };
 
         fetchTimes();
