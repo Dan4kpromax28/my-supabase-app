@@ -7,6 +7,8 @@ import InputComponent from '../components/InputComponent';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import validation from '../utils/helpers/handleInput.js';
+import TimePicker from '../components/TimePicker.jsx';
+import { DateTime } from 'luxon';
 export default function SubscriptionPage() {
 
     const { state } = useLocation();
@@ -70,19 +72,11 @@ export default function SubscriptionPage() {
         }));
     };
     const handleDateChange = (date) => {
-        setFormData(prev => ({ ...prev, date }));
-        if (subscription.time_restriction) {
-            fetchTimeAvailability(date);
-        }
+        const isoDate = DateTime.fromJSDate(date, { zone: 'local' }).toISODate();
+        setFormData(prev => ({ ...prev, date: isoDate }));
+       
     };
-    const fetchTimeAvailability = async (date) => {
-        const { data, error } = await supabase.rpc('get_available_times', { selected_date: date });
-        if (error) {
-            console.error('Notika kluda:');
-            return;
-        }
-        setAvailability(prev => ({ ...prev, times: data }));
-    };
+    
 
     const handleBack = () => {
         navigate(-1);
@@ -98,7 +92,7 @@ export default function SubscriptionPage() {
         }
 
         if (subscription.isTime) {
-            if (!formData.time) {
+            if (!formData.startTime || !formData.endTime) {
                 setGlobalError('Lūdzu izvēlieties laiku');
                 return;
             }
@@ -129,8 +123,8 @@ export default function SubscriptionPage() {
             cl_subscription: subId,
             cl_information: formData.additionalInfo,
             cl_start_date: formData.date ? formData.date.toISOString().split('T')[0] : null,
-            cl_start_time: formData.startTime ? `${formData.startTime}:00+02:00` : null,
-            cl_end_time: formData.endTime ? `${formData.endTime}:00+02:00` : null,
+            cl_start_time: formData.startTime ? `${formData.startTime}` : null,
+            cl_end_time: formData.endTime ? `${formData.endTime}` : null,
         });
     
         if (error) {
@@ -230,38 +224,31 @@ export default function SubscriptionPage() {
                                 <button type="button"
                                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3 "
                                     onClick={() => setShowCalendar(prev => !prev)}>
-                                    {formData.date ? `Datums: ${formData.date}` : "Izvēlieties datumu"}
+                                    {formData.date ? `Datums: ` : "Izvēlieties datumu"}
                                 </button>
 
                                 {showCalendar && (
                                     
                                     <Calendar
                                         className="mt-2"
-                                        value={formData.date ? new Date(formData.date) : null}
+                                        value={formData.date ? DateTime.fromISO(formData.date, { zone: 'local' }).toJSDate() : null}
                                         onChange={handleDateChange}
-                                        minDate={new Date()}
-                                        tileDisabled={({ date }) => availability.dates.includes(date.toISOString().slice(0, 10))}
+                                        minDate={DateTime.now().plus({ days: 1 }).toJSDate()}
                                     />
                                 )}
                             </div>
                         ) }
 
                         {(subscription.isTime) && (
-                            <div className="mt-4">
-                                <label className="block mb-2">Izvēlieties laiku:</label>
-                                <select
-                                    className="border p-2 w-full"
-                                    value={formData.time}
-                                    onChange={(e) => setFormData(prev => ({ ...prev, time: e.target.value }))}
-                                >
-                                    <option value="">Izvēlieties pieejamo laiku</option>
-                                    {availability.times.map(time => (
-                                        <option key={time} value={time}>{time}</option>
-                                    ))}
-                                </select>
-                            </div>
+                            <TimePicker 
+                            date={formData.date ? new Date(formData.date).toISOString().split('T')[0] : null}
+                            onStartTime={(time) => setFormData(prev => ({ ...prev, startTime: time }))}
+                            onEndTime={(time) => setFormData(prev => ({ ...prev, endTime: time }))}
+                            start={formData.startTime}
+                            end={formData.endTime}
+                          />
                         )}
-                        {globalError && (<div>Ir kluda</div>)}
+                        {globalError && (<div>{globalError}</div>)}
 
 
                         <div className="flex justify-center items-center">

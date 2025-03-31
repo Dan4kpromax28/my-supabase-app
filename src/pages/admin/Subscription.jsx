@@ -209,6 +209,9 @@ export default function Subscription() {
                             value={formData.price}
                             onChange={handleInputChange}
                         />}
+                        {formData.price && errors.price
+                        ? <div className='text-red-500 text-sm text-center '>{errors.price}</div>
+                        : null}
                         {invoice?.status && 
                         <><h3>Status:</h3>
                             <select 

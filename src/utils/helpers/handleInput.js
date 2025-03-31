@@ -1,6 +1,7 @@
+import { parse } from "date-fns";
 import { supabase } from "../supabase";
 
-export function InputFieldValidation(name, value) {
+function InputFieldValidation(name, value) {
     var message = '';
     switch(name){
         case 'name':
@@ -52,21 +53,18 @@ const InputFieldValidationInvoice = async (name, value, acctual_number) =>{
             else if (data && data.number_id != acctual_number && data.number_id === value){
                 message = 'Rēķina numurs jau eksistē';
             }
-            
-            
-
             break;
         case 'price':
-            if(!value || value <= 0 || value > 10000) {
+            const num = parseFloat(value);
+            if(isNaN(num) || num <= 0 || num > 10000) {
                 message = 'Nekorekta cenas ievade';
             }
             break;
-        /*case 'additionalInfo':
+        case 'additionalInfo':
             if(value.length > 10000) {
                 message = 'Ievades garuma parkapums';
             }
             break;
-            */
         default:
             break;
     }

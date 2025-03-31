@@ -5,7 +5,9 @@ import { supabase } from "../../utils/supabase";
 import Dropdown from "../../components/Dropdown";
 import Back from "../../components/Back";
 import { createClient } from '@supabase/supabase-js'
-
+import filterAllSubscriptions from "../../utils/helpers/filters.js";
+import { filterOptions } from "../../utils/helpers/filterOptions.js";
+import { sub } from "date-fns";
 
 export default function AllSubscriptions(){
 
@@ -17,51 +19,11 @@ export default function AllSubscriptions(){
     const navigate = useNavigate();
 
 
-    const filterOptions = [
-        "Visi abonimenti",
-        "Aktīvie abonimenti",
-        "Beigušies abonimenti",
-        "Ar informāciju",
-        "Bez informācijas",
-        "Jaunie",
-        "Rejected",
-        "Accepted",
-        "Invalid"
-    ]
+
 
     const handleFilter = (filterOption) => {
         setFilter(filterOption);
-        let filtered = [...subscriptions];
-
-        switch (filterOption) {
-            case "Aktīvie abonimenti":
-                filtered = subscriptions.filter(sub => new Date(sub.user_subscription?.end_date) > new Date());
-                break;  
-            case "Beigušies abonimenti":
-                filtered = subscriptions.filter(sub => new Date(sub.user_subscription?.end_date) <= new Date());
-                break;  
-            case "Ar informāciju":
-                filtered = subscriptions.filter(sub => sub.user_subscription?.information && sub.user_subscription.information.trim() !== "");
-                break;  
-            case "Bez informācijas":
-                filtered = subscriptions.filter(sub => !sub.user_subscription?.information || sub.user_subscription.information.trim() === "");
-                break;  
-            case "Jaunie":
-                filtered = subscriptions.filter(sub => sub.status === "new");
-                break;
-            case "Rejected":
-                filtered = subscriptions.filter(sub => sub.status === "rejected");
-                break;
-            case "Accepted":
-                filtered = subscriptions.filter(sub => sub.status === "accepted");
-                break;
-            case "Invalid":
-                filtered = subscriptions.filter(sub => sub.status === "invalid");
-                break;            
-            default:
-                filtered = subscriptions;
-        }
-        setFiltSubscriptions(filtered);
+        setFiltSubscriptions(filterAllSubscriptions[filterOption](subscriptions));
     }
 
     useEffect(() => {
@@ -91,7 +53,8 @@ export default function AllSubscriptions(){
                     ),
                     client:client_id(*)
                 )
-            `);
+            `)
+            .order('created_at', { ascending: false });
 
             if (find){
                 query = query.or(
@@ -102,7 +65,7 @@ export default function AllSubscriptions(){
             if (error) {
             console.error('Notika kluda:', error);
             } else {
-                
+           
             setSubscriptions(data);
             setFiltSubscriptions(data);
             }

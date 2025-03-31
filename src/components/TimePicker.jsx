@@ -3,7 +3,7 @@ import { supabase } from "../utils/supabase";
 import { useState } from "react";
 import { DateTime } from "luxon";
 
-export default function TimePicker({ date }) {
+export default function TimePicker({ date, onStartTime, onEndTime, start,end}) {
     const [times, setTimes] = useState([]);
 
     useEffect(() => {
@@ -35,10 +35,10 @@ export default function TimePicker({ date }) {
         let times = [];
         for (let i = 8; i < 21; i++) {
             if(i < 10){
-                times.push(`0${i}:00:00+02`);
+                times.push(`0${i}:00:00`);
                 continue;
             }
-            times.push(`${i}:00:00+02`);
+            times.push(`${i}:00:00`);
         }
         return times;
     } 
@@ -94,21 +94,37 @@ export default function TimePicker({ date }) {
         }
         return times;
     }
-    console.log('Filtred data:', newFiltredArray(times, listWithTimesFrom08To20()));
-    console.log('Second Filtred data:', newSecondFiltredArray(times, listWithTimesFrom08To20(), '08:00:00+02'));
+    const allTimes = listWithTimesFrom08To20();
+    const availableStartTimes = newFiltredArray(times, allTimes);
+    const availableEndTimes = newSecondFiltredArray(times, allTimes,start );
 
     return (
         <>
-        <select>
-            {newFiltredArray(times, listWithTimesFrom08To20()).map((time, index) => (
-                <option key={index} value={time}>{time}</option>
+          <label className="block text-gray-700 mb-1">Izvēlieties sākuma laiku:</label>
+          <select
+            className="cursor-pointer mr-2 mb-2 border-2 border-blue-300 rounded-md p-2"
+            onChange={(e) => onStartTime(e.target.value)}
+          >
+            <option value="">Izvēlieties sākuma laiku</option>
+            {availableStartTimes.map((time, index) => (
+              <option key={index} value={time}>
+                {time}
+              </option>
             ))}
-        </select>
-        <select>
-            {newSecondFiltredArray(times, listWithTimesFrom08To20(), '14:00:00+02').map((time, index) => (
-                <option key={index} value={time}>{time}</option>
+          </select>
+          
+          <label className="block text-gray-700 mb-1">Izvēlieties beigu laiku:</label>
+          <select
+            className="cursor-pointer mr-2 mb-2 border-2 border-blue-300 rounded-md p-2"
+            onChange={(e) => onEndTime(e.target.value)}
+          >
+            <option value="">Izvēlieties beigu laiku</option>
+            {availableEndTimes.map((time, index) => (
+              <option key={index} value={time}>
+                {time}
+              </option>
             ))}
-        </select>
+          </select>
         </>
-    );
+      );
 }
