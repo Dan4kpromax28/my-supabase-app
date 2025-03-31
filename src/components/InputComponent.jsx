@@ -13,7 +13,7 @@ export default function InputComponent({
         <div className="mb-5">
             <label 
                 htmlFor={id} 
-                className="block mb-2 text-sm font-medium text-gray-900"
+                className="block mb-1 text-sm font-medium text-gray-900"
             >
                 {label}:
             </label>

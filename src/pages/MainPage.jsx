@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../utils/supabase';
 
-import "../styles/MainPage.css";
+
 import Card from '../components/Card';
 import CustomSlider from '../components/CustomSlider';
 import MainHeader from '../components/MainHeader'

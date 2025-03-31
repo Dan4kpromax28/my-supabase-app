@@ -4,10 +4,12 @@ import { supabase } from '../utils/supabase';
 import MainHeader from '../components/MainHeader'
 import MainFooter from '../components/MainFooter';
 import InputComponent from '../components/InputComponent';
+import validation from '../utils/helpers/handleInput.js';
 
 
 export default function Users({name ='', surname = '', email = '', phone = '', tips=''}){
     const [message, setMessage] = useState('');
+    const [errors, setErrors] = useState({});
 
 
     const navigate = useNavigate();
@@ -25,15 +27,31 @@ export default function Users({name ='', surname = '', email = '', phone = '', t
             ...prev,
             [name]: value
         }));
+        const errorMessage = validation.InputFieldValidation(name, value);
+        setErrors(prev => ({
+            ...prev,
+            [name]: errorMessage
+        }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-   
-        if (!formData.name || !formData.surname || !formData.email || !formData.phone) {
-            alert('Lūdzu aizpildiet visus obligātos laukus');
-            return;
+        const newErrors = {};
+        let isValid = true;
+
+        Object.keys(formData).forEach(field => {
+            const error = validation.InputFieldValidation(field, formData[field]);
+            if (error) {
+                isValid = false;
+                newErrors[field] = error;
+            }
+            });
+        setErrors(newErrors);
+        if (!isValid) {
+            setMessage('Lūdzu aizpildiet visus laukus pareizi');
+        return;
         }
+   
     
         const { data: existing, error: existingError } = await supabase
             .from('client')
@@ -56,7 +74,27 @@ export default function Users({name ='', surname = '', email = '', phone = '', t
             return;
         }
         if(existing){
+            const {data: clientData,error: clientError} = await supabase
+                .from('client')
+                .select('id')
+                .eq('email', formData.email)
+                .single();
+            if(clientError){
+                console.log('Notika kluda');
+                return;
+            }
+
+            const {data: subData, error: subError} = await supabase
+            .from('user_subscription')
+            .update({'client_id': clientData.id})
+            .eq('client_id', existing.id)
             setMessage('Tika nomainits');
+            
+            if(subError){
+                console.log('Notika kluda');
+                return;
+            }
+            setMessage('Klients tika veiksmigi atjaunots');
             return;
         }
         
@@ -92,6 +130,9 @@ export default function Users({name ='', surname = '', email = '', phone = '', t
                         value={formData.name}
                         onChange={handleInputChange}
                     />
+                    {formData.name && errors.name 
+                    ? <div className='text-red-500 text-sm text-center '>{errors.name}</div>
+                    : null}
                     
                     <InputComponent 
                         label="Klienta uzvards"
@@ -100,6 +141,9 @@ export default function Users({name ='', surname = '', email = '', phone = '', t
                         value={formData.surname}
                         onChange={handleInputChange}
                     />
+                    {formData.surname && errors.surname
+                    ? <div className='text-red-500 text-sm text-center '>{errors.surname}</div>
+                    : null}
                     
                     <InputComponent 
                         label="Klienta e-pasts"
@@ -109,6 +153,9 @@ export default function Users({name ='', surname = '', email = '', phone = '', t
                         value={formData.email}
                         onChange={handleInputChange}
                     />
+                    {formData.email && errors.email
+                    ? <div className='text-red-500 text-sm text-center '>{errors.email}</div>
+                    : null}
                     
                     <InputComponent 
                         label="Klienta telefona numurs"
@@ -118,6 +165,9 @@ export default function Users({name ='', surname = '', email = '', phone = '', t
                         value={formData.phone}
                         onChange={handleInputChange}
                     />
+                    {formData.phone && errors.phone 
+                    ? <div className='text-red-500 text-sm text-center '>{errors.phone}</div>
+                    : null}
                     {message && (<h3 className='text-center text-sm text-zinc-400'>{message}</h3>)}
 
                     

@@ -5,6 +5,7 @@ import AdminHeader from "../../components/AdminHeader";
 import Back from "../../components/Back";
 import InputComponent from "../../components/InputComponent";
 import { formatDate } from "../../utils/helpers/helpers";
+import validation from "../../utils/helpers/handleInput";
 
 export default function Subscription() {
 
@@ -17,6 +18,7 @@ export default function Subscription() {
         additionalInfo: "",
         myStatus: ""
     });
+    const [errors, setErrors] = useState({});
 
     useEffect(() => {
         if (invoice) {
@@ -37,6 +39,14 @@ export default function Subscription() {
             ...prev,
             [name]: value
         }));
+        const errorMessage = validation.InputFieldValidationInvoice(name, value);
+        setErrors(prev => ({
+            ...prev,
+            [name]: errorMessage
+        }));
+        if (message) {
+            setMessage('');
+        }
     };
 
     const status = [
@@ -49,6 +59,21 @@ export default function Subscription() {
 
     const handleUpdate = async () => {
         if (!invoice) return;
+        const newErrors = {};
+        let isValid = true;
+        Object.keys(formData).forEach(field => {
+            const error = validation.InputFieldValidationInvoice(field, formData[field]);
+            if (error) {
+                isValid = false;
+                newErrors[field] = error;
+            }
+        }
+        );
+        setErrors(newErrors);
+        if (!isValid) {
+            setMessage('Lūdzu aizpildiet visus laukus pareizi');
+            return;
+        }
     
         try {
             
@@ -62,6 +87,7 @@ export default function Subscription() {
                 .eq("id", invoice.id);
     
             if (invoiceError) {
+                console.log(invoiceError);
                 setMessage("Kļuda atjauninot rēķinu!");
                 return;
             }
@@ -173,6 +199,9 @@ export default function Subscription() {
                             value={formData.invoice_number}
                             onChange={handleInputChange}
                         />}
+                        {formData.invoice_number && errors.invoice_number
+                        ? <div className='text-red-500 text-sm text-center '>{errors.invoice_number}</div>
+                        : null}
                         {invoice?.full_price &&
                         <InputComponent
                             label="Cena"
@@ -181,6 +210,9 @@ export default function Subscription() {
                             value={formData.price}
                             onChange={handleInputChange}
                         />}
+                         {formData.price && errors.price
+                        ? <div className='text-red-500 text-sm text-center '>{errors.price}</div>
+                        : null}
                         {invoice?.status && 
                         <><h3>Status:</h3>
                             <select 
@@ -200,7 +232,6 @@ export default function Subscription() {
                         
                     </div>
                     {message && (<h2 className="text-center">{message}</h2>)}
-                    {}
                     <div className="flex justify-center items-center">
                         <button type='submit' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3 mb-6' onClick={() => handleUpdate()}>
                             Atjaunot

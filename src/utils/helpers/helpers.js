@@ -14,3 +14,11 @@ export function formatDate(myDate){
         }
     );
 };
+
+
+export function getLatvaianTimeZoneOffSet(){
+    const date = new Date();
+    const latviaTimeZoneOffset = date.getTimezoneOffset() * 60;
+    return latviaTimeZoneOffset;
+
+}

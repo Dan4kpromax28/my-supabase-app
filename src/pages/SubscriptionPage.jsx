@@ -6,7 +6,7 @@ import MainFooter from '../components/MainFooter';
 import InputComponent from '../components/InputComponent';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-
+import InputFieldValidation from '../utils/helpers/handleInput.js';
 export default function SubscriptionPage() {
 
     const { state } = useLocation();
@@ -14,6 +14,8 @@ export default function SubscriptionPage() {
     const subId = state?.id;
     const [subscription, setSubscription] = useState(null);
     const [availability, setAvailability] = useState({ dates: [], times: [] });
+    const [errors, setErrors] = useState({});
+    const [globalError, setGlobalError] = useState('');
 
     const [showCalendar, setShowCalendar] = useState(false);
     const [formData, setFormData] = useState({
@@ -53,11 +55,18 @@ export default function SubscriptionPage() {
         fetchSubscription(); 
     }, [subId, navigate]);
 
+
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
             [name]: value
+        }));
+        const errorMessage = InputFieldValidation(name, value);
+        setErrors(prev => ({
+            ...prev,
+            [name]: errorMessage
         }));
     };
     const handleDateChange = (date) => {
@@ -81,10 +90,36 @@ export default function SubscriptionPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
    
-        if (!formData.name || !formData.surname || !formData.email || !formData.phone) {
-            alert('Lūdzu aizpildiet visus obligātos laukus');
-            return;
+        if (subscription.isDate){
+            if (!formData.date) {
+                setGlobalError('Lūdzu izvēlieties datumu');
+                return;
+            }
         }
+
+        if (subscription.isTime) {
+            if (!formData.time) {
+                setGlobalError('Lūdzu izvēlieties laiku');
+                return;
+            }
+        }
+        const newErrors = {};
+        let isValid = true;
+
+        Object.keys(formData).forEach(field => {
+            const error = InputFieldValidation(field, formData[field]);
+            if (error) {
+                isValid = false;
+                newErrors[field] = error;
+            }
+            });
+        setErrors(newErrors);
+        if (!isValid) {
+            globalError('Lūdzu aizpildiet visus laukus pareizi');
+        return;
+        }
+
+        
     
         const { error } = await supabase.rpc('create_user_subscription', {
             cl_name: formData.name,
@@ -140,6 +175,9 @@ export default function SubscriptionPage() {
                             value={formData.name}
                             onChange={handleInputChange}
                         />
+                        {formData.name && errors.name 
+                        ? <div className='text-red-500 text-sm text-center '>{errors.name}</div>
+                        : null}
                         
                         <InputComponent 
                             label="Uzvards"
@@ -148,6 +186,9 @@ export default function SubscriptionPage() {
                             value={formData.surname}
                             onChange={handleInputChange}
                         />
+                        {formData.surname && errors.surname 
+                        ? <div className='text-red-500 text-sm text-center'>{errors.surname}</div>
+                        : null}
                         
                         <InputComponent 
                             label="E-pasts"
@@ -157,15 +198,21 @@ export default function SubscriptionPage() {
                             value={formData.email}
                             onChange={handleInputChange}
                         />
+                        {formData.email && errors.email
+                        ? <div className='text-red-500 text-sm text-center'>{errors.email}</div>
+                        : null}
                         
                         <InputComponent 
                             label="Telefona numurs"
-                            type="tel"
+                            type="phone"
                             id="phone"
                             placeholder="+371 xxxxxxxx"
                             value={formData.phone}
                             onChange={handleInputChange}
                         />
+                        {formData.phone && errors.phone
+                        ? <div className='text-red-500 text-sm text-center'>{errors.phone}</div>
+                        : null}
                         <div>
                                 <label htmlFor="additionalInfo" className="block text-gray-700 mb-2">Papildu informacija:</label>
                                 <textarea
@@ -178,7 +225,7 @@ export default function SubscriptionPage() {
                                 />
                         </div>
 
-                        {!(subscription.name === '8 Reižu') && (
+                        {!(!subscription.isDate) && (
                             <div className="mt-4">
                                 <button type="button"
                                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3 "
@@ -199,7 +246,7 @@ export default function SubscriptionPage() {
                             </div>
                         ) }
 
-                        {(subscription.name === 'Konferenču zāle' || subscription.name === 'Atpūtas zona') && (
+                        {(subscription.isTime) && (
                             <div className="mt-4">
                                 <label className="block mb-2">Izvēlieties laiku:</label>
                                 <select
@@ -214,6 +261,7 @@ export default function SubscriptionPage() {
                                 </select>
                             </div>
                         )}
+                        {globalError && (<div>Ir kluda</div>)}
 
 
                         <div className="flex justify-center items-center">
