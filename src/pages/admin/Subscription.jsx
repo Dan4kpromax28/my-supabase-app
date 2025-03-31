@@ -5,7 +5,7 @@ import AdminHeader from "../../components/AdminHeader";
 import Back from "../../components/Back";
 import InputComponent from "../../components/InputComponent";
 import { formatDate } from "../../utils/helpers/helpers";
-import validation from "../../utils/helpers/handleInput";
+import validation from "../../utils/helpers/handleInput.js";
 
 export default function Subscription() {
 
@@ -33,21 +33,21 @@ export default function Subscription() {
 
     
 
-    const handleInputChange = (e) => {
+    const handleInputChange = async (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({
-            ...prev,
-            [name]: value
+          ...prev,
+          [name]: value
         }));
-        const errorMessage = validation.InputFieldValidationInvoice(name, value);
+        
+        const errorMessage = await validation.InputFieldValidationInvoice(name, value, invoice.number_id);
         setErrors(prev => ({
-            ...prev,
-            [name]: errorMessage
+        ...prev,
+        [name]: errorMessage
         }));
-        if (message) {
-            setMessage('');
-        }
-    };
+        
+        setMessage('');
+      };
 
     const status = [
         'new',
@@ -62,7 +62,7 @@ export default function Subscription() {
         const newErrors = {};
         let isValid = true;
         Object.keys(formData).forEach(field => {
-            const error = validation.InputFieldValidationInvoice(field, formData[field]);
+            const error =  validation.InputFieldValidation(field, formData[field], invoice.number_id);
             if (error) {
                 isValid = false;
                 newErrors[field] = error;
@@ -87,7 +87,6 @@ export default function Subscription() {
                 .eq("id", invoice.id);
     
             if (invoiceError) {
-                console.log(invoiceError);
                 setMessage("Kļuda atjauninot rēķinu!");
                 return;
             }
@@ -210,9 +209,6 @@ export default function Subscription() {
                             value={formData.price}
                             onChange={handleInputChange}
                         />}
-                         {formData.price && errors.price
-                        ? <div className='text-red-500 text-sm text-center '>{errors.price}</div>
-                        : null}
                         {invoice?.status && 
                         <><h3>Status:</h3>
                             <select 
@@ -232,6 +228,7 @@ export default function Subscription() {
                         
                     </div>
                     {message && (<h2 className="text-center">{message}</h2>)}
+                    {}
                     <div className="flex justify-center items-center">
                         <button type='submit' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3 mb-6' onClick={() => handleUpdate()}>
                             Atjaunot

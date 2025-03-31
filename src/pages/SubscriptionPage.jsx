@@ -6,7 +6,7 @@ import MainFooter from '../components/MainFooter';
 import InputComponent from '../components/InputComponent';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import InputFieldValidation from '../utils/helpers/handleInput.js';
+import validation from '../utils/helpers/handleInput.js';
 export default function SubscriptionPage() {
 
     const { state } = useLocation();
@@ -107,7 +107,7 @@ export default function SubscriptionPage() {
         let isValid = true;
 
         Object.keys(formData).forEach(field => {
-            const error = InputFieldValidation(field, formData[field]);
+            const error = validation.InputFieldValidation(field, formData[field]);
             if (error) {
                 isValid = false;
                 newErrors[field] = error;

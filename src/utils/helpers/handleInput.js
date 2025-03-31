@@ -33,10 +33,14 @@ export function InputFieldValidation(name, value) {
     return message;
 }
 
-const InputFieldValidationInvoice = async (name, value) =>{
+const InputFieldValidationInvoice = async (name, value, acctual_number) =>{
     var message = '';
     switch(name){
         case 'invoice_number':
+            const invoiceNumberRegex = /^MOM[0-9]{1,100}$/;
+            if(!value || !invoiceNumberRegex.test(value)){
+                message = 'Nekorekta rēķina numura ievade';
+            }
             const {data, error} = await supabase
                 .from('invoice')
                 .select('number_id')
@@ -45,13 +49,11 @@ const InputFieldValidationInvoice = async (name, value) =>{
             if (error) {
                 console.error('Notika kluda');
             }
-            else if (data && data.number_id != value){
+            else if (data && data.number_id != acctual_number && data.number_id === value){
                 message = 'Rēķina numurs jau eksistē';
             }
-            const invoiceNumberRegex = /^MOM[0-9]{1,100}$/;
-            if(!value || !invoiceNumberRegex.test(value)){
-                message = 'Nekorekta rēķina numura ievade';
-            }
+            
+            
 
             break;
         case 'price':
