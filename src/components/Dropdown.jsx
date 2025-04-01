@@ -23,11 +23,7 @@ export default function Dropdown({options, onSelect, selected}) {
                             <li key={index} onClick={() => handleSelect(option)} className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">
                                 {option}
                             </li>
-
-
-
-                        ))}
-                        
+                        ))} 
                     </ul>
                 </div>
             )}

@@ -109,6 +109,20 @@ export default function AllSubscriptions(){
         }
         alert('Status izmainits');
     }
+
+    const handleDelete = async (id) => {
+        const confirm = window.confirm('Vai velies nodzes ierastu?');
+        if (!confirm) return;
+        const {error} = await supabase
+            .from('invoice')
+            .delete()
+            .eq('id', id);
+        if (error){
+            alert('Notika kluda');
+        }
+        console.log('Veiksmigi nodzests' + id);
+        setFiltSubscriptions(prev => prev.filter(sub => sub.id !== id)); // lai atjaunot
+    }
     return (
         <>
         <AdminHeader />
@@ -173,6 +187,12 @@ export default function AllSubscriptions(){
                     </>
 
                     )}
+                    <button
+                        onClick={() => handleDelete(sub.id)}
+                        className="bg-red-800 text-white py-1 px-3 rounded hover:bg-red-900">
+                        Dzest
+                    </button>
+
                     
                 </div>
             </li>

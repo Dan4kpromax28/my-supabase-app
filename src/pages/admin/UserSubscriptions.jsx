@@ -36,8 +36,6 @@ export default function UserSubscriptions(){
                 return;
             }
             
-            console.log("Notika kluda");
-            
             const invoices = [];
             data.forEach(subscription => {
                 if (subscription.invoice && subscription.invoice.length > 0) {
@@ -64,6 +62,22 @@ export default function UserSubscriptions(){
         navigate(`/admin/clients/subscriptions/${subId}`);
     }
 
+
+    const handleDelete = async (id) => {
+        const confirm = window.confirm('Vai velaties nodzest ierastu?');
+        if (!confirm) return;
+        const {error} = await supabase
+            .from('invoice')
+            .delete()
+            .eq('id', id);
+
+        if (error) {
+            console.log('Notika kluda');
+            return;
+        }
+    
+        setSubscriptions(prev => prev.filter(sub => sub.id !== id)); // lai atjaunot
+    }
     return (<>
             <AdminHeader />
             
@@ -121,6 +135,12 @@ export default function UserSubscriptions(){
                         </>
     
                         )}
+
+                        <button
+                            onClick={() => handleDelete(sub.id)}
+                            className="bg-red-800 text-white py-1 px-3 rounded hover:bg-red-900">
+                            Dzest
+                        </button>
                         
                     </div>
                 </li>
