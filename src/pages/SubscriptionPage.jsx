@@ -65,7 +65,7 @@ export default function SubscriptionPage() {
             ...prev,
             [name]: value
         }));
-        const errorMessage = InputFieldValidation(name, value);
+        const errorMessage = validation.InputFieldValidation(name, value);
         setErrors(prev => ({
             ...prev,
             [name]: errorMessage
@@ -122,7 +122,7 @@ export default function SubscriptionPage() {
             cl_phone: formData.phone,
             cl_subscription: subId,
             cl_information: formData.additionalInfo,
-            cl_start_date: formData.date ? formData.date.toISOString().split('T')[0] : null,
+            cl_start_date: formData.date ? formData.date : null,
             cl_start_time: formData.startTime ? `${formData.startTime}` : null,
             cl_end_time: formData.endTime ? `${formData.endTime}` : null,
         });
@@ -219,7 +219,7 @@ export default function SubscriptionPage() {
                                 />
                         </div>
 
-                        {!(!subscription.isDate) && (
+                        {!(!subscription.is_date) && (
                             <div className="mt-4">
                                 <button type="button"
                                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3 "
@@ -239,7 +239,7 @@ export default function SubscriptionPage() {
                             </div>
                         ) }
 
-                        {(subscription.isTime) && (
+                        {(subscription.is_time) && (
                             <TimePicker 
                             date={formData.date ? new Date(formData.date).toISOString().split('T')[0] : null}
                             onStartTime={(time) => setFormData(prev => ({ ...prev, startTime: time }))}

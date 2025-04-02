@@ -8,6 +8,7 @@ export default function TimePicker({ date, onStartTime, onEndTime, start,end}) {
 
     useEffect(() => {
         const fetchTimes = async () => {
+            if (date === null || date === undefined) return;
             
             const { data, error } = await supabase
                 .from('user_subscription')

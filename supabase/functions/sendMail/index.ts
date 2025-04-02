@@ -8,13 +8,84 @@ import { SMTPClient } from "https://deno.land/x/denomailer/mod.ts";
 import { qrcode } from "https://deno.land/x/qrcode/mod.ts";
 import "jsr:@supabase/functions-js/edge-runtime.d.ts"
 import { corsHeaders } from "../_shared/cors.ts";
+import { createClient } from 'jsr:@supabase/supabase-js@2'
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
   try {
-    const { qrData, email } = await req.json();
-    const data = await qrcode(qrData);
+    const { subId, email } = await req.json();
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+      { global: { headers: { Authorization: req.headers.get('Authorization')! } } }
+    )
+    let isCreated = false;
+    let random = '';
+    const { data: exist, error: errExist } = await supabase
+      .from('ticket')
+      .select('user_string, count')
+      .eq('user_subscription_id', subId)
+      .maybeSingle();
+    if (errExist) {
+      console.error(errExist);
+      throw new Error('Notika kluda sakuma' + errExist.message);
+    }
+    if (exist) {
+      random = exist.user_string;
+    }
+    else{
+      while(!isCreated){
+        const charactersForQrCode = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        
+        for (let i = 0; i < 15; i++) {
+          random += charactersForQrCode.charAt(Math.floor(Math.random() * charactersForQrCode.length));
+        }
+        const {data, error} = await supabase
+          .from('ticket')
+          .select('user_string')
+          .eq('user_string', random)
+          .maybeSingle();
+        if (error) {
+          console.error(error);
+          throw new Error('Notika kluda ar string meklesanu' + error.message);
+        }
+        if (!data){
+          const { data: subscription, error: errSubscription } = await supabase
+            .from('user_subscription')
+            .select(`
+              *,
+              subscriptions(is_date, is_time)
+            `)
+            .eq('id', subId)
+            .single();
+          if (errSubscription) {
+            console.error(errSubscription);
+            throw new Error('Notika kluda ar subscription meklesanu 1' + errSubscription.message);
+          }
+          if (!subscription?.subscriptions?.is_date && !subscription?.subscriptions?.is_time){
+            const { error: secondEr} = await supabase
+            .from('ticket')
+            .insert({ user_string: random, user_subscription_id: subId, count : 8 });
+            if (secondEr) {
+              console.error(secondEr);
+              throw new Error('Notikakluda ar sutisanu 1'+ random + ''+ subscription?.subscriptions?.is_date + ''+ subscription?.subscriptions?.is_time) ;
+            }
+          } else{
+            const { error: secondEr} = await supabase
+            .from('ticket')
+            .insert({ user_string: random, user_subscription_id: subId, count: 0});
+            if (secondEr) {
+              console.error(secondEr);
+              throw new Error('Notika kluda ar sutisanu 2'+ subscription?.subscriptions?.is_date + ''+ subscription?.subscriptions?.is_time + secondEr.message) ;
+            }
+          }
+          isCreated = true;
+        }
+        
+      }
+    }
+    const data = await qrcode(random);
     const base64 = data.split(',')[1];
 
     const client = new SMTPClient({

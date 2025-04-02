@@ -88,7 +88,7 @@ export default function AllSubscriptions(){
         const d = String(datas);
         const e = String(email);
         const { data, error } = await supabase.functions.invoke('sendMail', {
-            body: { 'qrData': d, 'email': e},
+            body: { 'subId': d, 'email': e},
         });
     
         if (error) console.error(error);
@@ -170,7 +170,7 @@ export default function AllSubscriptions(){
                      {sub.status === 'accepted' && (
                     <>
                         <button
-                            onClick={() => handleInvoice(sub.user_subscription?.client?.email, sub.user_subscription?.client?.email)}
+                            onClick={() => handleInvoice(sub.user_subscription?.id, sub.user_subscription?.client?.email)}
                             className="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600">
                             Apmaksa atnaca
                         </button>
@@ -180,7 +180,7 @@ export default function AllSubscriptions(){
                      {sub.status === 'accepted' && (
                     <>
                         <button
-                            onClick={() => handleInvoice(sub.user_subscription?.client?.email, sub.user_subscription?.client?.email)}
+                            onClick={() => handleInvoice(sub.user_subscription?.id, sub.user_subscription?.client?.email)}
                             className="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600">
                             Apmaksa atnaca
                         </button>
