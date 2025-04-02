@@ -7,5 +7,6 @@ export const filterOptions = [
     "Jaunie",
     "Rejected",
     "Accepted",
+    "Valid",
     "Invalid"
 ]

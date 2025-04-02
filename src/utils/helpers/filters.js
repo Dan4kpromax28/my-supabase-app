@@ -9,6 +9,7 @@ const filterAllSubscriptions =
     "Jaunie" : (subscriptions) => subscriptions.filter(sub => sub.status === "new"),
     "Rejected" : (subscriptions) => subscriptions.filter(sub => sub.status === "rejected"),
     "Accepted" : (subscriptions) => subscriptions.filter(sub => sub.status === "accepted"),
+    "Valid" : (subscriptions) => subscriptions.filter(sub => sub.status === "valid"),
     "Invalid" : (subscriptions) => subscriptions.filter(sub => sub.status === "invalid"),
     "Visi abonimenti" : (subscriptions) => subscriptions
 };

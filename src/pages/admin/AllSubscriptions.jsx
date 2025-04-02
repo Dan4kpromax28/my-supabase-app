@@ -7,7 +7,7 @@ import Back from "../../components/Back";
 import { createClient } from '@supabase/supabase-js'
 import filterAllSubscriptions from "../../utils/helpers/filters.js";
 import { filterOptions } from "../../utils/helpers/filterOptions.js";
-import { sub } from "date-fns";
+import { set, sub } from "date-fns";
 
 export default function AllSubscriptions(){
 
@@ -84,19 +84,37 @@ export default function AllSubscriptions(){
     };
 
 
-    const handleInvoice = async (datas, email ) => {
+    const handleInvoice = async (datas, email, id ) => {
         const d = String(datas);
         const e = String(email);
+        console.log(d,e)
         const { data, error } = await supabase.functions.invoke('sendMail', {
             body: { 'subId': d, 'email': e},
         });
     
         if (error) console.error(error);
-        else console.log('Success:', data);
+        else {
+        const {error: second} = await supabase
+            .from('invoice')
+            .update({
+                status: 'valid'
+            })
+            .eq('id', id);
+            if (second){
+                console.log('Notika kluda');
+            }
+        }
+
     };
 
-    const handleReject = async (id) => {
-        
+    const handleReject = async (id, email) => {
+        const d = String(id);
+        const e = String(email);
+        console.log(d,e)
+        const { data, error: rejectEr } = await supabase.functions.invoke('sendMailWithCredentials', {
+            body: { 'id': d, 'email': e},
+        });
+        if (rejectEr) console.error(rejectEr);
         const {error} = await supabase
             .from('invoice')
             .update({
@@ -107,21 +125,51 @@ export default function AllSubscriptions(){
         if (error){
             alert('Notika kluda');
         }
-        alert('Status izmainits');
+        //alert('Status izmainits');
+       setFiltSubscriptions(prev => prev.filter(sub => sub.user_subscription?.id !== id)); // lai atjaunot
     }
 
     const handleDelete = async (id) => {
         const confirm = window.confirm('Vai velies nodzes ierastu?');
         if (!confirm) return;
         const {error} = await supabase
-            .from('invoice')
+            .from('user_subscription')
             .delete()
             .eq('id', id);
         if (error){
             alert('Notika kluda');
         }
         console.log('Veiksmigi nodzests' + id);
-        setFiltSubscriptions(prev => prev.filter(sub => sub.id !== id)); // lai atjaunot
+        setFiltSubscriptions(prev => prev.filter(sub => sub.user_subscription?.id !== id)); // lai atjaunot
+    }
+
+    const handleInvalid = async (id) => {
+        const {error} = await supabase
+            .from('invoice')
+            .update({ status: 'invalid'})
+            .eq('id', id);
+        if (error){
+            console.log('Nitika kluda ar statusa izmainu');
+        }
+        setFiltSubscriptions(prev => prev.filter(sub => sub.user_subscription?.id !== id));
+    }
+
+    const handleAccept = async (id, email) => {
+        const {error} = await supabase
+            .from('invoice')
+            .update({ status: 'accepted'})
+            .eq('id', id);
+        if (error){
+            console.log('Notika kluda ar statusa izmainu accept');
+            
+        }
+        const { data, error: accept } = await supabase.functions.invoke('sendMailWithCredentials', {
+            body: { 'id': id, 'email': email},
+        });
+        if (accept) 
+            alert('Notika kluda');
+        
+        setFiltSubscriptions(prev => prev.filter(sub => sub.user_subscription?.id !== id));
     }
     return (
         <>
@@ -161,34 +209,41 @@ export default function AllSubscriptions(){
                     {sub.status === 'new' && (
                     <>
                         <button
-                            onClick={() => handleReject(sub.id)}
+                            onClick={() => handleReject(sub.id, sub.user_subscription?.client?.email)}
                             className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600">
                             Atteikt
                         </button>
+                        <button
+                            onClick={() => handleAccept(sub.id, sub.user_subscription?.client?.email)}
+                            className="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600">
+                            Apstiprinat
+                        </button>
                     </>
+                    
+
                     )}
                      {sub.status === 'accepted' && (
                     <>
                         <button
-                            onClick={() => handleInvoice(sub.user_subscription?.id, sub.user_subscription?.client?.email)}
+                            onClick={() => handleInvoice(sub.user_subscription?.id, sub.user_subscription?.client?.email, sub.id)}
                             className="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600">
                             Apmaksa atnaca
                         </button>
                     </>
 
                     )}
-                     {sub.status === 'accepted' && (
+                     {sub.status === 'valid' && (
                     <>
                         <button
-                            onClick={() => handleInvoice(sub.user_subscription?.id, sub.user_subscription?.client?.email)}
-                            className="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600">
-                            Apmaksa atnaca
+                            onClick={() => handleInvalid(sub.id)}
+                            className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600">
+                            Ban
                         </button>
                     </>
 
                     )}
                     <button
-                        onClick={() => handleDelete(sub.id)}
+                        onClick={() => handleDelete(sub.user_subscription?.id)}
                         className="bg-red-800 text-white py-1 px-3 rounded hover:bg-red-900">
                         Dzest
                     </button>

@@ -67,7 +67,7 @@ export default function UserSubscriptions(){
         const confirm = window.confirm('Vai velaties nodzest ierastu?');
         if (!confirm) return;
         const {error} = await supabase
-            .from('invoice')
+            .from('user_subscription')
             .delete()
             .eq('id', id);
 
@@ -76,7 +76,7 @@ export default function UserSubscriptions(){
             return;
         }
     
-        setSubscriptions(prev => prev.filter(sub => sub.id !== id)); // lai atjaunot
+        setSubscriptions(prev => prev.filter(sub => sub.user_subscription?.id !== id)); // lai atjaunot
     }
     return (<>
             <AdminHeader />
@@ -137,7 +137,7 @@ export default function UserSubscriptions(){
                         )}
 
                         <button
-                            onClick={() => handleDelete(sub.id)}
+                            onClick={() => handleDelete(sub.user_subscription?.id)}
                             className="bg-red-800 text-white py-1 px-3 rounded hover:bg-red-900">
                             Dzest
                         </button>
