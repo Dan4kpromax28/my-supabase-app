@@ -34,45 +34,45 @@ export default function AllSubscriptions(){
     }, [search, subscriptions]);
 
 
-    useEffect(() => {
+    
         
-        const fetchSubscriptions = async (find) => {
+    const fetchSubscriptions = async (find) => {
 
-        
+    
 
-            let query = supabase
-            .from('invoice')
-            .select(`
+        let query = supabase
+        .from('invoice')
+        .select(`
+            *,
+            user_subscription:user_subscription_id (
                 *,
-                user_subscription:user_subscription_id (
-                    *,
-                    subscriptions:subscription_id (
-                        id,
-                        name,
-                        price
-                    ),
-                    client:client_id(*)
-                )
-            `)
-            .order('created_at', { ascending: false });
+                subscriptions:subscription_id (
+                    id,
+                    name,
+                    price
+                ),
+                client:client_id(*)
+            )
+        `)
+        .order('created_at', { ascending: false });
 
-            if (find){
-                query = query.or(
-                    `number_id.ilike.%${find}%`
-                );
-            }
-            const { data, error } = await query;
-            if (error) {
-            console.error('Notika kluda:', error);
-            } else {
-           
-            setSubscriptions(data);
-            setFiltSubscriptions(data);
-            }
-       
-        };
+        if (find){
+            query = query.or(
+                `number_id.ilike.%${find}%`
+            );
+        }
+        const { data, error } = await query;
+        if (error) {
+        console.error('Notika kluda:', error);
+        } else {
+        
+        setSubscriptions(data);
+        setFiltSubscriptions(data);
+        }
+    
+    };
 
-
+    useEffect(() => {
         fetchSubscriptions(); 
     }, [ navigate]);
 
@@ -104,6 +104,7 @@ export default function AllSubscriptions(){
                 console.log('Notika kluda');
             }
         }
+        await fetchSubscriptions(); // lai atjaunot
 
     };
 
@@ -126,7 +127,7 @@ export default function AllSubscriptions(){
             alert('Notika kluda');
         }
         //alert('Status izmainits');
-       setFiltSubscriptions(prev => prev.filter(sub => sub.user_subscription?.id !== id)); // lai atjaunot
+      await fetchSubscriptions(); // lai atjaunot
     }
 
     const handleDelete = async (id) => {
@@ -151,7 +152,7 @@ export default function AllSubscriptions(){
         if (error){
             console.log('Nitika kluda ar statusa izmainu');
         }
-        setFiltSubscriptions(prev => prev.filter(sub => sub.user_subscription?.id !== id));
+        await fetchSubscriptions(); // lai atjaunot
     }
 
     const handleAccept = async (id, email) => {
@@ -169,7 +170,7 @@ export default function AllSubscriptions(){
         if (accept) 
             alert('Notika kluda');
         
-        setFiltSubscriptions(prev => prev.filter(sub => sub.user_subscription?.id !== id));
+        await fetchSubscriptions(); // lai atjaunot
     }
     return (
         <>
