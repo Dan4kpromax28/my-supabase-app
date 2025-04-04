@@ -13,6 +13,8 @@ import AllSub from './components/SubComp';
 import AllSubscriptions from './pages/admin/AllSubscriptions';
 import EditClient from './pages/admin/EditClient';
 import SubscriptionTypes from './pages/admin/SubscriptionsTypes';
+import ForgotPassword from './pages/admin/ForgotPassword';
+
 
 import CreateType from './pages/admin/CreateType';
 import UpdateSubscriptionType from './pages/admin/UpdateSubscriptionType';
@@ -27,6 +29,8 @@ export default function App() {
         
         <Route path="/" element={<MainPage />} />
         <Route path="/pakalpojums/:id" element={<SubscriptionPage />} />
+        
+        <Route path="/admin/forgotpassword" element={<LoginWrapper><ForgotPassword /></LoginWrapper>} />
         <Route path="/admin/login" element={<LoginWrapper><AdminLogin /></LoginWrapper>} />
         <Route path="/admin/dashboard" element={<Wrapper><Dashboard /></Wrapper>}/>
         <Route path="/admin/profils" element={<Wrapper><AdminProfile /></Wrapper>} />
@@ -38,6 +42,7 @@ export default function App() {
         <Route path="/admin/subscriptions/:id" element={<Wrapper><UpdateSubscriptionType /></Wrapper>} />
         <Route path='/admin/subscription/create' element={<Wrapper><CreateType /></Wrapper>} />
         <Route path='/admin/clients/userSubscriptions/:id' element={<Wrapper><UserSubscriptions /></Wrapper>} />
+
        </Routes>
     </BrowserRouter>
   );

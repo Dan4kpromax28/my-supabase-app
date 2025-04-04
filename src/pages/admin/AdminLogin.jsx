@@ -37,6 +37,9 @@ export default function AdminLogin(){
             navigate('/admin/dashboard');
         }
     };
+    const handleReset = () => {
+        navigate("/admin/forgotpassword");
+    };
 
     return (
         <div className="min-h-screen bg-stone-100 flex flex-col">
@@ -64,11 +67,13 @@ export default function AdminLogin(){
                             onChange={handleInputChange}
                         />
                         {error && (<p>{error}</p>)}
-
-                        <div className="flex justify-center items-center">
+                    
+                        <div className="flex flex-col justify-center items-center">
+                            
                             <button type='submit' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3 mb-1'>
                                 Pieteikties
                             </button>
+                             <button className='underline text-blue-400' onClick={handleReset}>Reset</button>
                         </div>
                     </form>
                 </div>

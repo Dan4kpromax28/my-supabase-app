@@ -32,14 +32,8 @@ export default function AllSubscriptions(){
         );
         setFiltSubscriptions(filtered);
     }, [search, subscriptions]);
-
-
-    
         
     const fetchSubscriptions = async (find) => {
-
-    
-
         let query = supabase
         .from('invoice')
         .select(`
@@ -76,9 +70,7 @@ export default function AllSubscriptions(){
         fetchSubscriptions(); 
     }, [ navigate]);
 
-    const handleBack = () => {
-        navigate(-1);
-    }
+    
     const handleSubscriptions = (subId) => {
         navigate(`/admin/clients/subscriptions/${subId}`);
     };

@@ -18,7 +18,9 @@ export default function Tips({id}){
         durationValue: '',
         durationType: '',
         restrictionStart: '',
-        restrictionEnd: ''
+        restrictionEnd: '',
+        isTime: '',
+        isDate: '',
     });
 
     const UpdateForm = (data) => {
@@ -30,7 +32,9 @@ export default function Tips({id}){
         durationValue: data.duration_value,
         durationType: data.duration_type,
         restrictionStart: data.restriction_start,
-        restrictionEnd: data.restriction_end
+        restrictionEnd: data.restriction_end,
+        isTime: data.is_time,
+        isDate: data.is_date,
         });
     };
 
@@ -40,7 +44,7 @@ export default function Tips({id}){
                
                 const { data, error } = await supabase
                     .from('subscriptions')
-                    .select()
+                    .select('*')
                     .eq('id', id)
                     .single();
 
@@ -93,7 +97,9 @@ export default function Tips({id}){
                 duration_value: formData.durationValue,
                 duration_type: formData.durationType,
                 restriction_start: formData.restrictionStart,
-                restriction_end: formData.restrictionEnd
+                restriction_end: formData.restrictionEnd,
+                is_time: formData.isTime,
+                is_date: formData.isDate,
             }, { onConflict: 'name' })
             .select()
             .single();
@@ -153,14 +159,7 @@ export default function Tips({id}){
                         value={formData.price}
                         onChange={handleInputChange}
                     />
-                    <InputComponent
-                        label="additional hour price"
-                        id="additionalHourPrice"
-                        name="additionalHourPrice"
-                        placeholder="Cena par nakamo stundu"
-                        value={formData.additionalHourPrice}
-                        onChange={handleInputChange}
-                    />
+                    
 
                     <InputComponent
                         label="durationValue"
@@ -178,7 +177,18 @@ export default function Tips({id}){
                         value={formData.durationType}
                         onChange={handleInputChange}
                     />
+                    {formData.isTime && (<>
+                        <InputComponent
+                        label="additional hour price"
+                        id="additionalHourPrice"
+                        name="additionalHourPrice"
+                        placeholder="Cena par nakamo stundu"
+                        value={formData.additionalHourPrice}
+                        onChange={handleInputChange}
+                    />
+                    </>)}
                     <InputComponent
+                    
                         //type="time"
                         label="restStart"
                         id="restrictionStart"
@@ -196,6 +206,27 @@ export default function Tips({id}){
                         value={formData.restrictionEnd}
                         onChange={handleInputChange}
                     />
+                    <p>isTime</p>
+                    <input
+                        type="checkbox"
+                        id="isTime"
+                        name="isTime"
+                        checked={formData.isTime}
+                        onChange={(e) => setFormData({ ...formData, isTime: e.target.checked })}
+                    />
+                    <br/>
+                    <p>isDate</p>
+                     <input
+                        type="checkbox"
+                        id="isDate"
+                        name="isDate"
+                        checked={formData.isDate}
+                        onChange={(e) => setFormData({ ...formData, isDate: e.target.checked })}
+                    />
+
+                    
+                    
+                    
                     <div className="flex justify-center items-center">
                             <button type='submit' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3 mb-6'>
                                 {!id ? 'Izveidot' : 'Atjaunot' }
