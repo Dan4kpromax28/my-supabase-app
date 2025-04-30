@@ -10,7 +10,7 @@ export default function AdminLogin(){
 
     const navigate = useNavigate();
     const [error, setError] = useState(null);
-    const [session, setSession] = useState(null);
+    
 
     const [loginData, setLoginData] = useState({
         email: '',

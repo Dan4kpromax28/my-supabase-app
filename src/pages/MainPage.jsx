@@ -16,7 +16,6 @@ export default function MainPage() {
     
     useEffect(() => {
         const fetchSubscriptions = async () => {
-            
             const { data, error } = await supabase
                 .from('subscriptions')
                 .select('*'); 
