@@ -7,29 +7,13 @@ import Card from '../components/Card';
 import CustomSlider from '../components/CustomSlider';
 import MainHeader from '../components/MainHeader'
 import MainFooter from '../components/MainFooter';
+import useAllSubscription from '../hooks/supabaseAPI/useAllSubscription';
 
 
 export default function MainPage() {
     
-    const [subscriptions, setSubscriptions] = useState([]);
+    const {subscriptions} = useAllSubscription();
   
-    
-    useEffect(() => {
-        const fetchSubscriptions = async () => {
-            const { data, error } = await supabase
-                .from('subscriptions')
-                .select('*'); 
-    
-            if (error) {
-                console.error('Notika kluda:', error);
-            } else {
-                setSubscriptions(data);
-            }
-            
-        };
-  
-        fetchSubscriptions(); 
-    }, []);
   
     return (
         <div className="min-h-screen flex flex-col bg-stone-100 text-white">

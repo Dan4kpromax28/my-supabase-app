@@ -2,82 +2,26 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '../../utils/supabase';
 import { useNavigate } from 'react-router-dom';
 import AdminHeader from '../../components/AdminHeader';
+import useClient from '../../hooks/supabaseAPI/useClients';
 
 export default function Dashboard(){
     const [search, setSearch] = useState('');
-    const [clients, setClients] = useState([]);
+    const {clients} = useClient(search);
     const navigate = useNavigate();
-
-    useEffect(() => {
-        fetchClients();
-    }, []);
-
-    const fetchClients = async (find) => {
-        
-            
-        let query = supabase
-            .from("client")
-            .select(`
-                *,
-                user_subscription (
-                    *,
-                    invoice (*)
-                )
-            `);
-        if (find) {
-            query = query.or(
-                `name.ilike.%${find}%,surname.ilike.%${find}%,email.ilike.%${find}%,phone_number.ilike.%${find}%`
-            );
-        }
-
-        const { data, error } = await query;
-                    
-        if (error) {
-            console.error('Kļūda:', error);
-            return;
-        }
-
-        
-        const clientsSubscriptionCount = data.map(client => ({
-            ...client,
-            subscriptionCount: client.user_subscription ? client.user_subscription.length : 0
-        }));
-
-        setClients(clientsSubscriptionCount);
-    };
-
-    useEffect(() => {
-        fetchClients(search);
-    }, [search]);
 
     const handleEdit = (clientId) => {
         navigate(`/admin/clients/edit/${clientId}`);
-    };
-
-    const handleDelete = async (clientId) => {
-        if (window.confirm('Vai jus gribat nodzest clientu')) {
-            const { error } = await supabase.from('client').delete().eq('id', clientId);
-            if (error) {
-                console.error(error);
-                return;
-            }
-            fetchClients();
-        }
     };
 
     const handleViewSubscriptions = (clientId) => {
         navigate(`/admin/clients/userSubscriptions/${clientId}`);
     };
 
-    
-
     const handleCreateClient = () => {
         navigate('/admin/clients/createClient');
     };
     
 
-
-    
 
     return (
         <>

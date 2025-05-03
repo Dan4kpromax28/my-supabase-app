@@ -39,6 +39,7 @@ export default function AdminStatistic(){
         }
         fetchClinetStatistic();
     }, [date]);
+    
 
     console.log(date.startDate);
     console.log(date.endDate);

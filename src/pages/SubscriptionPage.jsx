@@ -9,13 +9,13 @@ import 'react-calendar/dist/Calendar.css';
 import validation from '../utils/helpers/handleInput.js';
 import TimePicker from '../components/TimePicker.jsx';
 import { DateTime } from 'luxon';
+import useOneSubscription from '../hooks/supabaseAPI/useOneSubscription.jsx';
 export default function SubscriptionPage() {
 
     const { state } = useLocation();
     const navigate = useNavigate();
     const subId = state?.id;
-    const [subscription, setSubscription] = useState(null);
-    const [availability, setAvailability] = useState({ dates: [], times: [] });
+    const subscription = useOneSubscription(subId);
     const [errors, setErrors] = useState({});
     const [globalError, setGlobalError] = useState('');
 
@@ -30,35 +30,6 @@ export default function SubscriptionPage() {
         startTime: '',
         endTime: ''
     });
-
-    useEffect(() => {
-        if (!subId) {
-            navigate('/');
-            return;
-        }
-
-        const fetchSubscription = async () => {
-           
-            const { data, error } = await supabase
-                .from('subscriptions')
-                .select('*')
-                .eq('id', subId)
-                .single(); 
-    
-            if (error) {
-                console.error('Notika kluda:', error);
-                navigate('/');
-            } else {
-                setSubscription(data);
-            }
-            
-        };
-  
-        fetchSubscription(); 
-    }, [subId, navigate]);
-
-
-
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({

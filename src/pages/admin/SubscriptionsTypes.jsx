@@ -3,6 +3,7 @@ import AdminHeader from "../../components/AdminHeader";
 import { supabase } from "../../utils/supabase";
 import { useNavigate } from "react-router-dom";
 import Back from "../../components/Back";
+import useAllSubscription from "../../hooks/supabaseAPI/useAllSubscription";
 
 
 
@@ -10,63 +11,17 @@ import Back from "../../components/Back";
 export default function SubscriptionTypes(){
 
 
-    const [subscriptions, setSubscriptions] = useState([]);
-
     const navigate = useNavigate();
-
-
-
-    useEffect(() => {
-        const fetchSubscriptions = async () => {
-           
-            const { data, error } = await supabase
-                .from('subscriptions')
-                .select('*'); 
-    
-            if (error) {
-                console.error('Notika kluda:', error);
-            } else {
-                setSubscriptions(data);
-            }
-        
-    };
-  
-        fetchSubscriptions(); 
-    }, []);
+    const {subscriptions, handleDelete} = useAllSubscription();
 
 
     const handleCreateSubscription = () => {
         navigate('/admin/subscription/create');
 
     };
-
-    const handleDelete = async (id, name) => {
-        const confirm = window.confirm('Vai velies nodzes ierastu '+name);
-
-        if (!confirm) return;
-
-       
-        const {error} = await supabase
-            .from('subscriptions')
-            .delete()
-            .eq('id', id);
-
-        if (error) {
-            alert('Notika kluda');
-        }
-        alert('Veiksmigi nodzests');
-        setSubscriptions(prev => prev.filter(sub => sub.id !== id)); // lai atjaunot
-       
-    };
-
-
     const handleClick = (id) => {
         navigate(`/admin/subscriptions/${id}`);
     };
-
-    
-
-
 
     return(
         <>

@@ -2,35 +2,14 @@ import { useEffect } from "react";
 import { supabase } from "../utils/supabase";
 import { useState } from "react";
 import { DateTime } from "luxon";
+import useTimes from "../hooks/supabaseAPI/useTimes";
 
 export default function TimePicker({ date, onStartTime, onEndTime, start,end}) {
-    const [times, setTimes] = useState([]);
+    const times = useTimes();
 
-    useEffect(() => {
-        const fetchTimes = async () => {
-            if (date === null || date === undefined) return;
-            
-            const { data, error } = await supabase
-                .from('user_subscription')
-                .select('start_time, end_time')
-                .eq('start_date', date)
-                .not('start_time', 'is', null);
+    
 
-            if (error) {
-                console.error('Notika kluda:', error.message);
-                return;
-            }
-
-            setTimes(data);
-           
-        };
-
-        fetchTimes();
-    }, [date]);
-
-    useEffect(() => {
-        console.log('Jaunie dati:', times);
-    }, [times]);
+   
 
     function listWithTimesFrom08To20(){
         let times = [];

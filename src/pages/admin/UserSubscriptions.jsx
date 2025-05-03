@@ -3,10 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../../utils/supabase";
 import AdminHeader from "../../components/AdminHeader";
 import Back from "../../components/Back";
-
-
-
-
+import useUserSubscriptions from "../../hooks/supabaseAPI/useUserSubscriptions";
 
 
 export default function UserSubscriptions(){
@@ -14,69 +11,9 @@ export default function UserSubscriptions(){
     const navigate = useNavigate();
     const { id: userId} = useParams();
 
-    const [subscriptions, setSubscriptions] = useState([]);
-    
-    
-
-    useEffect(() => {
-        const fetchUserSubscriptions = async () => {
-            
-            const { data, error } = await supabase
-                .from('user_subscription')
-                .select(`
-                    *,
-                    subscriptions:subscription_id(*),
-                    client:client_id(*),
-                    invoice(*)
-                `)
-                .eq('client_id', userId);
-            
-            if(error){
-                console.log('Notikak kluda');
-                return;
-            }
-            
-            const invoices = [];
-            data.forEach(subscription => {
-                if (subscription.invoice && subscription.invoice.length > 0) {
-                    subscription.invoice.forEach(inv => {
-                        invoices.push({
-                            ...inv,
-                            user_subscription: subscription
-                        });
-                    });
-                }
-            });
-            
-            setSubscriptions(invoices);
-            
-        };
-        
-        if (userId) {
-            fetchUserSubscriptions();
-        }
-    }, [userId, navigate]);
-
-
+    const {subscriptions, handleDelete}  = useUserSubscriptions(userId);
     const handleSubscriptions = (subId) => {
         navigate(`/admin/clients/subscriptions/${subId}`);
-    }
-
-
-    const handleDelete = async (id) => {
-        const confirm = window.confirm('Vai velaties nodzest ierastu?');
-        if (!confirm) return;
-        const {error} = await supabase
-            .from('user_subscription')
-            .delete()
-            .eq('id', id);
-
-        if (error) {
-            console.log('Notika kluda');
-            return;
-        }
-    
-        setSubscriptions(prev => prev.filter(sub => sub.user_subscription?.id !== id)); // lai atjaunot
     }
     return (<>
             <AdminHeader />
