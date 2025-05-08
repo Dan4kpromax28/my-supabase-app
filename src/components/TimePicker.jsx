@@ -5,11 +5,9 @@ import { DateTime } from "luxon";
 import useTimes from "../hooks/supabaseAPI/useTimes";
 
 export default function TimePicker({ date, onStartTime, onEndTime, start,end}) {
-    const times = useTimes();
-
+    const times = useTimes(date);
     
-
-   
+    
 
     function listWithTimesFrom08To20(){
         let times = [];
@@ -27,49 +25,54 @@ export default function TimePicker({ date, onStartTime, onEndTime, start,end}) {
     console.log(listWithTimesFrom08To20());
 
     function newFiltredArray(databaseTimes, allTimes){
+        let startTimes = [...allTimes];
+        startTimes.pop();
+
         let times = [];
-        for(let i =0; i < allTimes.length; i++){
+        for(let i =0; i < startTimes.length; i++){
             let isExist = false;
             for(let j = 0; j < databaseTimes.length; j++){
-                if(allTimes[i] >= databaseTimes[j].start_time && allTimes[i] < databaseTimes[j].end_time){
+                if(startTimes[i] >= databaseTimes[j].start_time && startTimes[i] < databaseTimes[j].end_time){
                     isExist = true;
                     break;
                 }
             }
             if(!isExist){
-                times.push(allTimes[i]);
+                times.push(startTimes[i]);
             }
         }
         return times;
     }
 
     function newSecondFiltredArray(databaseTimes, allTimes, selectedTime) {
+        let endTimes = [...allTimes];
+        endTimes.splice(0,1);
         let times = [];
-        for (let i = 0; i < allTimes.length; i++) {
+        for (let i = 0; i < endTimes.length; i++) {
             let isExist = false;
             
-            if (allTimes[i] <= selectedTime) {
+            if (endTimes[i] <= selectedTime) {
                 isExist = true;
             } else {
                 
                 for (let j = 0; j < databaseTimes.length; j++) {
                     if (
-                        allTimes[i] > databaseTimes[j].start_time && 
+                        endTimes[i] > databaseTimes[j].start_time && 
                         selectedTime < databaseTimes[j].end_time && 
-                        allTimes[i] <= databaseTimes[j].end_time
+                        endTimes[i] <= databaseTimes[j].end_time
                     ) {
                         isExist = true;
                         break;
                     }
                     
-                    if (databaseTimes[j].start_time > selectedTime && allTimes[i] > databaseTimes[j].start_time) {
+                    if (databaseTimes[j].start_time > selectedTime && endTimes[i] > databaseTimes[j].start_time) {
                         isExist = true;
                         break;
                     }
                 }
             }
             if (!isExist) {
-                times.push(allTimes[i]);
+                times.push(endTimes[i]);
             }
         }
         return times;

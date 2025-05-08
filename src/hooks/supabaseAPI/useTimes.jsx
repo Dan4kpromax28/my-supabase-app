@@ -1,10 +1,10 @@
 
+import { useState, useEffect } from "react";
 
 
+import { supabase } from '../../utils/supabase';
 
-
-
-export default function useTimes(){
+export default function useTimes(date){
 
     const [times, setTimes] = useState([]);
 
@@ -25,8 +25,10 @@ export default function useTimes(){
         setTimes(data);
         
     };
-    
+
     useEffect(() => {
         fetchTimes();
     }, [date]);
+
+    return times;
 }

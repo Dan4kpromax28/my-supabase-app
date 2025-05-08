@@ -3,7 +3,6 @@ import { supabase } from '../utils/supabase';
 import { useNavigate } from 'react-router-dom'
 
 
-
 export default function AdminHeader(){
 
     const navigate = useNavigate();
@@ -12,7 +11,6 @@ export default function AdminHeader(){
         const { error } = await supabase.auth.signOut();
         if (error) console.log("Notika kluda");
         navigate("/admin/login");
-
     };
     return (
         <header className='bg-sky-800 text-white'>
@@ -41,7 +39,6 @@ export default function AdminHeader(){
                     <Link to='/admin/profils' className='bg-sky-700 hover:bg-sky-900 px-3 py-2 rounded-md text-sm font-medium mr-3'>
                         Profils
                     </Link>
-
                     
                     <button onClick={signOut} className='bg-sky-950 hover:bg-red-400 px-3 py-2 rounded-md text-sm font-medium'>
                         Iziet

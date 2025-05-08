@@ -47,6 +47,6 @@ export default function Card({ id, name, description, price, additional_price}) 
             </div>
         </div>
     </div>
-</li>
-  );
+    </li>
+    );
 }

@@ -3,7 +3,6 @@ import { useState } from "react";
 export default function Dropdown({options, onSelect, selected}) {
     const [open, setOpen] = useState(false);
 
-
     const handleSelect = (option) => {
         onSelect?.(option);
         setOpen(false);
