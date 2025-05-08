@@ -200,12 +200,16 @@ export default function SubscriptionPage() {
 
                                 {showCalendar && (
                                     
-                                    <Calendar
-                                        className="mt-2"
-                                        value={formData.date ? DateTime.fromISO(formData.date, { zone: 'local' }).toJSDate() : null}
-                                        onChange={handleDateChange}
-                                        minDate={DateTime.now().plus({ days: 1 }).toJSDate()}
-                                    />
+                                    
+                                    <input
+                                type="date"
+                                name="date"
+                                value={formData.date ? DateTime.fromISO(formData.date, { zone: 'local' }).toJSDate() : null}
+                                onChange={handleDateChange}
+                                min={DateTime.now().plus({ days: 1 }).toJSDate()}
+                                className="mt-2"
+                            />
+
                                 )}
                             </div>
                         ) }

@@ -1,81 +1,270 @@
-
 import AdminHeader from '../../components/AdminHeader';
 import { useEffect, useState } from 'react';
 import { supabase } from '../../utils/supabase';
 import Back from '../../components/Back';
+import { Line } from 'react-chartjs-2';
+import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 
+Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
+const checkDayDifference = (startDate, endDate) => {
+    const start = startDate.split('T')[0];
+    const end = endDate.split('T')[0];
+    
+    const startDateObj = new Date(start);
+    const endDateObj = new Date(end);
+    
+    startDateObj.setHours(0, 0, 0, 0);
+    endDateObj.setHours(0, 0, 0, 0);
+    
+    const timeDifference = endDateObj.getTime() - startDateObj.getTime();
+    
+    const dayDifference = Math.round(timeDifference / (1000 * 60 * 60 * 24));
+    
+    return dayDifference;
+};
 
-export default function AdminStatistic(){
+const makeDataForChart = (stamps, startDate, endDate) => {
+    const dayDifference = checkDayDifference(startDate, endDate);
 
+    let labels = [];
+    let data = [];
+    let title = '';
+
+    if (dayDifference === 0) {
+        const hours = [];
+        for (let i = 0; i < 24; i++) {
+            hours.push(i + ':00');
+        }
+        const dataWithHourlyUpdate = new Array(24).fill(0);
+        stamps.forEach(stamp => {
+            const hour = new Date(stamp.created_at).getUTCHours();
+            dataWithHourlyUpdate[hour]++;
+        });
+        labels = hours;
+        data = dataWithHourlyUpdate;
+        title = "Apmeklējumi viena dienā";
+    }
+    else if (dayDifference < 7) {
+        const dayData = {};
+        const start = new Date(startDate);
+        for (let i = 0; i <= dayDifference; i++) {
+            const date = new Date(start);
+            date.setDate(date.getDate() + i);
+            labels.push(date.toDateString());
+        }
+        data = new Array(labels.length).fill(0);
+        stamps.forEach(stamp => {
+            const stampDate = new Date(stamp.created_at).toDateString();
+            const index = labels.indexOf(stampDate);
+            if (index !== -1) {
+                data[index]++;
+            }
+        });
+        title = "Apmēklējumi pa dienam";
+    }
+
+    const result = {
+        labels,
+        datasets: [{
+            label: 'Apmeklējumu skaits',
+            data: data,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.1,
+            fill: false
+        }],
+        title
+    };
+    
+    return result;
+};
+
+export default function AdminStatistic() {
     const todayInLatvia = new Date().toLocaleDateString('sv-SE', {
         timeZone: 'Europe/Riga'
-      });
-    const [users, setUsers] = useState([]);
+    });
+    const [stamps, setStamps] = useState([]);
     const [date, setDate] = useState({
         startDate: todayInLatvia,
         endDate: todayInLatvia
     });
+    const [dateError, setDateError] = useState('');
+    const [uniqueVisitors, setUniqueVisitors] = useState(0);
+    const [chartData, setShartData] = useState(null);
 
     const [howMuchVisits, setHowMuchVisits] = useState({});
     const [howMuchUniqueVisits, setHowMuchUniqueVisits] = useState({});
+
+    const handleDateChange = (e) => {
+        const { name, value } = e.target;
+        const newDate = {
+            ...date,
+            [name]: value
+        };
+
+        if (new Date(value) > new Date()) {
+            setDateError('Nevar izvēlēties nākotnes datumu');
+            return;
+        }
+
+        if (name === 'startDate' && new Date(value) > new Date(newDate.endDate)) {
+            setDateError('Sākuma datums nevar būt vēlāks par beigu datumu');
+            return;
+        }
+        if (name === 'endDate' && new Date(value) < new Date(newDate.startDate)) {
+            setDateError('Beigu datums nevar būt agrāks par sākuma datumu');
+            return;
+        }
+
+        setDateError('');
+        setDate(newDate);
+    };
+
+    const uniquePersonsThatEnters = (data) => {
+        const uniqueClients = new Set();
+        data.forEach(stamp => {
+            const clientId = stamp.ticket?.user_subscription?.client?.id;
+            if (clientId) {
+                uniqueClients.add(clientId);
+            }
+        });
+        return uniqueClients.size;
+    };
+
     useEffect(() => {
         const fetchClinetStatistic = async () => {
-            const { data, error} = await supabase
+            if (dateError) return;
+
+            const { data, error } = await supabase
                 .from('time_stamps')
                 .select(`
                     *,
-                    client:client_id(*)
+                    ticket:ticket_id(*, user_subscription:user_subscription_id(*, subscriptions:subscription_id(*), client:client_id(*)))
                 `)
                 .gte('created_at', `${date.startDate}T00:00:00.000Z`)
                 .lte('created_at', `${date.endDate}T23:59:59.999Z`)
                 .order('created_at', { ascending: false });
+
             if (error) {
                 console.log('Notika kluda:', error);
+            } else {
+                console.log('Fetched data:', data);
+                setStamps(data);
+                setUniqueVisitors(uniquePersonsThatEnters(data));
             }
-            else {
-                setUsers(data);
-            }
-        }
+        };
         fetchClinetStatistic();
-    }, [date]);
-    
+    }, [date, dateError]);
 
-    console.log(date.startDate);
-    console.log(date.endDate);
+    useEffect(() => {
+        if (stamps.length > 0) {
+            console.log('Updating chart with stamps:', stamps);
+            const chart = makeDataForChart(stamps, date.startDate, date.endDate);
+            console.log('Setting chart data:', chart);
+            setShartData(chart);
+        }
+    }, [stamps, date.startDate, date.endDate]);
 
+    console.log('Current chartData:', chartData);
 
-    
-
-
-    return(
-     <>
-     <div className="min-h-screen bg-stone-100 flex flex-col">
-        <AdminHeader />
-        <div className="flex-grow flex justify-center">
-            <div className="max-w-2xl w-full p-4">
-            <Back />
-            <div>
-                <h2 className="text-xl font-bold mb-4">Statistika</h2>
-                <p>Kopā ir: {users.length}</p>
-                <ul>
-                    {users.map((user, index) => (
-                    <li key={index} className="bg-white p-2 my-2 rounded shadow">
-                        {user.client?.name || 'Nav vārda'} – {user?.client.created_at}
-                    </li>
-                    ))}
-                </ul>
+    return (
+        <>
+            <div className="min-h-screen bg-stone-100 flex flex-col">
+                <AdminHeader />
+                <div className="flex-grow flex justify-center">
+                    <div className="max-w-4xl w-full p-4">
+                        <Back />
+                        <div>
+                            <h2 className="text-xl font-bold mb-4">Statistika</h2>
+                            <div className="mb-4 flex gap-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-800">Sākuma datums</label>
+                                    <input
+                                        type="date"
+                                        name="startDate"
+                                        value={date.startDate}
+                                        onChange={handleDateChange}
+                                        max={todayInLatvia}
+                                        className="mt-2"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-800">Beigu datums</label>
+                                    <input
+                                        type="date"
+                                        name="endDate"
+                                        value={date.endDate}
+                                        onChange={handleDateChange}
+                                        max={todayInLatvia}
+                                        className="mt-2"
+                                    />
+                                </div>
+                            </div>
+                            {dateError && (
+                                <div className="text-red-500 mb-4">
+                                    {dateError}
+                                </div>
+                            )}
+                            <div className="bg-white p-2 rounded-lg mb-5">
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <p className="text-gray-600">Kopējais apmeklējumu skaits:</p>
+                                        <p className="text-2xl font-bold">{stamps.length}</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-gray-600">Unikālo apmeklētāju skaits:</p>
+                                        <p className="text-2xl font-bold">{uniqueVisitors}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            {chartData && (
+                                <div className="bg-white p-4 rounded-lg shadow mb-5">
+                                    <h3 className="text-lg font-semibold mb-4">{chartData.title}</h3>
+                                    <Line
+                                        data={chartData}
+                                        options={{
+                                            responsive: true,
+                                            plugins: {
+                                                legend: {
+                                                    position: 'top',
+                                                },
+                                                title: {
+                                                    display: false
+                                                }
+                                            },
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: true,
+                                                    ticks: {
+                                                        stepSize: 1
+                                                    }
+                                                }
+                                            }
+                                        }}
+                                    />
+                                </div>
+                            )}
+                            <ul>
+                                {stamps.map((stamps, index) => (
+                                    <li key={index} className="bg-white p-2 my-2 rounded shadow">
+                                        <div className='flex justify-between'>
+                                            <div>
+                                                {stamps.ticket?.user_subscription?.client?.name + " " + stamps.ticket?.user_subscription?.client?.surname || 'Nav vārda'}
+                                            </div>
+                                            <div>
+                                                {stamps.ticket?.user_subscription?.subscriptions?.name || 'Nezinams'} aboniments
+                                            </div>
+                                            <div>
+                                                {new Date(stamps.created_at).toISOString().split('T')[0] + " " + new Date(stamps.created_at).toISOString().split('T')[1].split('.')[0]}
+                                            </div>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-        </div>
-        </div>
-    </div>
-     </>
-        
-       
-       
-        
-
+        </>
     );
-
 }
