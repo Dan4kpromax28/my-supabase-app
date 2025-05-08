@@ -2,10 +2,32 @@ import AdminHeader from '../../components/AdminHeader';
 import { useEffect, useState } from 'react';
 import { supabase } from '../../utils/supabase';
 import Back from '../../components/Back';
-import { Line } from 'react-chartjs-2';
-import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+import { 
+    Chart, 
+    CategoryScale, 
+    LinearScale, 
+    PointElement, 
+    LineElement, 
+    BarElement,
+    Title, 
+    Tooltip, 
+    Legend 
+} from 'chart.js';
 
-Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+Chart.register(
+    CategoryScale, 
+    LinearScale, 
+    PointElement, 
+    LineElement, 
+    BarElement,
+    Title, 
+    Tooltip, 
+    Legend
+);
+
+
+
 
 const checkDayDifference = (startDate, endDate) => {
     const start = startDate.split('T')[0];
@@ -45,7 +67,7 @@ const makeDataForChart = (stamps, startDate, endDate) => {
         data = dataWithHourlyUpdate;
         title = "Apmeklējumi viena dienā";
     }
-    else if (dayDifference < 7) {
+    else if (dayDifference < 31) {
         const dayData = {};
         const start = new Date(startDate);
         for (let i = 0; i <= dayDifference; i++) {
@@ -63,6 +85,54 @@ const makeDataForChart = (stamps, startDate, endDate) => {
         });
         title = "Apmēklējumi pa dienam";
     }
+    else if (dayDifference < 361) {
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        let current = new Date(start.getFullYear(), start.getMonth(), 1);
+
+        const allMonth = ['Janvāris', 'Februāris', 'Marts', 'Aprīlis', 'Maijs', 'Jūnijs',
+            'Jūlijs', 'Augusts', 'Septembris', 'Oktobris', 'Novembris', 'Decembris'];
+        while (current <= end) {
+          const monthName = allMonth[current.getMonth()];
+          labels.push(monthName);
+          current.setMonth(current.getMonth() + 1);
+        }
+        data = new Array(labels.length).fill(0);
+    
+        stamps.forEach(stamp => {
+          const date = new Date(stamp.created_at);
+          const monthName = allMonth[date.getMonth()];
+          const i = labels.indexOf(monthName);
+          if (i !== -1){
+            data[i]++;
+          }
+        });
+    
+        title = 'Apmeklējumi pa mēnešiem';
+      }
+
+      else {
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        let current = new Date(start.getFullYear(), 0, 1);
+
+        while (current <= end) {
+            const year = current.getFullYear();
+            labels.push(year);
+            current.setFullYear(current.getFullYear() + 1);
+        } 
+        data = new Array(labels.length).fill(0);
+
+        stamps.forEach(stamp => {
+            const stampYear = new Date(stamp.created_at).getFullYear();
+            const i = labels.indexOf(stampYear);
+            if (i !== -1){
+                data[i]++;
+            }
+        });
+        
+        title = 'Apmeklējumi pa gadiem';
+      }
 
     const result = {
         labels,
@@ -220,7 +290,7 @@ export default function AdminStatistic() {
                             {chartData && (
                                 <div className="bg-white p-4 rounded-lg shadow mb-5">
                                     <h3 className="text-lg font-semibold mb-4">{chartData.title}</h3>
-                                    <Line
+                                    <Bar
                                         data={chartData}
                                         options={{
                                             responsive: true,
