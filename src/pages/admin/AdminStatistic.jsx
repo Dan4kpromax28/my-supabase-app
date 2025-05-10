@@ -3,6 +3,10 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../../utils/supabase';
 import Back from '../../components/Back';
 import { Bar } from 'react-chartjs-2';
+import Pagination from '../../components/Pagination';
+import Select from 'react-select'
+
+
 import { 
     Chart, 
     CategoryScale, 
@@ -14,6 +18,7 @@ import {
     Tooltip, 
     Legend 
 } from 'chart.js';
+import useClient from '../../hooks/supabaseAPI/useClients';
 
 Chart.register(
     CategoryScale, 
@@ -139,7 +144,6 @@ const makeDataForChart = (stamps, startDate, endDate) => {
         datasets: [{
             label: 'Apmeklējumu skaits',
             data: data,
-            borderColor: 'rgb(75, 192, 192)',
             tension: 0.1,
             fill: false
         }],
@@ -153,7 +157,23 @@ export default function AdminStatistic() {
     const todayInLatvia = new Date().toLocaleDateString('sv-SE', {
         timeZone: 'Europe/Riga'
     });
+
+    const [page, setPage] = useState(1);
+    const itemsInPage = 10;
+
+    const [informationOnPage, setInformationOnPage] = useState([]);
+    
+    //const dispayItems = informationOnPage();
+
+    const [clients, setClients] = useState([]);
+    const [selectedClients, setSelectedClients] = useState([]);
+
+
+    
+
     const [stamps, setStamps] = useState([]);
+    const [filteredStamps, setFilteredStamps] = useState([]);
+
     const [date, setDate] = useState({
         startDate: todayInLatvia,
         endDate: todayInLatvia
@@ -201,6 +221,30 @@ export default function AdminStatistic() {
         return uniqueClients.size;
     };
 
+    const fetchClients = async () => {
+        const {data, error} = await supabase
+            .from('client')
+            .select('id, name, surname')
+            .order('name', {ascending: false});
+
+        if (error) {
+            console.log('Notika kluda');
+        }
+        else {
+            const clientsForSelector = data.map(client => (
+                {
+                    value: client.id,
+                    label: `${client.name} ${client.surname}`
+                }
+            ));
+            setClients(clientsForSelector);
+        }
+
+    } 
+    useEffect(() => {
+        fetchClients();
+    }, []);
+
     useEffect(() => {
         const fetchClinetStatistic = async () => {
             if (dateError) return;
@@ -218,9 +262,19 @@ export default function AdminStatistic() {
             if (error) {
                 console.log('Notika kluda:', error);
             } else {
-                console.log('Fetched data:', data);
-                setStamps(data);
-                setUniqueVisitors(uniquePersonsThatEnters(data));
+                setPage(1);
+                if (data.length === 0) {
+                    setStamps([]);
+                    setFilteredStamps([]);
+                    setUniqueVisitors(0);
+                    setInformationOnPage([]);
+                    setShartData(null);
+                } else {
+                    setStamps(data);
+                    setFilteredStamps(data);
+                    setUniqueVisitors(uniquePersonsThatEnters(data));
+                    setInformationOnPage(data.slice(0, itemsInPage));
+                }
             }
         };
         fetchClinetStatistic();
@@ -228,14 +282,40 @@ export default function AdminStatistic() {
 
     useEffect(() => {
         if (stamps.length > 0) {
-            console.log('Updating chart with stamps:', stamps);
-            const chart = makeDataForChart(stamps, date.startDate, date.endDate);
-            console.log('Setting chart data:', chart);
-            setShartData(chart);
-        }
-    }, [stamps, date.startDate, date.endDate]);
+            setPage(1);
+            const selectedIds = selectedClients.map(client => client.value);
+            const filtered = selectedClients.length > 0
+                ? stamps.filter(stamp =>
+                    selectedIds.includes(stamp.ticket?.user_subscription?.client?.id)
+                )
+                : stamps;
 
-    console.log('Current chartData:', chartData);
+            const chart = makeDataForChart(filtered, date.startDate, date.endDate);
+            setShartData(chart);
+            setFilteredStamps(filtered);
+            setUniqueVisitors(uniquePersonsThatEnters(filtered));
+            setInformationOnPage(filtered.slice(0, itemsInPage));
+        } else {
+            setShartData(null);
+            setInformationOnPage([]);
+            setUniqueVisitors(0);
+            setFilteredStamps([]);
+        }
+    }, [stamps, date.startDate, date.endDate, selectedClients]);
+
+    useEffect(() => {
+        if (filteredStamps.length > 0) {
+            setInformationOnPage(filteredStamps.slice((page - 1) * itemsInPage, page * itemsInPage));
+        }
+    }, [page, filteredStamps]);
+
+    const handleClient = (selectedOptions) => {
+        setPage(1);
+        setSelectedClients(selectedOptions);
+    }
+
+    console.log(chartData);
+
 
     return (
         <>
@@ -246,6 +326,15 @@ export default function AdminStatistic() {
                         <Back />
                         <div>
                             <h2 className="text-xl font-bold mb-4">Statistika</h2>
+                            <Select 
+                                options={clients}
+                                value={selectedClients}
+                                onChange={handleClient}
+                                isMulti={true}
+                                noOptionsMessage={() => 'Nav neviena klienta'}
+                                
+                            />
+                            
                             <div className="mb-4 flex gap-4">
                                 <div>
                                     <label className="block text-sm font-medium text-gray-800">Sākuma datums</label>
@@ -279,7 +368,7 @@ export default function AdminStatistic() {
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
                                         <p className="text-gray-600">Kopējais apmeklējumu skaits:</p>
-                                        <p className="text-2xl font-bold">{stamps.length}</p>
+                                        <p className="text-2xl font-bold">{filteredStamps.length}</p>
                                     </div>
                                     <div>
                                         <p className="text-gray-600">Unikālo apmeklētāju skaits:</p>
@@ -315,7 +404,7 @@ export default function AdminStatistic() {
                                 </div>
                             )}
                             <ul>
-                                {stamps.map((stamps, index) => (
+                                {informationOnPage.map((stamps, index) => (
                                     <li key={index} className="bg-white p-2 my-2 rounded shadow">
                                         <div className='flex justify-between'>
                                             <div>
@@ -331,6 +420,12 @@ export default function AdminStatistic() {
                                     </li>
                                 ))}
                             </ul>
+                            <Pagination 
+                                objects={filteredStamps}
+                                page={page}
+                                setPage={setPage}
+                                itemsInPage={itemsInPage} 
+                            />
                         </div>
                     </div>
                 </div>
