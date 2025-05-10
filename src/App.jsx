@@ -21,6 +21,8 @@ import UpdateSubscriptionType from './pages/admin/UpdateSubscriptionType';
 import UserSubscriptions from './pages/admin/UserSubscriptions';
 import Test from './pages/admin/Test';
 import AdminStatistic from './pages/admin/AdminStatistic';
+import UserManagment from './pages/admin/UserManagment';
+import CreateProfile from './pages/admin/CreateProfile';
 
 export default function App() {
   return (
@@ -44,6 +46,8 @@ export default function App() {
         <Route path='/admin/subscription/create' element={<Wrapper><CreateType /></Wrapper>} />
         <Route path='/admin/clients/userSubscriptions/:id' element={<Wrapper><UserSubscriptions /></Wrapper>} />
         <Route path='/admin/statistic' element={<Wrapper><AdminStatistic/></Wrapper>} />
+        <Route path='/admin/allProfiles' element={<Wrapper><UserManagment/></Wrapper>} />
+        <Route path='/admin/create_profile' element={<Wrapper><CreateProfile/></Wrapper>} />
        </Routes>
     </BrowserRouter>
   );
