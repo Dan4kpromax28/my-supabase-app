@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../utils/supabase';
 
-import { useNavigate } from 'react-router-dom';
+
 
 
 
@@ -91,7 +91,7 @@ export default function useInvoice(){
         if (error){
             alert('Notika kluda');
         }
-        //alert('Status izmainits');
+        
       await fetchSubscriptions(); // lai atjaunot
     }
 

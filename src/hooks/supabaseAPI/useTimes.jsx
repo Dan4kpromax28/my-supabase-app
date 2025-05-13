@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from "react";
 
+import PropTypes from 'prop-types';
 
 import { supabase } from '../../utils/supabase';
 
@@ -32,3 +33,7 @@ export default function useTimes(date){
 
     return times;
 }
+
+useTimes.propTypes = {
+    date: PropTypes.string
+};

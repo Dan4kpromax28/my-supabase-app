@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import PropTypes from 'prop-types';
 
 export default function Pagination({ objects, page, setPage, itemsInPage }) {
     const allPages = Math.ceil(objects.length / itemsInPage);
@@ -84,3 +84,10 @@ export default function Pagination({ objects, page, setPage, itemsInPage }) {
         </div>
     );
 }
+
+Pagination.propTypes = {
+    objects: PropTypes.array.isRequired,
+    page: PropTypes.number.isRequired,
+    setPage: PropTypes.func.isRequired,
+    itemsInPage: PropTypes.number.isRequired
+};

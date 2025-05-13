@@ -1,10 +1,6 @@
-
-
 import { useState, useEffect } from 'react';
 import { supabase } from '../../utils/supabase';
-
-
-
+import PropTypes from 'prop-types';
 
 export default function useClient(search){
 
@@ -61,3 +57,7 @@ export default function useClient(search){
 
     return {clients, handleDelete};
 }
+
+useClient.propTypes = {
+    search: PropTypes.string
+};

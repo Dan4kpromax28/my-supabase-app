@@ -1,10 +1,7 @@
-import { useEffect } from "react";
-import { supabase } from "../utils/supabase";
-import { useState } from "react";
-import { DateTime } from "luxon";
 import useTimes from "../hooks/supabaseAPI/useTimes";
+import PropTypes from 'prop-types';
 
-export default function TimePicker({ date, onStartTime, onEndTime, start,end}) {
+export default function TimePicker({ date, onStartTime, onEndTime, start, end}) {
     const times = useTimes(date);
     
     
@@ -111,3 +108,11 @@ export default function TimePicker({ date, onStartTime, onEndTime, start,end}) {
         </>
       );
 }
+
+TimePicker.propTypes = {
+    date: PropTypes.string.isRequired,
+    onStartTime: PropTypes.func.isRequired,
+    onEndTime: PropTypes.func.isRequired,
+    start: PropTypes.string,
+    end: PropTypes.string
+};

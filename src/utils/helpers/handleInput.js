@@ -1,8 +1,8 @@
-import { parse } from "date-fns";
+
 import { supabase } from "../supabase";
 
 function InputFieldValidation(name, value) {
-    var message = '';
+    let message = '';
     switch(name){
         case 'name':
             const nameRegex = /^[A-ZĒŪĪĻĶĢŠĀČŅ]{1}[a-zēūīļķģšāžčņ]+$/;
@@ -35,7 +35,7 @@ function InputFieldValidation(name, value) {
 }
 
 const InputFieldValidationInvoice = async (name, value, acctual_number) =>{
-    var message = '';
+    let message = '';
     switch(name){
         case 'invoice_number':
             const invoiceNumberRegex = /^MOM[0-9]{1,100}$/;

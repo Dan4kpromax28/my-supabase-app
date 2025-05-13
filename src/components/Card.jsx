@@ -1,6 +1,6 @@
 import React from 'react';
-
 import { useNavigate } from 'react-router-dom'
+import PropTypes from 'prop-types';
 
 export default function Card({ id, name, description, price, additional_price}) {
 
@@ -50,3 +50,11 @@ export default function Card({ id, name, description, price, additional_price}) 
     </li>
     );
 }
+
+Card.propTypes = {
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    name: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    additional_price: PropTypes.number.isRequired
+};

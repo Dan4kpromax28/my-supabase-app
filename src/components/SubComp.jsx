@@ -1,5 +1,4 @@
-
-
+import PropTypes from 'prop-types';
 
 export default function AllSub({sub}){
 
@@ -14,3 +13,7 @@ export default function AllSub({sub}){
     );
 
 }
+
+AllSub.propTypes = {
+    sub: PropTypes.array.isRequired
+};

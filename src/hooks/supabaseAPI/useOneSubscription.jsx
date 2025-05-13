@@ -4,6 +4,8 @@ import { supabase } from '../../utils/supabase';
 
 import { useNavigate } from 'react-router-dom';
 
+import PropTypes from 'prop-types';
+
 export default function useOneSubscription(subId){
 
     const [subscription, setSubscription] = useState();
@@ -38,4 +40,8 @@ export default function useOneSubscription(subId){
     return subscription;
 }
 
+
+useOneSubscription.PropTypes = {
+    subId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+};
 

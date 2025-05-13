@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PropTypes from 'prop-types';
 
 export default function Dropdown({options, onSelect, selected}) {
     const [open, setOpen] = useState(false);
@@ -29,3 +30,14 @@ export default function Dropdown({options, onSelect, selected}) {
         </div>
     );
 }
+
+Dropdown.propTypes = {
+    options: PropTypes.arrayOf(
+        PropTypes.shape({
+            value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+            label: PropTypes.string.isRequired
+        })
+    ).isRequired,
+    onSelect: PropTypes.func,
+    selected: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+};

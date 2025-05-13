@@ -1,9 +1,5 @@
 
-import { useState, useEffect } from 'react';
-import { supabase } from '../utils/supabase';
 
-
-import Card from '../components/Card';
 import CustomSlider from '../components/CustomSlider';
 import MainHeader from '../components/MainHeader'
 import MainFooter from '../components/MainFooter';

@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate, Navigate} from 'react-router-dom';
+import React, { useState } from 'react';
+import {  useNavigate } from 'react-router-dom';
 import { supabase } from '../utils/supabase';
 import MainHeader from '../components/MainHeader'
 import MainFooter from '../components/MainFooter';
 import InputComponent from '../components/InputComponent';
 import validation from '../utils/helpers/handleInput.js';
+
+import PropTypes from 'prop-types';
 
 
 export default function Users({name ='', surname = '', email = '', phone = '', tips=''}){
@@ -183,3 +185,12 @@ export default function Users({name ='', surname = '', email = '', phone = '', t
     );
 
 }
+
+
+Users.PropType = {
+    name: PropTypes.string.isRequired,
+    surname: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
+    phone: PropTypes.string.isRequired,
+    tips: PropTypes.string.isRequired
+};

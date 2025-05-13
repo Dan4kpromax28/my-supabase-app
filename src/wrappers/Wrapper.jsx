@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { supabase } from '../utils/supabase';
+import PropTypes from 'prop-types';
+
 
 export default function Wrapper({ children }) {
-    const [session, setSession] = useState(null);
+
+    
+
     const [loading, setLoading] = useState(true);
     const [authentication, setAuthentication] = useState(false);
 
@@ -35,4 +39,8 @@ export default function Wrapper({ children }) {
 
         
 
+};
+
+Wrapper.propTypes = {
+    children: PropTypes.node.isRequired,
 };

@@ -1,6 +1,7 @@
 import React from 'react';
 import Slider from 'react-slick';
 import Card from './Card';
+import PropTypes from 'prop-types';
 
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
@@ -52,3 +53,15 @@ export default function CustomSlider({subscriptions}){
         </div>
     );
 }
+
+CustomSlider.propTypes = {
+    subscriptions: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+            name: PropTypes.string.isRequired,
+            description: PropTypes.string.isRequired,
+            price: PropTypes.number.isRequired,
+            additional_hour_price: PropTypes.number.isRequired
+        })
+    ).isRequired
+};

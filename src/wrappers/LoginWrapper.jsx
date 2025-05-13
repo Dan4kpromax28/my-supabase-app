@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { supabase } from '../utils/supabase';
+import PropTypes from 'prop-types';
+
 
 export default function LoginWrapper({ children }) {
     //const [session, setSession] = useState(null);
@@ -35,4 +37,8 @@ export default function LoginWrapper({ children }) {
 
         
 
+};
+
+LoginWrapper.propTypes = {
+    children: PropTypes.node.isRequired,
 };

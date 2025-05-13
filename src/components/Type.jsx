@@ -1,10 +1,12 @@
 
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import AdminHeader from "../components/AdminHeader";
 import { useEffect, useState } from "react";
 import { supabase } from "../utils/supabase";
 import InputComponent from "../components/InputComponent";
 import Back from "../components/Back";
+
+import PropTypes from 'prop-types';
 
 
 export default function Tips({id}){
@@ -86,7 +88,7 @@ export default function Tips({id}){
             .eq('name', formData.name)
             .single();
 
-        const { data, error } = await supabase
+        const { error } = await supabase
             .from('subscriptions')
             .upsert({
                 id: id || undefined,
@@ -105,23 +107,23 @@ export default function Tips({id}){
             .single();
         
         if (existingError) {
-            //setMessage('Notika problemas ar nomainisanu');
+            
             return;
         }
         if(existing){
-            //setMessage('Tika nomainits');
+         
             alert("Viss ir ok");
             return;
         }
         
     
         if (error) {
-            //setMessage('Notika kļuda');
+           
             return;
         }
     
         alert("Viss ir atjaunots");
-        //setMessage("Pakalpojums ir veiksmigi izveidots");
+       
     };
 
     return (
@@ -177,7 +179,7 @@ export default function Tips({id}){
                         value={formData.durationType}
                         onChange={handleInputChange}
                     />
-                    {formData.isTime && (<>
+                    {formData.isTime && (
                         <InputComponent
                         label="additional hour price"
                         id="additionalHourPrice"
@@ -186,7 +188,7 @@ export default function Tips({id}){
                         value={formData.additionalHourPrice}
                         onChange={handleInputChange}
                     />
-                    </>)}
+                    )}
                     <InputComponent
                     
                         //type="time"
@@ -238,3 +240,7 @@ export default function Tips({id}){
         </>
     );
 }
+
+Tips.propTypes = {
+    id:  PropTypes.PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+};

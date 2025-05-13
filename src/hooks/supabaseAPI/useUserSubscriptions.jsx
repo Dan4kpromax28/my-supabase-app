@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import { supabase } from '../../utils/supabase';
 
+import PropTypes from 'prop-types';
+
 
 
 export default function useUserSubscriptions(userId){
@@ -68,3 +70,7 @@ export default function useUserSubscriptions(userId){
 
     return {subscriptions, handleDelete};
 }
+
+useUserSubscriptions.propTypes = {
+    userId: PropTypes.number
+};
