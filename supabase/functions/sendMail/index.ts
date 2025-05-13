@@ -50,39 +50,7 @@ Deno.serve(async (req) => {
           console.error(error);
           throw new Error('Notika kluda ar string meklesanu' + error.message);
         }
-        if (!data){
-          const { data: subscription, error: errSubscription } = await supabase
-            .from('user_subscription')
-            .select(`
-              *,
-              subscriptions(is_date, is_time)
-            `)
-            .eq('id', subId)
-            .single();
-          if (errSubscription) {
-            console.error(errSubscription);
-            throw new Error('Notika kluda ar subscription meklesanu 1' + errSubscription.message);
-          }
-          if (!subscription?.subscriptions?.is_date && !subscription?.subscriptions?.is_time){
-            const { error: secondEr} = await supabase
-            .from('ticket')
-            .insert({ user_string: random, user_subscription_id: subId, count : 8 });
-            if (secondEr) {
-              console.error(secondEr);
-              throw new Error('Notikakluda ar sutisanu 1'+ random + ''+ subscription?.subscriptions?.is_date + ''+ subscription?.subscriptions?.is_time) ;
-            }
-          } else{
-            const { error: secondEr} = await supabase
-            .from('ticket')
-            .insert({ user_string: random, user_subscription_id: subId, count: 0});
-            if (secondEr) {
-              console.error(secondEr);
-              throw new Error('Notika kluda ar sutisanu 2'+ subscription?.subscriptions?.is_date + ''+ subscription?.subscriptions?.is_time + secondEr.message) ;
-            }
-          }
-          isCreated = true;
-        }
-        
+        isCreated = true;
       }
     }
     const data = await qrcode(random);

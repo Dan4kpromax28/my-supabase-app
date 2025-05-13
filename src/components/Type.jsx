@@ -1,10 +1,10 @@
-
 import { useNavigate} from "react-router-dom";
 import AdminHeader from "../components/AdminHeader";
 import { useEffect, useState } from "react";
 import { supabase } from "../utils/supabase";
 import InputComponent from "../components/InputComponent";
 import Back from "../components/Back";
+import validation from '../utils/helpers/handleInput.js';
 
 import PropTypes from 'prop-types';
 
@@ -16,14 +16,15 @@ export default function Tips({id}){
         name: '',
         description: '',
         price: '',
-        additionalHourPrice: '',
+        additionalHourPrice: null,
         durationValue: '',
         durationType: '',
         restrictionStart: '',
         restrictionEnd: '',
-        isTime: '',
-        isDate: '',
+        isTime: false,
+        isDate: false,
     });
+    const [errors, setErrors] = useState({});
 
     const UpdateForm = (data) => {
         setFormData({
@@ -72,6 +73,11 @@ export default function Tips({id}){
             ...prev,
             [name]: value
         }));
+        const errorMessage = validation.InputFieldValidationType(name, value);
+        setErrors(prev => ({
+            ...prev,
+            [name]: errorMessage
+        }));
     };
 
     const handleSubmit = async (e) => {
@@ -81,7 +87,7 @@ export default function Tips({id}){
             alert('Lūdzu aizpildiet visus obligātos laukus');
             return;
         }
-    
+
         const { data: existing, error: existingError } = await supabase
             .from('subscriptions')
             .select('id')
@@ -107,8 +113,8 @@ export default function Tips({id}){
             .single();
         
         if (existingError) {
+            alert("Notika kluda");
             
-            return;
         }
         if(existing){
          
@@ -142,6 +148,9 @@ export default function Tips({id}){
                         value={formData.name}
                         onChange={handleInputChange}
                     />
+                    {formData.name && errors.name 
+                    ? <div className='text-red-500 text-sm text-center '>{errors.name}</div>
+                    : null}
                     <div>
                         <label htmlFor="additionalInfo" className="block text-gray-700 mb-2">Informacija par ko :</label>
                         <textarea
@@ -153,6 +162,9 @@ export default function Tips({id}){
                             placeholder="Ievadiet papildu informaciju"
                         />
                     </div>
+                    {formData.description && errors.description
+                    ? <div className='text-red-500 text-sm text-center '>{errors.description}</div>
+                    : null}
                     <InputComponent
                         label="Cena"
                         id="price"
@@ -161,8 +173,9 @@ export default function Tips({id}){
                         value={formData.price}
                         onChange={handleInputChange}
                     />
-                    
-
+                    {formData.price && errors.price 
+                    ? <div className='text-red-500 text-sm text-center '>{errors.price}</div>
+                    : null}
                     <InputComponent
                         label="durationValue"
                         id="durationValue"
@@ -171,6 +184,9 @@ export default function Tips({id}){
                         value={formData.durationValue}
                         onChange={handleInputChange}
                     />
+                    {formData.durationValue && errors.durationValue 
+                    ? <div className='text-red-500 text-sm text-center '>{errors.durationValue}</div>
+                    : null}
                     <InputComponent
                         label="durationType"
                         id="durationType"
@@ -179,6 +195,9 @@ export default function Tips({id}){
                         value={formData.durationType}
                         onChange={handleInputChange}
                     />
+                    {formData.durationType && errors.durationType 
+                    ? <div className='text-red-500 text-sm text-center '>{errors.durationType}</div>
+                    : null}
                     {formData.isTime && (
                         <InputComponent
                         label="additional hour price"
@@ -188,7 +207,11 @@ export default function Tips({id}){
                         value={formData.additionalHourPrice}
                         onChange={handleInputChange}
                     />
+                    
                     )}
+                    {formData.additionalHourPrice && errors.additionalHourPrice
+                    ? <div className='text-red-500 text-sm text-center '>{errors.additionalHourPrice}</div>
+                    : null}
                     <InputComponent
                     
                         //type="time"
@@ -199,6 +222,9 @@ export default function Tips({id}){
                         value={formData.restrictionStart}
                         onChange={handleInputChange}
                     />
+                    {formData.restrictionStart && errors.restrictionStart
+                    ? <div className='text-red-500 text-sm text-center '>{errors.restrictionStart}</div>
+                    : null}
                     <InputComponent
                         //type="time"
                         label="restEnd"
@@ -208,6 +234,9 @@ export default function Tips({id}){
                         value={formData.restrictionEnd}
                         onChange={handleInputChange}
                     />
+                    {formData.restrictionEnd && errors.restrictionEnd
+                    ? <div className='text-red-500 text-sm text-center '>{errors.restrictionEnd}</div>
+                    : null}
                     <p>isTime</p>
                     <input
                         type="checkbox"

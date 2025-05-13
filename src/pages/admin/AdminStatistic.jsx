@@ -119,7 +119,7 @@ export default function AdminStatistic() {
                                                     position: 'top',
                                                 },
                                                 title: {
-                                                    display: false
+                                                    display: true
                                                 }
                                             },
                                             scales: {

@@ -69,7 +69,7 @@ export default function useInvoice(){
                 console.log('Notika kluda');
             }
         }
-        await fetchSubscriptions(); // lai atjaunot
+        await fetchSubscriptions(); 
 
     };
 

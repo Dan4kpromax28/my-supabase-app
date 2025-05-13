@@ -9,7 +9,7 @@ import { supabase } from '../../utils/supabase';
 
 
 export default function AdminPanel(){
-    const navigate = useNavigate();
+    
 
     const [message, setMessage] = useState();
 

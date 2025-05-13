@@ -1,4 +1,3 @@
-
 import { supabase } from "../supabase";
 
 function InputFieldValidation(name, value) {
@@ -71,6 +70,54 @@ const InputFieldValidationInvoice = async (name, value, acctual_number) =>{
     return message;
 }
 
-export default {InputFieldValidation, InputFieldValidationInvoice};
+const InputFieldValidationType = (name, value) => {
+    let message = '';
+    switch(name){
+        case 'name': 
+            if(!value || value.length < 2 || value.length > 30){
+                message = 'Nekorekta nosaukuma ievade';
+            }
+            break;
+        case 'description':
+            if (value.length > 200){
+                message = 'Zinojums nevar but lielaks par 200 simboliem';
+            }
+            break;
+        case 'price':
+        case 'additionalHourPrice':
+            if (isNaN(value) || value < 0){
+                message = 'Cena nevar but negativa';
+            }
+            break;
+        case 'durationValue':
+            if (isNaN(value) || value <= 0){
+                message = 'Ilgums nevar but negativs vai nulle';
+            }
+            break;
+        case 'durationType':
+            if (!value || !['dienas', 'stundas', 'reizes'].includes(value)){
+                message = 'Nekorekts ilguma tips';
+            }
+            break;
+        case 'restrictionStart':
+        case 'restrictionEnd':
+            const timeRegex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/;
+            if (!timeRegex.test(value)){
+                message = 'Nekorekta laika ievade';
+            }
+            break;
+        case 'isTime':
+        case 'isDate':
+            if (typeof value !== 'boolean'){
+                message = 'Nekorekta vertiba';
+            }
+            break;
+        default:
+            break;
+    }
+    return message;
+};
+
+export default {InputFieldValidation, InputFieldValidationInvoice, InputFieldValidationType};
 
 
