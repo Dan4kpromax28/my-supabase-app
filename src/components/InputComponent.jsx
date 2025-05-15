@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 
 export default function InputComponent({ 
     label, 
@@ -30,3 +32,13 @@ export default function InputComponent({
         </div>
     );
 }
+
+InputComponent.propTypes = {
+    label: PropTypes.string.isRequired,
+    type: PropTypes.string,
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    placeholder: PropTypes.string,
+    required: PropTypes.bool,
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    onChange: PropTypes.func.isRequired
+};

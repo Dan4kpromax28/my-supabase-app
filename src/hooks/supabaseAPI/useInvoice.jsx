@@ -53,7 +53,7 @@ export default function useInvoice(){
         const d = String(datas);
         const e = String(email);
         console.log(d,e)
-        const { data, error } = await supabase.functions.invoke('sendMail', {
+        const { error } = await supabase.functions.invoke('sendMail', {
             body: { 'subId': d, 'email': e},
         });
     
@@ -77,7 +77,7 @@ export default function useInvoice(){
         const d = String(id);
         const e = String(email);
         console.log(d,e)
-        const { data, error: rejectEr } = await supabase.functions.invoke('sendMailWithCredentials', {
+        const { error: rejectEr } = await supabase.functions.invoke('sendMailWithCredentials', {
             body: { 'id': d, 'email': e},
         });
         if (rejectEr) console.error(rejectEr);
@@ -129,7 +129,7 @@ export default function useInvoice(){
             console.log('Notika kluda ar statusa izmainu accept');
             
         }
-        const { data, error: accept } = await supabase.functions.invoke('sendMailWithCredentials', {
+        const {  error: accept } = await supabase.functions.invoke('sendMailWithCredentials', {
             body: { 'id': id, 'email': email},
         });
         if (accept) 

@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 
 
 export default function LoginWrapper({ children }) {
-    //const [session, setSession] = useState(null);
     const [loading, setLoading] = useState(true);
     const [authentication, setAuthentication] = useState(false);
 

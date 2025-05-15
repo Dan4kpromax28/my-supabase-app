@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useSubmit } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AdminHeader from "../../components/AdminHeader";
-import { supabase } from "../../utils/supabase";
 import Dropdown from "../../components/Dropdown";
 import Back from "../../components/Back";
 import filterAllSubscriptions from "../../utils/helpers/SubscriptionsFilters.js";
@@ -56,21 +55,27 @@ export default function AllSubscriptions(){
         <ul className="list-none p-4">
             {filteredSubscriptions.map((sub) => (
             <li key={sub.id} className="bg-white shadow-md rounded-lg p-4 mb-4 flex justify-between items-center hover:bg-gray-50" >
-                <div className="" onClick={() => handleSubscriptions(sub.id)}>
-                    <h3 className="font-bold text-lg">{sub.user_subscription?.subscriptions?.name} </h3>
-                    <p className="text-sm text-gray-600">{sub.user_subscription?.client?.name+" "+sub.user_subscription?.client?.surname}</p>
-                    <p className="text-sm text-gray-600">{sub.full_price} eiro</p>
-                    <p className="text-sm text-gray-600">{sub.time}</p>
-                
-                    <p className="text-sm text-gray-600">{sub.user_subscription?.start_date} - {sub.user_subscription?.end_date}</p>
-                    {!(sub.user_subscription?.information && sub.user_subscription?.information.trim() !== "") && (
-                    
-                        <span className="inline-block w-3 h-3 rounded-full bg-green-500" />
-                
-                    )}
-                    {sub.user_subscription?.information && sub.user_subscription?.information.trim() !== "" && (
-                        <span className="inline-block w-3 h-3 rounded-full bg-red-500" />
-                    )}
+                <div className="" >
+                    <button className="w-full " onClick={() => handleSubscriptions(sub.id)}>
+                        <div className="text-left">
+                            <h3 className="font-bold text-lg ">{sub.user_subscription?.subscriptions?.name} </h3>
+                            <div className="text-sm text-gray-600">
+                                <p>{sub.user_subscription?.client?.name+" "+sub.user_subscription?.client?.surname}</p>
+                                <p>{sub.full_price} eiro</p>
+                                <p>{sub.time}</p>
+                                <p >{sub.user_subscription?.start_date} - {sub.user_subscription?.end_date}</p>
+                            </div>
+                        
+                            {!(sub.user_subscription?.information && sub.user_subscription?.information.trim() !== "") && (
+                            
+                                <span className="inline-block w-3 h-3 rounded-full bg-green-500" />
+                        
+                            )}
+                            {sub.user_subscription?.information && sub.user_subscription?.information.trim() !== "" && (
+                                <span className="inline-block w-3 h-3 rounded-full bg-red-500" />
+                            )}
+                        </div>
+                    </button>
                 </div>
                 <div className="flex gap-2">
                     {sub.status === 'new' && (
@@ -90,23 +95,23 @@ export default function AllSubscriptions(){
 
                     )}
                      {sub.status === 'accepted' && (
-                    <>
+                 
                         <button
                             onClick={() => handleInvoice(sub.user_subscription?.id, sub.user_subscription?.client?.email, sub.id)}
                             className="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600">
                             Apmaksa atnaca
                         </button>
-                    </>
+                   
 
                     )}
                      {sub.status === 'valid' && (
-                    <>
+                   
                         <button
                             onClick={() => handleInvalid(sub.id)}
                             className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600">
                             Ban
                         </button>
-                    </>
+                    
 
                     )}
                     <button

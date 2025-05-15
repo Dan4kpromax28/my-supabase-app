@@ -50,7 +50,6 @@ export default function AdminStatistic() {
     });
 
     return (
-        <>
             <div className="min-h-screen bg-stone-100 flex flex-col">
                 <AdminHeader />
                 <div className="flex-grow flex justify-center">
@@ -68,8 +67,9 @@ export default function AdminStatistic() {
                             
                             <div className="mb-4 flex gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-800">Sākuma datums</label>
+                                    <label className="block text-sm font-medium text-gray-800" htmlFor='startDate'>Sākuma datums</label>
                                     <input
+                                        id='startDate'
                                         type="date"
                                         name="startDate"
                                         value={date.startDate}
@@ -79,8 +79,9 @@ export default function AdminStatistic() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-800">Beigu datums</label>
+                                    <label className="block text-sm font-medium text-gray-800" htmlFor='endDate'>Beigu datums</label>
                                     <input
+                                        id='endDate'
                                         type="date"
                                         name="endDate"
                                         value={date.endDate}
@@ -88,6 +89,7 @@ export default function AdminStatistic() {
                                         max={todayInLatvia}
                                         className="mt-2"
                                     />
+                                    
                                 </div>
                             </div>
                             {dateError && (
@@ -135,8 +137,8 @@ export default function AdminStatistic() {
                                 </div>
                             )}
                             <ul>
-                                {informationOnPage.map((stamps, index) => (
-                                    <li key={index} className="bg-white p-2 my-2 rounded shadow">
+                                {informationOnPage.map((stamps) => (
+                                    <li key={stamps.id} className="bg-white p-2 my-2 rounded shadow">
                                         <div className='flex justify-between'>
                                             <div>
                                                 {stamps.ticket?.user_subscription?.client?.name + " " + stamps.ticket?.user_subscription?.client?.surname || 'Nav vārda'}
@@ -161,6 +163,5 @@ export default function AdminStatistic() {
                     </div>
                 </div>
             </div>
-        </>
     );
 }

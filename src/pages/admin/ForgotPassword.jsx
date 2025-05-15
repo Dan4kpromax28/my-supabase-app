@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState} from "react";
+
 
 import { supabase } from "../../utils/supabase";
 import InputComponent from "../../components/InputComponent";
@@ -11,7 +11,6 @@ export default function ForgotPassword(){
     const [email, setEmail] = useState('');
     const [error, setError] = useState(null);
 
-    const navigate = useNavigate();
 
     const handleInputChange = (e) => {
         setEmail(e.target.value);

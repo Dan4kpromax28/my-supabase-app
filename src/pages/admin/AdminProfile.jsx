@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+
 import { useState } from "react"
 import AdminHeader from '../../components/AdminHeader'
 import InputComponent from "../../components/InputComponent";
@@ -31,7 +31,7 @@ export default function AdminPanel(){
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        const { data, error } = await supabase.auth.updateUser(
+        const {  error } = await supabase.auth.updateUser(
             { password: newPassword.password }
         )
 

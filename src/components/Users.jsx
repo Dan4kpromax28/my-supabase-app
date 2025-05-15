@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import {  useNavigate } from 'react-router-dom';
 import { supabase } from '../utils/supabase';
 import MainHeader from '../components/MainHeader'
 import MainFooter from '../components/MainFooter';
@@ -7,6 +6,7 @@ import InputComponent from '../components/InputComponent';
 import validation from '../utils/helpers/handleInput.js';
 
 import PropTypes from 'prop-types';
+import Back from './Back.jsx';
 
 
 export default function Users({name ='', surname = '', email = '', phone = '', tips=''}){
@@ -14,7 +14,6 @@ export default function Users({name ='', surname = '', email = '', phone = '', t
     const [errors, setErrors] = useState({});
 
 
-    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         name: name,
         surname: surname,
@@ -61,7 +60,7 @@ export default function Users({name ='', surname = '', email = '', phone = '', t
             .eq('email', formData.email)
             .single();
 
-        const { data: client, error } = await supabase
+        const { error } = await supabase
             .from('client')
             .upsert({
                 name: formData.name,
@@ -86,7 +85,7 @@ export default function Users({name ='', surname = '', email = '', phone = '', t
                 return;
             }
 
-            const {data: subData, error: subError} = await supabase
+            const { error: subError} = await supabase
             .from('user_subscription')
             .update({'client_id': clientData.id})
             .eq('client_id', existing.id)
@@ -112,17 +111,12 @@ export default function Users({name ='', surname = '', email = '', phone = '', t
 
     
 
-    const handleBack = () => {
-        navigate(-1);
-    }
 
     return (
         <div >
             <MainHeader />
             <div className='max-w-2xl mx-auto p-4'>
-                <div className='bg-sky-50 shadow-md rounded-lg p-4 mb-4 flex items-center hover:bg-sky-100 cursor-pointer' onClick={() => handleBack()}>
-                    <h2 className='font-bold text-center'>Atpakaļ</h2>
-                </div>
+                <Back />
                 <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-6">
                     
                     <InputComponent 
@@ -187,7 +181,7 @@ export default function Users({name ='', surname = '', email = '', phone = '', t
 }
 
 
-Users.PropType = {
+Users.propTypes = {
     name: PropTypes.string.isRequired,
     surname: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,

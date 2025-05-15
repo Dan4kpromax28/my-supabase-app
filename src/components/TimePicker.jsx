@@ -24,18 +24,17 @@ export default function TimePicker({ date, onStartTime, onEndTime, start, end}) 
     function newFiltredArray(databaseTimes, allTimes){
         let startTimes = [...allTimes];
         startTimes.pop();
-
         let times = [];
-        for(let i =0; i < startTimes.length; i++){
+        for(const time of startTimes){
             let isExist = false;
-            for(let j = 0; j < databaseTimes.length; j++){
-                if(startTimes[i] >= databaseTimes[j].start_time && startTimes[i] < databaseTimes[j].end_time){
+            for(const databaseTime of databaseTimes){
+                if(time >= databaseTime.start_time && time < databaseTime.end_time){
                     isExist = true;
                     break;
                 }
             }
             if(!isExist){
-                times.push(startTimes[i]);
+                times.push(times);
             }
         }
         return times;
@@ -45,31 +44,31 @@ export default function TimePicker({ date, onStartTime, onEndTime, start, end}) 
         let endTimes = [...allTimes];
         endTimes.splice(0,1);
         let times = [];
-        for (let i = 0; i < endTimes.length; i++) {
+        for (const time of endTimes) {
             let isExist = false;
             
-            if (endTimes[i] <= selectedTime) {
+            if (time <= selectedTime) {
                 isExist = true;
             } else {
                 
-                for (let j = 0; j < databaseTimes.length; j++) {
+                for (const databaseTime of databaseTimes) {
                     if (
-                        endTimes[i] > databaseTimes[j].start_time && 
-                        selectedTime < databaseTimes[j].end_time && 
-                        endTimes[i] <= databaseTimes[j].end_time
+                        time > databaseTime.start_time && 
+                        selectedTime < databaseTime.end_time && 
+                        time <= databaseTime.end_time
                     ) {
                         isExist = true;
                         break;
                     }
                     
-                    if (databaseTimes[j].start_time > selectedTime && endTimes[i] > databaseTimes[j].start_time) {
+                    if (databaseTime.start_time > selectedTime && time > databaseTime.start_time) {
                         isExist = true;
                         break;
                     }
                 }
             }
             if (!isExist) {
-                times.push(endTimes[i]);
+                times.push(time);
             }
         }
         return times;
@@ -80,31 +79,36 @@ export default function TimePicker({ date, onStartTime, onEndTime, start, end}) 
 
     return (
         <>
-          <label className="block text-gray-700 mb-1">Izvēlieties sākuma laiku:</label>
+          <label className="block text-gray-700 mb-1" htmlFor="startTime">Izvēlieties sākuma laiku:</label>
           <select
+            id="startTime"
             className="cursor-pointer mr-2 mb-2 border-2 border-blue-300 rounded-md p-2"
             onChange={(e) => onStartTime(e.target.value)}
           >
             <option value="">Izvēlieties sākuma laiku</option>
-            {availableStartTimes.map((time, index) => (
-              <option key={index} value={time}>
+            {availableStartTimes.map((time) => (
+              <option key={time} value={time}>
                 {time}
               </option>
             ))}
           </select>
           
-          <label className="block text-gray-700 mb-1">Izvēlieties beigu laiku:</label>
+          
+          <label className="block text-gray-700 mb-1" htmlFor="endTime">Izvēlieties beigu laiku:</label>
           <select
+            id="endTime"
             className="cursor-pointer mr-2 mb-2 border-2 border-blue-300 rounded-md p-2"
             onChange={(e) => onEndTime(e.target.value)}
           >
+
             <option value="">Izvēlieties beigu laiku</option>
-            {availableEndTimes.map((time, index) => (
-              <option key={index} value={time}>
+            {availableEndTimes.map((time) => (
+              <option key={time} value={time}>
                 {time}
               </option>
             ))}
           </select>
+          
         </>
       );
 }

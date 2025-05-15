@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate, Navigate } from 'react-router-dom';
+import React, { useState} from 'react';
+import {  useNavigate} from 'react-router-dom';
 import { supabase } from '../../utils/supabase';
 import MainFooter from '../../components/MainFooter';
 import MainHeader from '../../components/MainHeader';
@@ -27,7 +27,7 @@ export default function AdminLogin(){
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const { data, error } = await supabase.auth.signInWithPassword({
+        const { error } = await supabase.auth.signInWithPassword({
             email: loginData.email,
             password: loginData.password,
         });

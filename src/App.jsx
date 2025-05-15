@@ -19,7 +19,6 @@ import ForgotPassword from './pages/admin/ForgotPassword';
 import CreateType from './pages/admin/CreateType';
 import UpdateSubscriptionType from './pages/admin/UpdateSubscriptionType';
 import UserSubscriptions from './pages/admin/UserSubscriptions';
-import Test from './pages/admin/Test';
 import AdminStatistic from './pages/admin/AdminStatistic';
 
 
@@ -27,7 +26,6 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/test" element={<Test />} />
         
         <Route path="/" element={<MainPage />} />
         <Route path="/pakalpojums/:id" element={<SubscriptionPage />} />

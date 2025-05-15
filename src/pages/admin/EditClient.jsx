@@ -2,7 +2,6 @@ import Users from "../../components/Users";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../../utils/supabase";
-import AdminHeader from "../../components/AdminHeader";
 
 export default function EditClient(){
     const navigate = useNavigate();

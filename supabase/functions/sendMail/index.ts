@@ -13,11 +13,10 @@ Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
-  try {
     const { subId, email } = await req.json();
     const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+      Deno.env.get('SUPABASE_URL'),
+      Deno.env.get('SUPABASE_ANON_KEY'),
       { global: { headers: { Authorization: req.headers.get('Authorization')! } } }
     )
     let isCreated = false;
@@ -28,8 +27,10 @@ Deno.serve(async (req) => {
       .eq('user_subscription_id', subId)
       .maybeSingle();
     if (errExist) {
-      console.error(errExist);
-      throw new Error('Notika kluda sakuma' + errExist.message);
+      return new Response(JSON.stringify({ error: errExist.message }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 400,
+      });
     }
     if (exist) {
       random = exist.user_string;
@@ -41,14 +42,16 @@ Deno.serve(async (req) => {
         for (let i = 0; i < 15; i++) {
           random += charactersForQrCode.charAt(Math.floor(Math.random() * charactersForQrCode.length));
         }
-        const {data, error} = await supabase
+        const {error} = await supabase
           .from('ticket')
           .select('user_string')
           .eq('user_string', random)
           .maybeSingle();
         if (error) {
-          console.error(error);
-          throw new Error('Notika kluda ar string meklesanu' + error.message);
+          return new Response(JSON.stringify({ error: error.message }), {
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            status: 400,
+          });
         }
         isCreated = true;
       }
@@ -101,20 +104,13 @@ Deno.serve(async (req) => {
     });
 
     await client.close();
-
     
     return new Response(JSON.stringify(data), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 200,
     });
-  } catch (error) {
-    
-      return new Response(JSON.stringify({ error: error.message }), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 400,
-      });
   }
-});
+);
 
 /* To invoke locally:
 

@@ -19,9 +19,9 @@ export default function Dropdown({options, onSelect, selected}) {
             {open && (
                 <div className="absolute mt-2 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow-lg">
                     <ul className="py-2 text-sm text-gray-700">
-                        {options.map((option, index) => (
-                            <li key={index} onClick={() => handleSelect(option)} className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                                {option}
+                        {options.map((option) => (
+                            <li key={option}>
+                                <butoon onClick={() => handleSelect(option)} className="w-full block px-4 py-2 hover:bg-gray-100 cursor-pointer">{option}</butoon>
                             </li>
                         ))} 
                     </ul>

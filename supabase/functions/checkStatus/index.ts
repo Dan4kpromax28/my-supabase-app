@@ -7,8 +7,8 @@ import "jsr:@supabase/functions-js/edge-runtime.d.ts"
 import { createClient } from "jsr:@supabase/supabase-js@2";
 
 const supabase = createClient(
-  Deno.env.get("SUPABASE_URL")!,
-  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")! 
+  Deno.env.get("SUPABASE_URL"),
+  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") 
 );
 
 
@@ -51,14 +51,10 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({error: 'Problema ar datiem'}), {status: 500});
     }
 
-    const { date: date_now, time: time_now } = getLatvianTime();
-
     for (const ticket of tickets) {
       const status = ticket.user_subscription.invoice[0].status;
-      const invoiceId = ticket.user_subscription?.invoice?.[0]?.id;
       if (status === 'valid') {
         const id = ticket.id;
-        const user_id = ticket.user_subscription.client_id;
         const is_date = ticket.user_subscription.subscriptions.is_date;
         const is_time = ticket.user_subscription.subscriptions.is_time;
         const invoice_id = ticket.user_subscription.invoice[0].id;
@@ -154,7 +150,7 @@ async function getResult(id: number) {
   const { data, error } = await supabase
     .from("time_stamps")
     .select("created_at")
-    .eq("id", id)
+    .eq("ticket_id", id)
     .order("created_at", { ascending: false });
 
   if (error) {

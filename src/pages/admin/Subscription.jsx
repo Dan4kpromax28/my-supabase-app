@@ -40,7 +40,7 @@ export default function Subscription() {
           [name]: value
         }));
         
-        const errorMessage = await validation.InputFieldValidationInvoice(name, value, invoice.number_id);
+        const errorMessage = await validation.InputFieldValidationInvoice(name, value, invoice?.number_id);
         setErrors(prev => ({
         ...prev,
         [name]: errorMessage
@@ -75,7 +75,7 @@ export default function Subscription() {
             return;
         }
     
-        try {
+        
             
             const { error: invoiceError } = await supabase
                 .from("invoice")
@@ -107,10 +107,7 @@ export default function Subscription() {
             }
     
             setMessage("Ieraksts veiksmīgi atjaunināts!");
-        } catch (error) {
-            
-            setMessage("Notika kļūda!");
-        }
+        
     };
 
 
@@ -144,7 +141,6 @@ export default function Subscription() {
                 console.error('Notika kluda:', error);
             } else {
                 setInvoice(data);
-                //setFiltSubscriptions(data);
                 setChooseOption(data.status);
             }
         
@@ -154,9 +150,7 @@ export default function Subscription() {
         fetchInvoice(); 
     }, [inId, navigate]);
 
-    const selectOption = (option) =>{
-        setChooseOption(option);
-    }
+ 
 
 
 
@@ -220,8 +214,8 @@ export default function Subscription() {
                                 value={formData.myStatus} 
                                 onChange={(e) => setFormData(prev => ({ ...prev, myStatus: e.target.value }))}
                             >
-                                {status.map((st, index) => 
-                                    <option key={index} value={st}>
+                                {status.map((st) => 
+                                    <option key={st} value={st}>
                                         {st}
                                     </option>
                                 )}

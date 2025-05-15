@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { supabase } from '../../utils/supabase';
+import React, { useState } from 'react';
+
 import { useNavigate } from 'react-router-dom';
 import AdminHeader from '../../components/AdminHeader';
 import useClient from '../../hooks/supabaseAPI/useClients';
@@ -34,21 +34,21 @@ export default function Dashboard(){
             </input>
 
             <div className='bg-sky-50 shadow-md rounded-lg p-4 mb-4 flex items-center hover:bg-sky-100'>
-                <div className='cursor-pointer' onClick={() => handleCreateClient()}>
+                <button className='cursor-pointer' onClick={() => handleCreateClient()}>
                     <h2 className='font-bold text-center'>Izveidot jaunu klientu</h2>
-                </div>
+                </button>
             </div>
 
             {clients.map(client => (
                 <div key={client.id} className="bg-white shadow-md rounded-lg p-4 mb-4 flex justify-between items-center hover:bg-gray-50">
-                    <div className="cursor-pointer" onClick={() => handleViewSubscriptions(client.id)}>
+                    <button className="w-full npmcursor-pointer text-left" onClick={() => handleViewSubscriptions(client.id)}>
                         <h3 className="font-bold text-lg" >{client.name} {client.surname}</h3>
                         <p className="text-sm text-gray-600">{client.email}</p>
                         <p className="text-sm text-gray-600">{client.phone_number}</p>
                         <span className="inline-block mt-1 bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
                             Abonementi: {client.subscriptionCount}
                         </span>
-                    </div>
+                    </button>
                     <div className="flex gap-2">
                         <button
                             onClick={() => handleEdit(client.id)}

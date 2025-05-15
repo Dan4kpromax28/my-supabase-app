@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
+
 import AdminHeader from "../../components/AdminHeader";
-import { supabase } from "../../utils/supabase";
 import { useNavigate } from "react-router-dom";
-import Back from "../../components/Back";
 import useAllSubscription from "../../hooks/supabaseAPI/useAllSubscription";
 
 
@@ -28,9 +26,9 @@ export default function SubscriptionTypes(){
          <AdminHeader />
          <div className="max-w-3xl mx-auto p-4">
          <div className='bg-sky-50 shadow-md rounded-lg p-4 mb-4 flex items-center hover:bg-sky-100'>
-                <div className='cursor-pointer' onClick={() => handleCreateSubscription()}>
+                <button className='cursor-pointer' onClick={() => handleCreateSubscription()}>
                     <h2 className='font-bold text-center'>Izveidot jaunu piedavajumu</h2>
-                </div>
+                </button>
             </div>
          <ul>
          {subscriptions.map((sub) => (
