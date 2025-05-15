@@ -1,9 +1,7 @@
 
 import { useState, useEffect } from 'react';
-import { supabase } from '../../utils/supabase';
-
+import { supabase } from '../../utils/helpers/supabase/supabase';
 import { useNavigate } from 'react-router-dom';
-
 import PropTypes from 'prop-types';
 
 export default function useOneSubscription(subId){
@@ -41,7 +39,7 @@ export default function useOneSubscription(subId){
 }
 
 
-useOneSubscription.PropTypes = {
+useOneSubscription.propTypes = {
     subId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 };
 

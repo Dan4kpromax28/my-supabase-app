@@ -1,11 +1,11 @@
 import { useState} from "react";
 
 
-import { supabase } from "../../utils/supabase";
-import InputComponent from "../../components/InputComponent";
-import MainHeader from "../../components/MainHeader";
-import MainFooter from "../../components/MainFooter";
-import Back from "../../components/Back";
+import { supabase } from "../../../utils/helpers/supabase/supabase";
+import InputComponent from "../../../components/InputComponent";
+import MainHeader from "../../../components/pageComponents/headers/MainHeader";
+import MainFooter from "../../../components/pageComponents/footers/MainFooter";
+import Back from "../../../components/buttons/Back";
 
 export default function ForgotPassword(){
     const [email, setEmail] = useState('');

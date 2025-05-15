@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { supabase } from '../../utils/supabase';
+import { supabase } from '../../utils/helpers/supabase/supabase';
 
 import PropTypes from 'prop-types';
 

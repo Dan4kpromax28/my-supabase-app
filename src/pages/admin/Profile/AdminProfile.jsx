@@ -1,8 +1,8 @@
 
 import { useState } from "react"
-import AdminHeader from '../../components/AdminHeader'
-import InputComponent from "../../components/InputComponent";
-import { supabase } from '../../utils/supabase';
+import AdminHeader from '../../../components/pageComponents/headers/AdminHeader'
+import InputComponent from "../../../components/InputComponent";
+import { supabase } from '../../../utils/helpers/supabase/supabase';
 
 
 

@@ -1,25 +1,25 @@
 import { BrowserRouter, Routes, Route} from 'react-router-dom';
-import MainPage from './pages/MainPage';
-import SubscriptionPage from './pages/SubscriptionPage';
+import MainPage from './pages/public/MainPage/MainPage';
+import SubscriptionPage from './pages/public/CreateSubscription/SubscriptionPage';
 import './App.css'
-import AdminLogin from './pages/admin/AdminLogin';
-import Dashboard from './pages/admin/Dashboard';
+import AdminLogin from './pages/admin/Login/AdminLogin';
+import Dashboard from './pages/admin/MainPage/Dashboard';
 import Wrapper from './wrappers/Wrapper';
 import LoginWrapper from './wrappers/LoginWrapper';
-import AdminProfile from './pages/admin/AdminProfile'
-import CreateClient from './pages/admin/CreateClient';
-import Subscription from './pages/admin/Subscription';
+import AdminProfile from './pages/admin/Profile/AdminProfile'
+import CreateClient from './pages/admin/Client/CreateClient';
+import Subscription from './pages/admin/ClientsSubscription/Subscription';
 
-import AllSubscriptions from './pages/admin/AllSubscriptions';
-import EditClient from './pages/admin/EditClient';
+import AllSubscriptions from './pages/admin/ClientsSubscription/AllSubscriptions';
+import EditClient from './pages/admin/Client/EditClient';
 import SubscriptionTypes from './pages/admin/SubscriptionsTypes';
-import ForgotPassword from './pages/admin/ForgotPassword';
+import ForgotPassword from './pages/admin/Login/ForgotPassword';
 
 
 import CreateType from './pages/admin/CreateType';
 import UpdateSubscriptionType from './pages/admin/UpdateSubscriptionType';
-import UserSubscriptions from './pages/admin/UserSubscriptions';
-import AdminStatistic from './pages/admin/AdminStatistic';
+import UserSubscriptions from './pages/admin/ClientsSubscription/UserSubscriptions';
+import AdminStatistic from './pages/admin/Statistic/AdminStatistic';
 
 
 export default function App() {

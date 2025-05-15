@@ -1,9 +1,9 @@
 import React, { useState} from 'react';
 import {  useNavigate} from 'react-router-dom';
-import { supabase } from '../../utils/supabase';
-import MainFooter from '../../components/MainFooter';
-import MainHeader from '../../components/MainHeader';
-import InputComponent from '../../components/InputComponent';
+import { supabase } from '../../../utils/helpers/supabase/supabase';
+import MainFooter from '../../../components/pageComponents/footers/MainFooter';
+import MainHeader from '../../../components/pageComponents/headers/MainHeader';
+import InputComponent from '../../../components/InputComponent';
 export default function AdminLogin(){
 
     

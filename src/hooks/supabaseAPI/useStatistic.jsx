@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../../utils/supabase';
-import { makeDataForChart, uniquePersonsThatEnters } from '../../utils/statisticUtils';
+import { supabase } from '../../utils/helpers/supabase/supabase';
+import { makeDataForChart, uniquePersonsThatEnters } from '../../utils/helpers/chartDataSet/statisticUtils';
 
 
 export default function useStatistic() {

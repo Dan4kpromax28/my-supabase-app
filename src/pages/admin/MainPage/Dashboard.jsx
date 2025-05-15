@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-
 import { useNavigate } from 'react-router-dom';
-import AdminHeader from '../../components/AdminHeader';
-import useClient from '../../hooks/supabaseAPI/useClients';
+import AdminHeader from '../../../components/pageComponents/headers/AdminHeader';
+import useClient from '../../../hooks/supabaseAPI/useClients';
 
 export default function Dashboard(){
     const [search, setSearch] = useState('');

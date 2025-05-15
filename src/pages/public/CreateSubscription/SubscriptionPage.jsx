@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { supabase } from '../utils/supabase';
-import MainHeader from '../components/MainHeader'
-import MainFooter from '../components/MainFooter';
-import InputComponent from '../components/InputComponent';
+import { supabase } from '../../../utils/helpers/supabase/supabase.js';
+import MainHeader from '../../../components/pageComponents/headers/MainHeader.jsx'
+import MainFooter from '../../../components/pageComponents/footers/MainFooter.jsx';
+import InputComponent from '../../../components/InputComponent.jsx';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import validation from '../utils/helpers/handleInput.js';
-import TimePicker from '../components/TimePicker.jsx';
+import validation from '../../../utils/helpers/validation/handleInput.js';
+import TimePicker from '../../../components/dateTime/TimePicker.jsx';
 import { DateTime } from 'luxon';
-import useOneSubscription from '../hooks/supabaseAPI/useOneSubscription.jsx';
-import Back from '../components/Back.jsx';
+import useOneSubscription from '../../../hooks/supabaseAPI/useOneSubscription.jsx';
+import Back from '../../../components/buttons/Back.jsx';
 export default function SubscriptionPage() {
 
     const { state } = useLocation();

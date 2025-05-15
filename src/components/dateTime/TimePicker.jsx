@@ -1,4 +1,4 @@
-import useTimes from "../hooks/supabaseAPI/useTimes";
+import useTimes from "../../hooks/supabaseAPI/useTimes";
 import PropTypes from 'prop-types';
 
 export default function TimePicker({ date, onStartTime, onEndTime, start, end}) {
@@ -34,7 +34,7 @@ export default function TimePicker({ date, onStartTime, onEndTime, start, end}) 
                 }
             }
             if(!isExist){
-                times.push(times);
+                times.push(time); 
             }
         }
         return times;
@@ -52,16 +52,7 @@ export default function TimePicker({ date, onStartTime, onEndTime, start, end}) 
             } else {
                 
                 for (const databaseTime of databaseTimes) {
-                    if (
-                        time > databaseTime.start_time && 
-                        selectedTime < databaseTime.end_time && 
-                        time <= databaseTime.end_time
-                    ) {
-                        isExist = true;
-                        break;
-                    }
-                    
-                    if (databaseTime.start_time > selectedTime && time > databaseTime.start_time) {
+                    if (checkIfIsTimeConflict(databaseTime, selectedTime,time)){
                         isExist = true;
                         break;
                     }
@@ -72,6 +63,12 @@ export default function TimePicker({ date, onStartTime, onEndTime, start, end}) 
             }
         }
         return times;
+    }
+
+    function checkIfIsTimeConflict(databaseTime, selectedTime, time){
+      return (time > databaseTime.start_time && 
+        selectedTime < databaseTime.end_time && 
+        time <= databaseTime.end_time || databaseTime.start_time > selectedTime && time > databaseTime.start_time)
     }
     const allTimes = listWithTimesFrom08To20();
     const availableStartTimes = newFiltredArray(times, allTimes);
@@ -87,7 +84,7 @@ export default function TimePicker({ date, onStartTime, onEndTime, start, end}) 
           >
             <option value="">Izvēlieties sākuma laiku</option>
             {availableStartTimes.map((time) => (
-              <option key={time} value={time}>
+              <option key={`start-${time}`} value={time}>
                 {time}
               </option>
             ))}
@@ -103,7 +100,7 @@ export default function TimePicker({ date, onStartTime, onEndTime, start, end}) 
 
             <option value="">Izvēlieties beigu laiku</option>
             {availableEndTimes.map((time) => (
-              <option key={time} value={time}>
+              <option key={`end-${time}`} value={time}>
                 {time}
               </option>
             ))}

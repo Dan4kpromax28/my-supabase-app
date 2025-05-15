@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AdminHeader from "../../components/AdminHeader";
-import Dropdown from "../../components/Dropdown";
-import Back from "../../components/Back";
-import filterAllSubscriptions from "../../utils/helpers/SubscriptionsFilters.js";
-import { filterOptions } from "../../utils/helpers/filterOptions.js";
-import useInvoice from "../../hooks/supabaseAPI/useInvoice.jsx";
+import AdminHeader from "../../../components/pageComponents/headers/AdminHeader.jsx";
+import Dropdown from "../../../components/Dropdown.jsx";
+import Back from "../../../components/buttons/Back.jsx";
+import filterAllSubscriptions from "../../../utils/helpers/filters/SubscriptionsFilters.js";
+import { filterOptions } from "../../../utils/helpers/filters/filterOptions.js";
+import useInvoice from "../../../hooks/supabaseAPI/useInvoice.jsx";
 
 
 export default function AllSubscriptions(){

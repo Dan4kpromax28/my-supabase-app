@@ -1,5 +1,5 @@
 
-import Users from '../../components/Users';
+import Users from '../../../components/specialPages/Users';
 
 
 export default function CreateUser(){

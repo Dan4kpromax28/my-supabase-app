@@ -1,6 +1,6 @@
 import {  useParams } from "react-router-dom";
 
-import Tips from "../../components/Type";
+import Tips from "../../components/specialPages/Type";
 
 export default function UpdateSubscriptionType() {
 

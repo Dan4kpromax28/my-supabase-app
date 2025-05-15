@@ -1,7 +1,7 @@
-import Users from "../../components/Users";
+import Users from "../../../components/specialPages/Users";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { supabase } from "../../utils/supabase";
+import { supabase } from "../../../utils/helpers/supabase/supabase";
 
 export default function EditClient(){
     const navigate = useNavigate();

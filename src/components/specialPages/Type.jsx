@@ -1,10 +1,10 @@
 import { useNavigate} from "react-router-dom";
-import AdminHeader from "../components/AdminHeader";
+import AdminHeader from "../../components/pageComponents/headers/AdminHeader.jsx";
 import { useEffect, useState } from "react";
-import { supabase } from "../utils/supabase";
-import InputComponent from "../components/InputComponent";
-import Back from "../components/Back";
-import validation from '../utils/helpers/handleInput.js';
+import { supabase } from "../../utils/helpers/supabase/supabase.js";
+import InputComponent from "../InputComponent.jsx";
+import Back from "../buttons/Back.jsx";
+import validation from '../../utils/helpers/validation/handleInput.js';
 
 import PropTypes from 'prop-types';
 
@@ -148,7 +148,7 @@ export default function Tips({id}){
                         value={formData.name}
                         onChange={handleInputChange}
                     />
-                    {formData.name && errors.name 
+                    {errors.name 
                     ? <div className='text-red-500 text-sm text-center '>{errors.name}</div>
                     : null}
                     <div>
@@ -162,7 +162,7 @@ export default function Tips({id}){
                             placeholder="Ievadiet papildu informaciju"
                         />
                     </div>
-                    {formData.description && errors.description
+                    {errors.description
                     ? <div className='text-red-500 text-sm text-center '>{errors.description}</div>
                     : null}
                     <InputComponent
@@ -173,7 +173,7 @@ export default function Tips({id}){
                         value={formData.price}
                         onChange={handleInputChange}
                     />
-                    {formData.price && errors.price 
+                    {errors.price 
                     ? <div className='text-red-500 text-sm text-center '>{errors.price}</div>
                     : null}
                     <InputComponent
@@ -184,7 +184,7 @@ export default function Tips({id}){
                         value={formData.durationValue}
                         onChange={handleInputChange}
                     />
-                    {formData.durationValue && errors.durationValue 
+                    {errors.durationValue 
                     ? <div className='text-red-500 text-sm text-center '>{errors.durationValue}</div>
                     : null}
                     <InputComponent
@@ -195,7 +195,7 @@ export default function Tips({id}){
                         value={formData.durationType}
                         onChange={handleInputChange}
                     />
-                    {formData.durationType && errors.durationType 
+                    {errors.durationType 
                     ? <div className='text-red-500 text-sm text-center '>{errors.durationType}</div>
                     : null}
                     {formData.isTime && (
@@ -222,7 +222,7 @@ export default function Tips({id}){
                         value={formData.restrictionStart}
                         onChange={handleInputChange}
                     />
-                    {formData.restrictionStart && errors.restrictionStart
+                    {errors.restrictionStart
                     ? <div className='text-red-500 text-sm text-center '>{errors.restrictionStart}</div>
                     : null}
                     <InputComponent
@@ -234,7 +234,7 @@ export default function Tips({id}){
                         value={formData.restrictionEnd}
                         onChange={handleInputChange}
                     />
-                    {formData.restrictionEnd && errors.restrictionEnd
+                    {errors.restrictionEnd
                     ? <div className='text-red-500 text-sm text-center '>{errors.restrictionEnd}</div>
                     : null}
                     <p>isTime</p>

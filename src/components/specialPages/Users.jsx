@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { supabase } from '../utils/supabase';
-import MainHeader from '../components/MainHeader'
-import MainFooter from '../components/MainFooter';
-import InputComponent from '../components/InputComponent';
-import validation from '../utils/helpers/handleInput.js';
+import { supabase } from '../../utils/helpers/supabase/supabase.js';
+import MainHeader from '../pageComponents/headers/MainHeader.jsx'
+import MainFooter from '../pageComponents/footers/MainFooter.jsx';
+import InputComponent from '../InputComponent.jsx';
+import validation from '../../utils/helpers/validation/handleInput.js';
 
 import PropTypes from 'prop-types';
-import Back from './Back.jsx';
+import Back from '../buttons/Back.jsx';
 
 
 export default function Users({name ='', surname = '', email = '', phone = '', tips=''}){

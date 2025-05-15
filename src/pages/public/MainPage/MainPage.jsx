@@ -1,9 +1,9 @@
 
 
-import CustomSlider from '../components/CustomSlider';
-import MainHeader from '../components/MainHeader'
-import MainFooter from '../components/MainFooter';
-import useAllSubscription from '../hooks/supabaseAPI/useAllSubscription';
+import CustomSlider from '../../../components/productsCard/CustomSlider';
+import MainHeader from '../../../components/pageComponents/headers/MainHeader'
+import MainFooter from '../../../components/pageComponents/footers/MainFooter';
+import useAllSubscription from '../../../hooks/supabaseAPI/useAllSubscription';
 
 
 export default function MainPage() {

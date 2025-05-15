@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 
 import PropTypes from 'prop-types';
 
-import { supabase } from '../../utils/supabase';
+import { supabase } from '../../utils/helpers/supabase/supabase';
 
 export default function useTimes(date){
 

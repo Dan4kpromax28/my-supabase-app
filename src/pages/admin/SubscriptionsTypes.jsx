@@ -1,5 +1,5 @@
 
-import AdminHeader from "../../components/AdminHeader";
+import AdminHeader from "../../components/pageComponents/headers/AdminHeader";
 import { useNavigate } from "react-router-dom";
 import useAllSubscription from "../../hooks/supabaseAPI/useAllSubscription";
 

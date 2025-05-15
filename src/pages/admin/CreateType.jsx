@@ -1,4 +1,4 @@
-import Tips from "../../components/Type";
+import Tips from "../../components/specialPages/Type";
 
 
 
