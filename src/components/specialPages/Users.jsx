@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { supabase } from '../../utils/helpers/supabase/supabase.js';
 import MainHeader from '../pageComponents/headers/MainHeader.jsx'
 import MainFooter from '../pageComponents/footers/MainFooter.jsx';
-import InputComponent from '../InputComponent.jsx';
+import InputComponent from '../customInput/InputComponent.jsx';
 import validation from '../../utils/helpers/validation/handleInput.js';
 
 import PropTypes from 'prop-types';

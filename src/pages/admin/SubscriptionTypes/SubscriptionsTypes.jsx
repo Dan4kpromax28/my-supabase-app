@@ -1,7 +1,7 @@
-
-import AdminHeader from "../../components/pageComponents/headers/AdminHeader";
+import React from 'react';
+import AdminHeader from "../../../components/pageComponents/headers/AdminHeader";
 import { useNavigate } from "react-router-dom";
-import useAllSubscription from "../../hooks/supabaseAPI/useAllSubscription";
+import useAllSubscription from "../../../hooks/supabaseAPI/useAllSubscription";
 
 
 

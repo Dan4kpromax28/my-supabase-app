@@ -3,7 +3,7 @@ import {  useNavigate} from 'react-router-dom';
 import { supabase } from '../../../utils/helpers/supabase/supabase';
 import MainFooter from '../../../components/pageComponents/footers/MainFooter';
 import MainHeader from '../../../components/pageComponents/headers/MainHeader';
-import InputComponent from '../../../components/InputComponent';
+import InputComponent from '../../../components/customInput/InputComponent';
 export default function AdminLogin(){
 
     

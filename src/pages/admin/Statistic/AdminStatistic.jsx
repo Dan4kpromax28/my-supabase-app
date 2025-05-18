@@ -1,7 +1,7 @@
 import AdminHeader from '../../../components/pageComponents/headers/AdminHeader';
 import Back from '../../../components/buttons/Back';
 import { Bar } from 'react-chartjs-2';
-import Pagination from '../../../components/Pagination';
+import Pagination from '../../../components/forPages/Pagination';
 import Select from 'react-select';
 import useStatistic from '../../../hooks/supabaseAPI/useStatistic';
 

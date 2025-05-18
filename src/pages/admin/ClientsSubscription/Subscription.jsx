@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../../../utils/helpers/supabase/supabase.js";
 import AdminHeader from "../../../components/pageComponents/headers/AdminHeader.jsx";
 import Back from "../../../components/buttons/Back.jsx";
-import InputComponent from "../../../components/InputComponent.jsx";
+import InputComponent from "../../../components/customInput/InputComponent.jsx";
 import { formatDate } from "../../../utils/helpers/date/helpers.js";
 import validation from "../../../utils/helpers/validation/handleInput.js";
 
@@ -129,7 +129,9 @@ export default function Subscription() {
                         subscriptions:subscription_id (
                             id,
                             name,
-                            price
+                            price,
+                            is_time,
+                            is_date
                         ),
                         client:client_id(*)
                     )
@@ -167,12 +169,31 @@ export default function Subscription() {
                 
                 <li key={invoice?.id} className="bg-white shadow-md rounded-lg p-4 mb-4">
                     <div>
-                        <h1 className="font-bold text-xl underline">{invoice?.user_subscription?.subscriptions?.name}</h1>
-                        <h2 className="font-bold text-lg">{invoice?.user_subscription?.client?.name} {invoice?.user_subscription?.client?.surname}</h2>
-                        <h2 className="font-bold text-sm">Izveidots: {formatDate(invoice?.user_subscription?.created_at)}</h2>
-                        {invoice?.user_subscription?.start_date && invoice?.user_subscription?.end_date && <p>Datums: {invoice?.user_subscription?.start_date} - {invoice?.user_subscription?.end_date}</p>}
-                        {invoice?.user_subscription?.start_date && <p>Datums: {invoice?.user_subscription?.start_date}</p>}
-                        {invoice?.user_subscription?.time && <p>Laiks: {invoice?.user_subscription?.time}</p>}
+                        <h1 className="font-bold text-6xl">{invoice?.user_subscription?.subscriptions?.name}</h1>
+                        <h2 className="font-bold text-3xl">{invoice?.user_subscription?.client?.name} {invoice?.user_subscription?.client?.surname}</h2>
+                        <h2 className="font-bold text-3xl">Izveidots: {formatDate(invoice?.user_subscription?.created_at)}</h2>
+                        <h2 className="font-semibold text-2xl">
+                            {invoice?.user_subscription?.start_date && invoice?.user_subscription?.end_date && (
+                                <>
+                                Datums: {invoice.user_subscription.start_date} - {invoice.user_subscription.end_date}
+                                </>
+                            )}
+                        </h2>
+                        
+                        <h2 className="font-semibold text-2xl">
+                            {invoice?.user_subscription?.start_date && (
+                                <>
+                                Datums: {invoice?.user_subscription?.start_date}
+                                </>
+                            )}
+                        </h2>
+                        <h2 className="font-semibold text-2xl">
+                            {invoice?.user_subscription?.start_time && invoice?.user_subscription?.end_time &&  (
+                                <>
+                                    Laiks: {invoice?.user_subscription?.start_time} - {invoice?.user_subscription?.end_time}
+                                </>
+                            )}
+                        </h2>
                         {invoice?.user_subscription?.information && <div>
                             <label htmlFor="additionalInfo" className="block text-gray-700 mb-2">Papildu informacija:</label>
                             <textarea

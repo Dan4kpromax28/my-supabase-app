@@ -2,7 +2,7 @@ import { useNavigate} from "react-router-dom";
 import AdminHeader from "../../components/pageComponents/headers/AdminHeader.jsx";
 import { useEffect, useState } from "react";
 import { supabase } from "../../utils/helpers/supabase/supabase.js";
-import InputComponent from "../InputComponent.jsx";
+import InputComponent from "../customInput/InputComponent.jsx";
 import Back from "../buttons/Back.jsx";
 import validation from '../../utils/helpers/validation/handleInput.js';
 

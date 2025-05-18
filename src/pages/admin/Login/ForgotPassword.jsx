@@ -2,7 +2,7 @@ import { useState} from "react";
 
 
 import { supabase } from "../../../utils/helpers/supabase/supabase";
-import InputComponent from "../../../components/InputComponent";
+import InputComponent from "../../../components/customInput/InputComponent";
 import MainHeader from "../../../components/pageComponents/headers/MainHeader";
 import MainFooter from "../../../components/pageComponents/footers/MainFooter";
 import Back from "../../../components/buttons/Back";

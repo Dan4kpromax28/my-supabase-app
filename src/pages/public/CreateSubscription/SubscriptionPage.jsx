@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { supabase } from '../../../utils/helpers/supabase/supabase.js';
 import MainHeader from '../../../components/pageComponents/headers/MainHeader.jsx'
 import MainFooter from '../../../components/pageComponents/footers/MainFooter.jsx';
-import InputComponent from '../../../components/InputComponent.jsx';
+import InputComponent from '../../../components/customInput/InputComponent.jsx';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import validation from '../../../utils/helpers/validation/handleInput.js';

@@ -1,23 +1,20 @@
-import { BrowserRouter, Routes, Route} from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MainPage from './pages/public/MainPage/MainPage';
 import SubscriptionPage from './pages/public/CreateSubscription/SubscriptionPage';
-import './App.css'
+import './App.css';
 import AdminLogin from './pages/admin/Login/AdminLogin';
 import Dashboard from './pages/admin/MainPage/Dashboard';
 import Wrapper from './wrappers/Wrapper';
 import LoginWrapper from './wrappers/LoginWrapper';
-import AdminProfile from './pages/admin/Profile/AdminProfile'
+import AdminProfile from './pages/admin/Profile/AdminProfile';
 import CreateClient from './pages/admin/Client/CreateClient';
 import Subscription from './pages/admin/ClientsSubscription/Subscription';
-
 import AllSubscriptions from './pages/admin/ClientsSubscription/AllSubscriptions';
 import EditClient from './pages/admin/Client/EditClient';
-import SubscriptionTypes from './pages/admin/SubscriptionsTypes';
+import SubscriptionTypes from './pages/admin/SubscriptionTypes/SubscriptionsTypes';
 import ForgotPassword from './pages/admin/Login/ForgotPassword';
-
-
-import CreateType from './pages/admin/CreateType';
-import UpdateSubscriptionType from './pages/admin/UpdateSubscriptionType';
+import CreateType from './pages/admin/SubscriptionTypes/CreateType';
+import UpdateSubscriptionType from './pages/admin/SubscriptionTypes/UpdateSubscriptionType';
 import UserSubscriptions from './pages/admin/ClientsSubscription/UserSubscriptions';
 import AdminStatistic from './pages/admin/Statistic/AdminStatistic';
 import NotFound from './pages/notFound/NotFound';
@@ -27,7 +24,6 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        
         <Route path="/" element={<MainPage />} />
         <Route path="/pakalpojums/:id" element={<SubscriptionPage />} />
         
@@ -45,7 +41,7 @@ export default function App() {
         <Route path='/admin/clients/userSubscriptions/:id' element={<Wrapper><UserSubscriptions /></Wrapper>} />
         <Route path='/admin/statistic' element={<Wrapper><AdminStatistic/></Wrapper>} />
         <Route path='*' element={<NotFound />} />
-       </Routes>
+      </Routes>
     </BrowserRouter>
   );
 }
