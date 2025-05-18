@@ -29,15 +29,14 @@ Deno.serve(async (req)=>{
     let actualMessage = '';
     if (data.status === 'accepted'){
       actualMessage = `Labdien, ${data.user_subscription?.client?.name} ${data.user_subscription?.client?.surname}!<br>
-      Jūsu pasutijums ${data.user_subscription?.subscriptions?.name} ir apstradats un gaida lai jus par to samaksatu.<br>
-      Musu bakas konts ir: LV80HABA055101000001<br>
-      Noradiet maksajuma mērķī so numuru numuru: ${data.number_id}<br>
-      Un summa samaksai ir: ${data.full_price} EUR<br>`
+Jūsu pasūtījums “${data.user_subscription?.subscriptions?.name}” ir apstrādāts un gaida apmaksu.<br>
+Mūsu bankas konts ir: LV80HABA055101000001<br>
+Maksājuma mērķī, lūdzu, norādiet šo numuru: ${data.number_id}<br>
+Apmaksājamā summa: ${data.full_price} EUR<br>`;
     }else{
       actualMessage = `Labdien, ${data.user_subscription?.client?.name} ${data.user_subscription?.client?.surname}!<br>
-      Mes diemzel mes nevaram apstiprinat pasutijumu ${data.user_subscription?.subscriptions?.name}.<br>
-      Tas bus pabeigts. Jus varat ar mums szinaties seit\n
-      `
+Diemžēl mēs nevaram apstiprināt pasūtījumu “${data.user_subscription?.subscriptions?.name}”.<br>
+Tas tiks atcelts. Ja jums ir kādi jautājumi, lūdzu, sazinieties ar mums šeit.<br>`;
     }
     
    const client = new SMTPClient({

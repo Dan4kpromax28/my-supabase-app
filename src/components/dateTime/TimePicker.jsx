@@ -1,8 +1,8 @@
 import useTimes from "../../hooks/supabaseAPI/useTimes";
 import PropTypes from 'prop-types';
 
-export default function TimePicker({ date, onStartTime, onEndTime, start, end}) {
-    const times = useTimes(date);
+export default function TimePicker({ date, onStartTime, onEndTime, start, subscriptonId}) {
+    const times = useTimes(date, subscriptonId);
     
     
 
@@ -115,5 +115,5 @@ TimePicker.propTypes = {
     onStartTime: PropTypes.func.isRequired,
     onEndTime: PropTypes.func.isRequired,
     start: PropTypes.string,
-    end: PropTypes.string
+    subscriptonId: PropTypes.number
 };

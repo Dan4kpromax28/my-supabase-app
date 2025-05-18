@@ -12,22 +12,27 @@ const supabase = createClient(
 );
 
 
-function getLatvianTime() {
-  const now = new Date();
-  const latvianTime = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Riga' }));
-  return {
-    date: latvianTime.toISOString().split('T')[0],
-    time: latvianTime.toISOString().split('T')[1].split('.')[0]
-  };
-}
+
 
 Deno.serve(async (req) => {
+  try{
   
-    const tickets = await getTicket();
+    const tickets = await getTickets();
+    if (!tickets || tickets.length === 0) return new Response(
+      JSON.stringify({ message: 'Nav pieejamu biļešu' }),
+      { headers: { "Content-Type": "application/json" } }
+    );
 
     const { date: date_now, time: time_now } = getLatvianTime();
 
     for (const ticket of tickets) {
+      if (!ticket.user_subscription || 
+          !ticket.user_subscription.invoice || 
+          !ticket.user_subscription.invoice[0] ||
+          !ticket.user_subscription.subscriptions) {
+        continue;
+      }
+      
       const status = ticket.user_subscription.invoice[0].status;
       
       if (status === 'valid') {
@@ -37,70 +42,108 @@ Deno.serve(async (req) => {
         const invoice_id = ticket.user_subscription.invoice[0].id;
         
         if (is_date && is_time) {
-          const { start_date, end_time } = ticket.user_subscription;
-
-          const formatted_start_date = new Date(start_date).toISOString().split('T')[0];
-          const formatted_end_time = end_time;
-
-          console.log("formatted_start_date", formatted_start_date);
-          console.log("formatted_end_time", formatted_end_time);
-
-          if (formatted_start_date < date_now) {
-            console.log('datums nav derigs');
-            await changeStatus(invoice_id);
-          }
-          else if (formatted_start_date === date_now && formatted_end_time < time_now) {
-            console.log('laiks nav derigs');
-            await changeStatus(invoice_id);
-          }
-          
+          await checkConditonForTimeAndDate(ticket, date_now, time_now, invoice_id);
         }
         else if (is_date && !is_time) {
-          const { end_date } = ticket.user_subscription;
-          
-          const formatted_end_date = new Date(end_date).toISOString().split('T')[0];
-
-          if (formatted_end_date < date_now) {
-            await changeStatus(invoice_id);
-            
-          
+          await checkDayAndNotTime(ticket, date_now, invoice_id);
         }
         else {
           
-          const resultSecond = await getResult(id);
-          let count = 0;
-          const uniqueDates = [];
-
-          if (resultSecond && resultSecond.length !== 0) {
-            for (const item of resultSecond) {
-              const createdDate = new Date(item.created_at).toISOString().split('T')[0];
-              if (uniqueDates.length === 0 || uniqueDates[uniqueDates.length - 1] !== createdDate) {
-                uniqueDates.push(createdDate);
-                count++;
-              }
-            }
-            const restrictionType = ticket.user_subscription.subscriptions.duration_type;
-            const restrictionValue = ticket.user_subscription.subscriptions.duration_value;
-            const lastUsedDate = new Date(uniqueDates[uniqueDates.length - 1]);
-            const today = new Date();
-
-            if (restrictionType === "dienas" && uniqueDates.length === restrictionValue && lastUsedDate < today) {
-              await changeStatus(invoice_id); 
-            }
-          }
-         
+          const stamps = await getResult(id);
+          
+          if (!stamps || stamps.length === 0) continue;
+          const uniqueDates = extractDates(stamps);
+          if (!uniqueDates || uniqueDates.length === 0) continue;
+          
+          const {duration_type: restrictionType, duration_value: restrictionValue} = ticket.user_subscription.subscriptions;
+          await checkStatusChange(restrictionType, restrictionValue, uniqueDates, invoice_id);
         }
-      }
       }
     }
     return new Response(
       JSON.stringify({ message: 'Viss ir labi' }),
       { headers: { "Content-Type": "application/json" } }
     );
-  
+  }catch (err) {
+    console.error("Kļūda funkcijā:", err);
+    return new Response(
+      JSON.stringify({ error: "Servera kļūda" }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
+  }
 });
 
-async function changeStatus(id: number) {
+const extractDates = (stamps) => {
+  if (!stamps || stamps.length === 0) return [];
+  
+  const uniqueDates = [];
+  for (const stamp of stamps) {
+    if (!stamp || !stamp.created_at) continue;
+    
+    const createdDate = new Date(stamp.created_at).toISOString().split('T')[0];
+    if (uniqueDates.length === 0 || uniqueDates[uniqueDates.length - 1] !== createdDate) {
+      uniqueDates.push(createdDate);
+    }
+  }
+
+  return uniqueDates;
+};
+
+const checkStatusChange = async (restrictionType, restrictionValue, uniqueDates, invoice_id) =>{
+  if (!uniqueDates || uniqueDates.length === 0 || !restrictionType || !restrictionValue) return;
+
+  const lastUsedDate = new Date(uniqueDates[uniqueDates.length - 1]);
+  const today = new Date();
+  if (restrictionType === "dienas" && uniqueDates.length >= restrictionValue && lastUsedDate < today) {
+    await changeStatus(invoice_id); 
+  }
+}
+
+const checkConditonForTimeAndDate = async(ticket, date_now, time_now, invoice_id) => {
+  try{
+    if (!ticket || !ticket.user_subscription || !ticket.user_subscription.start_date) return;
+    
+    const { start_date, end_time } = ticket.user_subscription;
+
+    const formatted_start_date = new Date(start_date).toISOString().split('T')[0];
+    const formatted_end_time = end_time;
+
+    console.log("formatted_start_date", formatted_start_date);
+    console.log("formatted_end_time", formatted_end_time);
+
+    if (formatted_start_date < date_now) {
+      console.log('datums nav derigs');
+      await changeStatus(invoice_id);
+    }
+    else if (formatted_start_date === date_now && formatted_end_time < time_now) {
+      console.log('laiks nav derigs');
+      await changeStatus(invoice_id);
+    }
+  }catch(err){
+    console.log('notika kluda');
+    console.error(err);
+  }
+}
+
+const checkDayAndNotTime = async (ticket, date_now, invoice_id) => {
+  try{
+    if (!ticket || !ticket.user_subscription || !ticket.user_subscription.end_date) return;
+    
+    const { end_date } = ticket.user_subscription;
+          
+    const formatted_end_date = new Date(end_date).toISOString().split('T')[0];
+
+    if (formatted_end_date < date_now) {
+      await changeStatus(invoice_id);
+    }
+  }catch(err){
+    console.error(err);
+  }
+}
+
+const changeStatus = async (id: number) => {
+  if (!id) return;
+  
   const { error } = await supabase
     .from("invoice")
     .update({ status: "invalid" })
@@ -111,7 +154,9 @@ async function changeStatus(id: number) {
   }
 }
 
-async function getResult(id: number) {
+const getResult = async(id: number) => {
+  if (!id) return [];
+  
   const { data, error } = await supabase
     .from("time_stamps")
     .select("created_at")
@@ -122,11 +167,20 @@ async function getResult(id: number) {
     return [];
   }
 
-  return data;
+  return data ?? [];
 }
 
-async function getTicket(){
-  const { data: tickets, error } = await supabase
+const getLatvianTime = () =>  {
+  const now = new Date();
+  const latvianTime = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Riga' }));
+  return {
+    date: latvianTime.toISOString().split('T')[0],
+    time: latvianTime.toISOString().split('T')[1].split('.')[0]
+  };
+}
+
+const getTickets = async () => {
+  const { data, error } = await supabase
   .from("ticket")
   .select(`
     id,
@@ -151,9 +205,10 @@ async function getTicket(){
   `);
 
   if (error) {
-    return new Response(JSON.stringify({error: 'Problema ar datiem'}), {status: 500});
+    console.error("Notika kluda", error);
+    return [];
   }
-  return tickets;
+  return data ?? [];
 }
 
 /* To invoke locally:

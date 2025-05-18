@@ -209,7 +209,7 @@ export default function Tips({id}){
                     />
                     
                     )}
-                    {formData.additionalHourPrice && errors.additionalHourPrice
+                    {errors.additionalHourPrice
                     ? <div className='text-red-500 text-sm text-center '>{errors.additionalHourPrice}</div>
                     : null}
                     <InputComponent

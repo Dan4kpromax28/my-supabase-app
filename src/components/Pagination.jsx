@@ -29,9 +29,7 @@ export default function Pagination({ objects, page, setPage, itemsInPage }) {
         <div className="flex flex-col items-center">
             <div className="flex items-center gap-2 mt-4">
                 <button
-                    onClick={setFirstPage}
-                    disabled={page === 1}
-                    className={`px-3 py-1 rounded-md ${
+                    onClick={setFirstPage} disabled={page === 1} className={`px-3 py-1 rounded-md ${
                         page === 1 
                             ? 'bg-gray-200 text-gray-500 cursor-not-allowed' 
                             : 'bg-white text-gray-700 hover:bg-gray-100'
@@ -40,9 +38,7 @@ export default function Pagination({ objects, page, setPage, itemsInPage }) {
                     Pirma lapa {1}
                 </button>
                 <button
-                    onClick={setPreviousPage}
-                    disabled={page === 1}
-                    className={`px-3 py-1 rounded-md ${
+                    onClick={setPreviousPage} disabled={page === 1} className={`px-3 py-1 rounded-md ${
                         page === 1 
                             ? 'bg-gray-200 text-gray-500 cursor-not-allowed' 
                             : 'bg-white text-gray-700 hover:bg-gray-100'
@@ -58,9 +54,7 @@ export default function Pagination({ objects, page, setPage, itemsInPage }) {
                 
 
                 <button
-                    onClick={setNextPage}
-                    disabled={page === allPages}
-                    className={`px-3 py-1 rounded-md ${
+                    onClick={setNextPage} disabled={page === allPages} className={`px-3 py-1 rounded-md ${
                         page === allPages 
                             ? 'bg-gray-200 text-gray-500 cursor-not-allowed' 
                             : 'bg-white text-gray-700 hover:bg-gray-100'
@@ -69,9 +63,7 @@ export default function Pagination({ objects, page, setPage, itemsInPage }) {
                     {'>'}
                 </button>
                 <button
-                    onClick={setLastPage}
-                    disabled={page === allPages}
-                    className={`px-3 py-1 rounded-md ${
+                    onClick={setLastPage} disabled={page === allPages} className={`px-3 py-1 rounded-md ${
                         page === allPages 
                             ? 'bg-gray-200 text-gray-500 cursor-not-allowed' 
                             : 'bg-white text-gray-700 hover:bg-gray-100'

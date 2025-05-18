@@ -211,7 +211,7 @@ export default function SubscriptionPage() {
                             onStartTime={(time) => setFormData(prev => ({ ...prev, startTime: time }))}
                             onEndTime={(time) => setFormData(prev => ({ ...prev, endTime: time }))}
                             start={formData.startTime}
-                            end={formData.endTime}
+                            subscriptonId={subId}
                           />
                         )}
                         {globalError && (<div>{globalError}</div>)}
