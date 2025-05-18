@@ -1,24 +1,12 @@
-import { useState, useEffect } from 'react';
+
 import { Navigate } from 'react-router-dom';
-import { supabase } from '../utils/helpers/supabase/supabase';
+
 import PropTypes from 'prop-types';
+import useSession from '../hooks/supabaseAPI/useSession';
 
 
 export default function LoginWrapper({ children }) {
-    const [loading, setLoading] = useState(true);
-    const [authentication, setAuthentication] = useState(false);
-
-    useEffect(() => {
-        const getSession = async () => {
-            const {
-                data: {session},
-            } = await supabase.auth.getSession();
-
-            setAuthentication(!!session);
-            setLoading(false);
-        }
-        getSession();
-    },[]);
+    const {authentication, loading} = useSession();
 
     if (loading){
         return (

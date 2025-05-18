@@ -113,9 +113,9 @@ export default function Users({name ='', surname = '', email = '', phone = '', t
 
 
     return (
-        <div >
+        <div className=''>
             <MainHeader />
-            <div className='max-w-2xl mx-auto p-4'>
+            <div className='max-w-2xl mx-auto p-4 h-screen'>
                 <Back />
                 <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-6">
                     

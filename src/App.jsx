@@ -20,6 +20,7 @@ import CreateType from './pages/admin/CreateType';
 import UpdateSubscriptionType from './pages/admin/UpdateSubscriptionType';
 import UserSubscriptions from './pages/admin/ClientsSubscription/UserSubscriptions';
 import AdminStatistic from './pages/admin/Statistic/AdminStatistic';
+import NotFound from './pages/notFound/NotFound';
 
 
 export default function App() {
@@ -43,6 +44,7 @@ export default function App() {
         <Route path='/admin/subscription/create' element={<Wrapper><CreateType /></Wrapper>} />
         <Route path='/admin/clients/userSubscriptions/:id' element={<Wrapper><UserSubscriptions /></Wrapper>} />
         <Route path='/admin/statistic' element={<Wrapper><AdminStatistic/></Wrapper>} />
+        <Route path='*' element={<NotFound />} />
        </Routes>
     </BrowserRouter>
   );
