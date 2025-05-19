@@ -5,13 +5,12 @@ import { supabase } from "../../utils/helpers/supabase/supabase.js";
 import InputComponent from "../customInput/InputComponent.jsx";
 import Back from "../buttons/Back.jsx";
 import validation from '../../utils/helpers/validation/handleInput.js';
+import SimpleTimePicker from "../dateTime/SimpleTimePicker.jsx";
 
 import PropTypes from 'prop-types';
 
-
 export default function Tips({id}){
     const navigate = useNavigate();
-
     const [formData, setFormData] = useState({
         name: '',
         description: '',
@@ -28,23 +27,22 @@ export default function Tips({id}){
 
     const UpdateForm = (data) => {
         setFormData({
-        name: data.name,
-        description: data.description,
-        price: data.price,
-        additionalHourPrice: data.additional_hour_price,
-        durationValue: data.duration_value,
-        durationType: data.duration_type,
-        restrictionStart: data.restriction_start,
-        restrictionEnd: data.restriction_end,
-        isTime: data.is_time,
-        isDate: data.is_date,
+            name: data.name,
+            description: data.description,
+            price: data.price,
+            additionalHourPrice: data.additional_hour_price,
+            durationValue: data.duration_value,
+            durationType: data.duration_type,
+            restrictionStart: data.restriction_start,
+            restrictionEnd: data.restriction_end,
+            isTime: data.is_time,
+            isDate: data.is_date,
         });
     };
 
     useEffect(() => {
         const fetchSubType = async () => {
             if(id){
-               
                 const { data, error } = await supabase
                     .from('subscriptions')
                     .select('*')
@@ -58,13 +56,10 @@ export default function Tips({id}){
                 }
 
                 UpdateForm(data);
-               
-           
-            }else return;
+            }
         };
             
         fetchSubType();
-        
     }, [id, navigate]);
 
     const handleInputChange = (e) => {
@@ -83,7 +78,7 @@ export default function Tips({id}){
     const handleSubmit = async (e) => {
         e.preventDefault();
    
-        if (!formData.name || !formData.description || !formData.price || !formData.durationValue || !formData.durationType) {
+        if (!formData.name || !formData.description || !formData.price || !formData.durationValue) {
             alert('Lūdzu aizpildiet visus obligātos laukus');
             return;
         }
@@ -113,23 +108,19 @@ export default function Tips({id}){
             .single();
         
         if (existingError) {
-            alert("Notika kluda");
             
         }
         if(existing){
-         
             alert("Viss ir ok");
             return;
         }
         
-    
         if (error) {
-           
+            alert("Notika kluda");
             return;
         }
     
         alert("Viss ir atjaunots");
-       
     };
 
     return (
@@ -137,8 +128,6 @@ export default function Tips({id}){
         <AdminHeader />
             <div className='max-w-2xl mx-auto p-4'>
                 <Back />
-
-                
                 <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-6">
                     <InputComponent
                         label="Nosaukums"
@@ -197,36 +186,22 @@ export default function Tips({id}){
                         value={formData.additionalHourPrice}
                         onChange={handleInputChange}
                     />
-                    
                     )}
                     {errors.additionalHourPrice
                     ? <div className='text-red-500 text-sm text-center '>{errors.additionalHourPrice}</div>
                     : null}
-                    <InputComponent
-                    
-                        //type="time"
-                        label="restStart"
-                        id="restrictionStart"
-                        name="restrictionStart"
-                        placeholder="restrictionStart"
-                        value={formData.restrictionStart}
-                        onChange={handleInputChange}
+                    <SimpleTimePicker
+                        startTime={formData.restrictionStart}
+                        endTime={formData.restrictionEnd}
+                        onStartTime={(time) => setFormData(prev => ({
+                            ...prev,
+                            restrictionStart: time
+                        }))}
+                        onEndTime={(time) => setFormData(prev => ({
+                            ...prev,
+                            restrictionEnd: time
+                        }))}
                     />
-                    {errors.restrictionStart
-                    ? <div className='text-red-500 text-sm text-center '>{errors.restrictionStart}</div>
-                    : null}
-                    <InputComponent
-                        //type="time"
-                        label="restEnd"
-                        id="restrictionEnd"
-                        name="restrictionEnd"
-                        placeholder="Kad sakas laika ierobezojums"
-                        value={formData.restrictionEnd}
-                        onChange={handleInputChange}
-                    />
-                    {errors.restrictionEnd
-                    ? <div className='text-red-500 text-sm text-center '>{errors.restrictionEnd}</div>
-                    : null}
                     <p>isTime</p>
                     <input
                         type="checkbox"
@@ -244,17 +219,12 @@ export default function Tips({id}){
                         checked={formData.isDate}
                         onChange={(e) => setFormData({ ...formData, isDate: e.target.checked })}
                     />
-
-                    
-                    
-                    
                     <div className="flex justify-center items-center">
-                            <button type='submit' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3 mb-6'>
-                                {!id ? 'Izveidot' : 'Atjaunot' }
-                            </button>
-                        </div>
+                        <button type='submit' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3 mb-6'>
+                            {!id ? 'Izveidot' : 'Atjaunot' }
+                        </button>
+                    </div>
                 </form>
-
             </div>
         </>
     );

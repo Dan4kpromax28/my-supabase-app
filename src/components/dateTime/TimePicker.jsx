@@ -19,7 +19,7 @@ export default function TimePicker({ date, onStartTime, onEndTime, start, subscr
         return;
       }
       
-      console.log('Полученные данные:', data);
+      
       setTimeValues(data);
     }
 
@@ -28,7 +28,7 @@ export default function TimePicker({ date, onStartTime, onEndTime, start, subscr
     }, [subscriptonId]);
 
     function listWithTimesFrom08To20(start, end) {
-      
+      if (!start || !end) return [];
       
       const actualStart = parseInt(start.slice(0, 2)); 
       const actualEnd = parseInt(end.slice(0, 2));     
