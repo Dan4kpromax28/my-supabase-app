@@ -51,6 +51,7 @@ export default function Subscription() {
 
     const status = [
         'new',
+        'valid',
         'rejected',
         'accepted',
         'invalid'

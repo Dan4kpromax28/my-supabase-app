@@ -187,17 +187,7 @@ export default function Tips({id}){
                     {errors.durationValue 
                     ? <div className='text-red-500 text-sm text-center '>{errors.durationValue}</div>
                     : null}
-                    <InputComponent
-                        label="durationType"
-                        id="durationType"
-                        name="durationType"
-                        placeholder="Tips "
-                        value={formData.durationType}
-                        onChange={handleInputChange}
-                    />
-                    {errors.durationType 
-                    ? <div className='text-red-500 text-sm text-center '>{errors.durationType}</div>
-                    : null}
+                    
                     {formData.isTime && (
                         <InputComponent
                         label="additional hour price"

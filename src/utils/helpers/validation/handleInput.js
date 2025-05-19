@@ -106,12 +106,6 @@ const InputFieldValidationType = (name, value) => {
             }
             break;
         }
-        case 'durationType':
-            if (!value || !['dienas', 'stundas', 'reizes'].includes(value)){
-                message = 'Nekorekts ilguma tips';
-            }
-        
-            break;
         case 'restrictionStart':
         case 'restrictionEnd':{
             const timeRegex = /^([01]?\d|2[0-3]):[0-5]\d:[0-5]\d$/;
