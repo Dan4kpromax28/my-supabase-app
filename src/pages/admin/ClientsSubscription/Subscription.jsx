@@ -112,6 +112,18 @@ export default function Subscription() {
     };
 
 
+    const handleNewCode = async (datas, email) => {
+        const d = String(datas);
+        const e = String(email);
+        console.log(d,e)
+        const { error } = await supabase.functions.invoke('sendMail', {
+            body: { 'subId': d, 'email': e},
+        });
+    
+        if (error) console.error(error);
+    }
+
+
     
 
     const navigate = useNavigate();
@@ -252,6 +264,16 @@ export default function Subscription() {
                         <button type='submit' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3 mb-6' onClick={() => handleUpdate()}>
                             Atjaunot
                         </button>
+                        {invoice?.status === 'valid' && (
+                            <button
+                                onClick={() => handleNewCode(invoice?.user_subscription?.id, invoice?.user_subscription?.client?.email)}
+                                className=" ml-13 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3 mb-6"
+                            >
+                                Nosutit kvadratkodu atkartoti
+                                
+                            </button>
+                            )
+                        }
                     </div>
                 </li>
                 

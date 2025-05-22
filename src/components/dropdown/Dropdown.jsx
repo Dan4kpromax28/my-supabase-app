@@ -21,7 +21,7 @@ export default function Dropdown({options, onSelect, selected}) {
                     <ul className="py-2 text-sm text-gray-700">
                         {options.map((option) => (
                             <li key={option}>
-                                <butoon onClick={() => handleSelect(option)} className="w-full block px-4 py-2 hover:bg-gray-100 cursor-pointer">{option}</butoon>
+                                <button onClick={() => handleSelect(option)} className="w-full block px-4 py-2 hover:bg-gray-100 cursor-pointer">{option}</button>
                             </li>
                         ))} 
                     </ul>

@@ -5,7 +5,7 @@ import useClient from '../../../hooks/supabaseAPI/useClients';
 
 export default function Dashboard(){
     const [search, setSearch] = useState('');
-    const {clients} = useClient(search);
+    const {clients, handleDelete} = useClient(search);
     const navigate = useNavigate();
 
     const handleEdit = (clientId) => {

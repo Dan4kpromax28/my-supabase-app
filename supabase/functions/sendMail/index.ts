@@ -9,6 +9,7 @@ import { qrcode } from "https://deno.land/x/qrcode/mod.ts";
 import "jsr:@supabase/functions-js/edge-runtime.d.ts"
 import { corsHeaders } from "../_shared/cors.ts";
 import { createClient } from 'jsr:@supabase/supabase-js@2'
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
@@ -23,7 +24,7 @@ Deno.serve(async (req) => {
     let random = '';
     const { data: exist, error: errExist } = await supabase
       .from('ticket')
-      .select('user_string, count')
+      .select('user_string')
       .eq('user_subscription_id', subId)
       .maybeSingle();
     if (errExist) {
@@ -34,8 +35,7 @@ Deno.serve(async (req) => {
     }
     if (exist) {
       random = exist.user_string;
-    }
-    else{
+    } else {
       while(!isCreated){
         const charactersForQrCode = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         
@@ -53,6 +53,19 @@ Deno.serve(async (req) => {
             status: 400,
           });
         }
+        const {error: insertError} = await supabase
+          .from('ticket')
+          .insert({ user_string: random, user_subscription_id: subId })
+          .select()
+          .single();
+
+        if (insertError) {
+          return new Response(JSON.stringify({ error: insertError.message }), {
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            status: 400,
+          });
+        }
+
         isCreated = true;
       }
     }

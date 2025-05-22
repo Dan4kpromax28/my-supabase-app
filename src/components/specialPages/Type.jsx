@@ -63,6 +63,7 @@ export default function Tips({id}){
     }, [id, navigate]);
 
     const handleInputChange = (e) => {
+        
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,

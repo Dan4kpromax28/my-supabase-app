@@ -12,11 +12,9 @@ export default function AdminHeader(){
 
     const signOut = async () => {
         const { error } = await supabase.auth.signOut();
-        if (error) console.log("Notika kluda");
+        if (error) console.log(error);
         navigate("/admin/login");
     };
-
-
     
     return (
         <header className='bg-sky-800 text-white'>

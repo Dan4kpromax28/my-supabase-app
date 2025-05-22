@@ -9,41 +9,45 @@ import { supabase } from '../../utils/helpers/supabase/supabase';
 
 
 
-export default function useInvoice(){
+export default function useInvoice(userId = ''){
     const [subscriptions, setSubscriptions] = useState([]);
 
 
     const fetchSubscriptions = async (find) => {
         let query = supabase
-        .from('invoice')
-        .select(`
-            *,
-            user_subscription:user_subscription_id (
+            .from('invoice')
+            .select(`
                 *,
-                subscriptions:subscription_id (
-                    id,
-                    name,
-                    price
-                ),
-                client:client_id(*)
-            )
-        `)
-        .order('created_at', { ascending: false });
+                user_subscription:user_subscription_id (
+                    *,
+                    subscriptions:subscription_id (
+                        id,
+                        name,
+                        price
+                    ),
+                    client:client_id(*)
+                )
+            `)
+            .order('created_at', { ascending: false });
 
-        if (find){
-            query = query.or(
-                `number_id.ilike.%${find}%`
-            );
+        if (find) {
+            query = query.or(`number_id.ilike.%${find}%`);
         }
+
         const { data, error } = await query;
+        
         if (error) {
-            console.error('Notika kluda:', error);
-        } else {
-        
-            setSubscriptions(data);
-        
+            console.error('Notika kluda');
+            return;
         }
-    
+
+        if (userId) {
+            let newData = data.filter(invoice => Number(invoice.user_subscription?.client_id) === Number(userId));
+            setSubscriptions(newData);
+            return;
+        }
+
+        setSubscriptions(data || []);
     };
 
     useEffect(() => {
@@ -106,7 +110,7 @@ export default function useInvoice(){
             alert('Notika kluda');
         }
         console.log('Veiksmigi nodzests' + id);
-        setFiltSubscriptions(prev => prev.filter(sub => sub.user_subscription?.id !== id)); // lai atjaunot
+        await fetchSubscriptions();
     }
 
     const handleInvalid = async (id) => {

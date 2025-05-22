@@ -184,7 +184,6 @@ const getTickets = async () => {
   .from("ticket")
   .select(`
     id,
-    count,
     user_string,
     user_subscription_id,
     user_subscription(

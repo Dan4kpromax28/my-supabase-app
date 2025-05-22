@@ -37,8 +37,8 @@ InputComponent.propTypes = {
     label: PropTypes.string.isRequired,
     type: PropTypes.string,
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    placeholder: PropTypes.string,
-    required: PropTypes.bool,
-    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    placeholder: PropTypes.string.isRequired,
+    required: PropTypes.bool.isRequired,
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     onChange: PropTypes.func.isRequired
 };

@@ -25,7 +25,7 @@ export default function AdminLogin(){
         }));
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmitLogin = async (e) => {
         e.preventDefault();
         const { error } = await supabase.auth.signInWithPassword({
             email: loginData.email,
@@ -48,7 +48,7 @@ export default function AdminLogin(){
             <div className="flex-grow flex items-center justify-center">
                 <div className="max-w-2xl w-full p-4">
                     
-                    <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-6">
+                    <form onSubmit={handleSubmitLogin} className="bg-white rounded-lg shadow-md p-6">
 
                         <InputComponent 
                             label="E-pasts"
