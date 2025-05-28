@@ -33,7 +33,9 @@ BEGIN
 END;
 $$;
 
-CREATE TRIGGER check_day_input
-BEFORE INSERT OR UPDATE ON user_subscriptions
+DROP TRIGGER IF EXISTS "check_subscription_input" ON "public"."subscriptions";
+CREATE TRIGGER "check_subscription_input"
+BEFORE INSERT OR UPDATE
+ON "public"."subscriptions"
 FOR EACH ROW
-EXECUTE FUNCTION validate_subscription_input();
+EXECUTE FUNCTION "public"."validate_subscription_input"();

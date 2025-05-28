@@ -54,3 +54,10 @@ BEGIN
   RETURN NEW;
 END;
 $$;
+
+DROP TRIGGER IF EXISTS "full_price_calculation" ON "public"."invoice";
+CREATE TRIGGER "full_price_calculation"
+BEFORE INSERT
+ON "public"."invoice"
+FOR EACH ROW
+EXECUTE FUNCTION "public"."get_price_before_invoice_insert"();

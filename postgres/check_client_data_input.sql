@@ -24,7 +24,9 @@ AS $$
 	END;
 $$
 
-CREATE TRIGGER check_client_data
-BEFORE INSERT OR UPDATE ON clients
+DROP TRIGGER IF EXISTS "check_client_data" ON "public"."client";
+CREATE TRIGGER "check_client_data"
+BEFORE UPDATE OR INSERT
+ON "public"."client"
 FOR EACH ROW
-EXECUTE FUNCTION check_client_data_input();
+EXECUTE FUNCTION "public"."check_client_data_input"();

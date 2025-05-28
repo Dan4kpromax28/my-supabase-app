@@ -25,3 +25,11 @@ BEGIN
     RETURN NEW;
 END;
 $$;
+
+DROP TRIGGER IF EXISTS "after_user_subscription_insert" ON "public"."user_subscription";
+
+CREATE TRIGGER "after_user_subscription_insert"
+AFTER INSERT
+ON "public"."user_subscription"
+FOR EACH ROW
+EXECUTE FUNCTION "public"."create_invoice_after_subscription"();

@@ -10,3 +10,10 @@ BEGIN
   RETURN NEW;
 END;
 $$;
+
+DROP TRIGGER IF EXISTS "check_invoice_status_input" ON "public"."invoice";
+CREATE TRIGGER "check_invoice_status_input"
+BEFORE INSERT OR UPDATE
+ON "public"."invoice"
+FOR EACH ROW
+EXECUTE FUNCTION "public"."validate_status_input"();

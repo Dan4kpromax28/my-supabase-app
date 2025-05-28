@@ -13,3 +13,10 @@ BEGIN
 RETURN NEW;
 END;
 $$;
+
+DROP TRIGGER IF EXISTS "check_day_input_trigger" ON "public"."user_subscription";
+CREATE TRIGGER "check_day_input_trigger"
+BEFORE UPDATE OR INSERT
+ON "public"."user_subscription"
+FOR EACH ROW
+EXECUTE FUNCTION "public"."check_day_input"();

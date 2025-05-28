@@ -15,7 +15,7 @@ BEGIN
 
     IF NOT time AND date THEN
         IF NEW.start_date IS NULL THEN
-            RAISE EXCEPTION 'Sakuma datums nevar but tukss';
+            RAISE EXCEPTION 'Sākuma datums nevar but tukšs';
         END IF;
         NEW.end_date := NEW.start_date + (duration || ' days')::INTERVAL;
         NEW.start_time := NULL;
@@ -24,3 +24,10 @@ BEGIN
     RETURN NEW;
 END;
 $$;
+
+DROP TRIGGER IF EXISTS "trigger_set_end_date" ON "public"."user_subscription";
+CREATE TRIGGER "trigger_set_end_date"
+BEFORE INSERT
+ON "public"."user_subscription"
+FOR EACH ROW
+EXECUTE FUNCTION "public"."set_subscription_end_date"();
