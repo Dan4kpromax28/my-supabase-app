@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
+
 import { supabase } from '../../utils/helpers/supabase/supabase';
 
 

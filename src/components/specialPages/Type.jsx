@@ -109,6 +109,7 @@ export default function Tips({id}){
             .single();
         
         if (existingError) {
+            console.log('kkas notika');
             
         }
         if(existing){

@@ -40,11 +40,11 @@ export const makeDataForChart = (stamps, startDate, endDate) => {
         for (let i = 0; i <= dayDifference; i++) {
             const date = new Date(start);
             date.setDate(date.getDate() + i);
-            labels.push(date.toDateString());
+            labels.push(date.toISOString().split('T')[0]);
         }
         data = new Array(labels.length).fill(0);
         stamps.forEach(stamp => {
-            const stampDate = new Date(stamp.created_at).toDateString();
+            const stampDate = new Date(stamp.created_at).toISOString().split('T')[0];
             const index = labels.indexOf(stampDate);
             if (index !== -1) {
                 data[index]++;

@@ -44,9 +44,8 @@ export default function SubscriptionPage() {
         }));
     };
     const handleDateChange = (date) => {
-        const isoDate = DateTime.fromJSDate(date, { zone: 'local' }).toISODate();
+        const isoDate = DateTime.fromJSDate(date, { zone: 'Europe/Riga' }).toISODate();
         setFormData(prev => ({ ...prev, date: isoDate }));
-       
     };
     
     const handleSubmit = async (e) => {
@@ -96,7 +95,7 @@ export default function SubscriptionPage() {
         });
     
         if (error) {
-            alert(error.message);
+            alert(error);
             return;
         }
         alert('Pieteikums veiksmīgi nosūtīts!');
@@ -195,7 +194,7 @@ export default function SubscriptionPage() {
                                     
                                     <Calendar
                                         className="mt-2"
-                                        value={formData.date ? DateTime.fromISO(formData.date, { zone: 'local' }).toJSDate() : null}
+                                        value={formData.date ? DateTime.fromISO(formData.date, { zone: 'Europe/Riga' }).toJSDate() : null}
                                         onChange={handleDateChange}
                                         minDate={DateTime.now().plus({ days: 1 }).toJSDate()}
                                     />

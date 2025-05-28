@@ -70,7 +70,7 @@ export default function useInvoice(userId = ''){
                 })
                 .eq('id', id);
             if (second){
-                console.log('Notika kluda');
+                console.log(second);
             }
         }
         await fetchSubscriptions(); 
@@ -107,7 +107,7 @@ export default function useInvoice(userId = ''){
             .delete()
             .eq('id', id);
         if (error){
-            alert('Notika kluda');
+            alert('error');
         }
         console.log('Veiksmigi nodzests' + id);
         await fetchSubscriptions();

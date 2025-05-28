@@ -11,6 +11,7 @@ import useInvoice from "../../hooks/supabaseAPI/useInvoice.jsx";
 
 import filterAllSubscriptions from "../../utils/helpers/filters/SubscriptionsFilters.js";
 import { filterOptions } from "../../utils/helpers/filters/filterOptions.js";
+import PropTypes from "prop-types";
 
 
 
@@ -136,4 +137,7 @@ export default function Subscriptions( {userId=''}){
         );
 
 
+}
+Subscriptions.propTypes = {
+    userId: PropTypes.string.isRequired
 }

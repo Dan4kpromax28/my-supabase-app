@@ -7,19 +7,19 @@ AS $$
 		IF NEW.name IS NULL OR (char_length(NEW.name) < 2 OR char_length(NEW.name) > 30) THEN
 			RAISE EXCEPTION 'Nekorekta vārda ievade';
 		END IF;
-	
+
 		IF NEW.surname IS NULL OR (char_length(NEW.surname) < 2 OR char_length(NEW.surname) > 30) THEN
 			RAISE EXCEPTION 'Nekorekta uzvārda ievade';
 		END IF;
-	
+
 		IF NEW.email IS NULL OR NEW.email !~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$' THEN
 			RAISE EXCEPTION 'Nekorekta e-pasta ievade';
 		END IF;
-	
+
 		IF NEW.phone_number IS NULL OR NEW.phone_number !~* '^\+?[0-9]{8,15}$' THEN
 			RAISE EXCEPTION 'Nekorekta telefona numura ievade';
 		END IF;
-	
+
 		RETURN NEW;
 	END;
 $$

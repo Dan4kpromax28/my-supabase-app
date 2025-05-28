@@ -7,7 +7,7 @@ export default function NotFound(){
 
 
 
-    const {authentication, loading} = useSession();
+    const {authentication} = useSession();
 
 
     if (authentication) {
@@ -16,7 +16,7 @@ export default function NotFound(){
                 <AdminHeader />
                 <div className="flex items-center justify-center h-screen">
                     <div className="w-6/12">
-                        <img src="../../../public/images/Not_found.png" className="w-full"/>
+                        <img src="../../../public/images/Not_found.png" className="w-full" alt="not_found"/>
                     </div>
                 </div>
 
@@ -30,7 +30,7 @@ export default function NotFound(){
                 <MainHeader />
                 <div className="flex items-center justify-center h-screen">
                     <div className="w-6/12">
-                        <img src="../../../public/images/Not_found.png" className="w-full"/>
+                        <img src="../../../public/images/Not_found.png" className="w-full" alt="not_found"/>
                     </div>
     
                 </div>

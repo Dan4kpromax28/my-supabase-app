@@ -5,9 +5,9 @@ import { supabase } from "../../../utils/helpers/supabase/supabase";
 
 export default function EditClient(){
     const navigate = useNavigate();
-    const [client, setClient] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
+    const [client, setClient] = useState();
+    
+    const [setError] = useState('');
     const { id: clientId } = useParams();
 
     useEffect(() => {
@@ -17,8 +17,6 @@ export default function EditClient(){
         }
 
         const fetchClient = async () => {
-           
-            setLoading(true);
             
             const { data, error } = await supabase
                 .from('client')
@@ -27,7 +25,7 @@ export default function EditClient(){
                 .single();
     
             if (error) {
-                throw error;
+                console.log("Notika kluda");
             }
 
             if (!data) {
@@ -36,29 +34,22 @@ export default function EditClient(){
             }
 
             setClient(data);
-            setLoading(false);
         };
   
         fetchClient();
     }, [clientId, navigate]);
 
-    if (loading) {
-        return (
-            <div className="min-h-screen bg-stone-100 flex items-center justify-center">
-                <div className="text-xl animate-bounce"></div>
-            </div>
-        );
-    }
+    
 
     
 
     return (
 
             <Users 
-                name={client.name}
-                surname={client.surname}
-                email={client.email}
-                phone={client.phone_number}
+                name={client?.name}
+                surname={client?.surname}
+                email={client?.email}
+                phone={client?.phone_number}
                 tips="update"
             />
     );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import { supabase } from '../../utils/helpers/supabase/supabase.js';
 import MainHeader from '../pageComponents/headers/MainHeader.jsx'
 import MainFooter from '../pageComponents/footers/MainFooter.jsx';
@@ -20,6 +20,15 @@ export default function Users({name ='', surname = '', email = '', phone = '', t
         email: email,
         phone: phone,
     });
+
+    useEffect(() => {
+        setFormData({
+            name,
+            surname,
+            email,
+            phone
+        });
+    }, [name, surname, email, phone]);
 
 
     const handleInputChange = (e) => {
@@ -53,60 +62,42 @@ export default function Users({name ='', surname = '', email = '', phone = '', t
         return;
         }
    
-    
-        const { data: existing, error: existingError } = await supabase
-            .from('client')
-            .select('id')
-            .eq('email', formData.email)
-            .single();
-
-        const { error } = await supabase
-            .from('client')
-            .upsert({
-                name: formData.name,
-                surname: formData.surname,
-                email: formData.email,
-                phone_number: formData.phone
-            }, { onConflict: 'email' })
-            .single();
-        
-        if (existingError) {
-            setMessage('Notika problemas ar nomainisanu');
-            return;
-        }
-        if(existing){
-            const {data: clientData,error: clientError} = await supabase
+        if (tips === 'update'){
+            const { error } = await supabase
                 .from('client')
-                .select('id')
-                .eq('email', formData.email)
-                .single();
-            if(clientError){
-                console.log('Notika kluda');
+                .update({
+                    name: formData.name,
+                    surname: formData.surname,
+                    email: formData.email,
+                    phone_number: formData.phone
+                }, { onConflict: 'email' })
+                .eq('email', email);
+
+            if (error) {
+                setMessage('Notika kļuda');
                 return;
             }
 
-            const { error: subError} = await supabase
-            .from('user_subscription')
-            .update({'client_id': clientData.id})
-            .eq('client_id', existing.id)
-            setMessage('Tika nomainits');
-            
-            if(subError){
-                console.log('Notika kluda');
+            setMessage("Klinets ir veiksmigi izveidots");
+        }
+        else {
+            const { error } = await supabase
+                .from('client')
+                .insert({
+                    name: formData.name,
+                    surname: formData.surname,
+                    email: formData.email,
+                    phone_number: formData.phone
+                }, { onConflict: 'email' })
+                .single();
+
+            if (error) {
+                setMessage('Notika kļuda');
                 return;
             }
-            setMessage('Klients tika veiksmigi atjaunots');
-            return;
+
+            setMessage("Klinets ir veiksmigi izveidots");
         }
-        
-    
-        if (error) {
-            setMessage('Notika kļuda');
-            return;
-        }
-    
-        
-        setMessage("Klinets ir veiksmigi izveidots");
     };
 
     

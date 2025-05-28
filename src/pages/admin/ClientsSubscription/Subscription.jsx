@@ -7,6 +7,7 @@ import InputComponent from "../../../components/customInput/InputComponent.jsx";
 import { formatDate } from "../../../utils/helpers/date/helpers.js";
 import validation from "../../../utils/helpers/validation/handleInput.js";
 
+
 export default function Subscription() {
 
     const [invoice, setInvoice] = useState();
@@ -59,11 +60,11 @@ export default function Subscription() {
 
 
     const handleUpdate = async () => {
-        if (!invoice) return;
+        
         const newErrors = {};
         let isValid = true;
         Object.keys(formData).forEach(field => {
-            const error =  validation.InputFieldValidation(field, formData[field], invoice.number_id);
+            const error =  validation.InputFieldValidation(field, formData[field], invoice?.number_id);
             if (error) {
                 isValid = false;
                 newErrors[field] = error;
@@ -85,28 +86,12 @@ export default function Subscription() {
                     full_price: formData.price,
                     number_id: formData.invoice_number
                 })
-                .eq("id", invoice.id);
+                .eq("id", invoice?.id);
     
             if (invoiceError) {
-                setMessage("Kļuda atjauninot rēķinu!");
+                setMessage("Notika kluda");
                 return;
             }
-    
-            
-            if (invoice.user_subscription?.id) {
-                const { error: subscriptionError } = await supabase
-                    .from("user_subscription")
-                    .update({
-                        information: formData.additionalInfo
-                    })
-                    .eq("id", invoice.user_subscription.id);
-    
-                if (subscriptionError) {
-                    setMessage("Kļuda atjauninot abonementa informāciju!");
-                    return;
-                }
-            }
-    
             setMessage("Ieraksts veiksmīgi atjaunināts!");
         
     };
@@ -165,13 +150,6 @@ export default function Subscription() {
         fetchInvoice(); 
     }, [inId, navigate]);
 
- 
-
-
-
-
-
-  
 
   return (
     <>
@@ -212,8 +190,8 @@ export default function Subscription() {
                             <textarea
                                 id="additionalInfo"
                                 name="additionalInfo"
-                                value={formData.additionalInfo}
-                                onChange={handleInputChange}
+                                
+                                defaultValue={formData.additionalInfo}
                                 className="w-full border border-gray-300 rounded-md p-2 min-h-[100px]"
                                 placeholder="Ievadiet papildu informaciju"
                             />
@@ -283,3 +261,4 @@ export default function Subscription() {
         </>
     );
 }
+
