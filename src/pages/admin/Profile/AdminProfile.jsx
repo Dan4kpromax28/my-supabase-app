@@ -3,46 +3,15 @@ import { useState } from "react"
 import AdminHeader from '../../../components/pageComponents/headers/AdminHeader'
 import InputComponent from "../../../components/customInput/InputComponent";
 import { supabase } from '../../../utils/helpers/supabase/supabase';
+import validation from "../../../utils/helpers/validation/handleInput.js";
+import useAdminProfile from "../../../hooks/supabaseAPI/useAdminProfile.js";
 
 
 
 
 
 export default function AdminPanel(){
-    
-
-    const [message, setMessage] = useState();
-
-    const [newPassword, setNewPassword] = useState({
-        password: '',
-    });
-
-
-    
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setNewPassword(prev => ({
-            ...prev,
-            [name]: value
-        }));
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        
-        const {  error } = await supabase.auth.updateUser(
-            { password: newPassword.password }
-        )
-
-        if (error) {
-            setMessage("Notika kluda");
-        } else {    
-            setMessage("Parole vieksmigi izmainita")
-        }
-        setNewPassword({password: ''});
-           
-    };
+    const {error, handleInputChange, handleSubmit, message} = useAdminProfil();
 
     return(
         <div className="min-h-screen bg-stone-100 flex flex-col">
@@ -51,7 +20,7 @@ export default function AdminPanel(){
                 <div className="max-w-2xl w-full p-4">
                     
                     <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-6">
-
+                        {error && (<p className="text-red-500 text-center">{error.password}</p>)}
                         <InputComponent 
                             label="Jauna parole"
                             type="password"

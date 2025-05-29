@@ -37,7 +37,8 @@ export default function useInvoice(userId = ''){
         const { data, error } = await query;
         
         if (error) {
-            console.error('Notika kluda');
+            console.error('Notika klūda!');
+            setSubscriptions([]);
             return;
         }
 
@@ -47,7 +48,7 @@ export default function useInvoice(userId = ''){
             return;
         }
 
-        setSubscriptions(data || []);
+        setSubscriptions(data);
     };
 
     useEffect(() => {
@@ -70,7 +71,7 @@ export default function useInvoice(userId = ''){
                 })
                 .eq('id', id);
             if (second){
-                console.log(second);
+                console.log('Notika kļūda ar statusa izmaiņu!');
             }
         }
         await fetchSubscriptions(); 
@@ -93,10 +94,10 @@ export default function useInvoice(userId = ''){
             .eq('id', id);
         
         if (error){
-            alert('Notika kluda');
+            alert('Notika kluda!');
         }
         
-      await fetchSubscriptions(); // lai atjaunot
+      await fetchSubscriptions(); 
     }
 
     const handleDelete = async (id) => {
@@ -107,7 +108,8 @@ export default function useInvoice(userId = ''){
             .delete()
             .eq('id', id);
         if (error){
-            alert('error');
+            alert('Notika kļūda!');
+            return;
         }
         console.log('Veiksmigi nodzests' + id);
         await fetchSubscriptions();
@@ -119,9 +121,10 @@ export default function useInvoice(userId = ''){
             .update({ status: 'invalid'})
             .eq('id', id);
         if (error){
-            console.log('Nitika kluda ar statusa izmainu');
+            console.log('Notika kluda ar statusa izmaiņu!');
+            return;
         }
-        await fetchSubscriptions(); // lai atjaunot
+        await fetchSubscriptions(); 
     }
 
     const handleAccept = async (id, email) => {
@@ -130,16 +133,18 @@ export default function useInvoice(userId = ''){
             .update({ status: 'accepted'})
             .eq('id', id);
         if (error){
-            console.log('Notika kluda ar statusa izmainu accept');
-            
+            console.log('Notika kluda ar statusa izmaiņu!');
+            return;
         }
         const {  error: accept } = await supabase.functions.invoke('sendMailWithCredentials', {
             body: { 'id': id, 'email': email},
         });
-        if (accept) 
-            alert('Notika kluda');
+        if (accept) {
+            alert('Notika kluda!');
+            return;
+        }
         
-        await fetchSubscriptions(); // lai atjaunot
+        await fetchSubscriptions(); 
     }
 
 

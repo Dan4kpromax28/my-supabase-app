@@ -26,7 +26,8 @@ export default function useClient(search){
         const { data, error } = await query;
                     
         if (error) {
-            console.error('Kļūda:', error);
+            console.error('Notika kļūda');
+            setClients([]);
             return;
         }
 
@@ -44,10 +45,10 @@ export default function useClient(search){
     }, [search]);
 
     const handleDelete = async (clientId) => {
-        if (window.confirm('Vai jus gribat nodzest clientu')) {
+        if (window.confirm('Vai jūs gribat nodzēst klientu?')) {
             const { error } = await supabase.from('client').delete().eq('id', clientId);
             if (error) {
-                console.error(error);
+                alert('Notika kļūda!');
                 return;
             }
             fetchClients();

@@ -1,5 +1,5 @@
 import { useNavigate} from "react-router-dom";
-import AdminHeader from "../../components/pageComponents/headers/AdminHeader.jsx";
+import AdminHeader from "../pageComponents/headers/AdminHeader.jsx";
 import { useEffect, useState } from "react";
 import { supabase } from "../../utils/helpers/supabase/supabase.js";
 import InputComponent from "../customInput/InputComponent.jsx";

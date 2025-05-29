@@ -24,7 +24,8 @@ export default function useOneSubscription(subId){
                 .single(); 
     
             if (error) {
-                console.error('Notika kluda:', error);
+                console.error('Notika kļūda!');
+                setSubscription(null);
                 navigate('/');
             } else {
                 setSubscription(data);

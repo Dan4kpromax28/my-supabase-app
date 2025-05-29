@@ -1,54 +1,24 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { supabase } from "../../../utils/helpers/supabase/supabase.js";
+
 import AdminHeader from "../../../components/pageComponents/headers/AdminHeader.jsx";
 import Back from "../../../components/buttons/Back.jsx";
 import InputComponent from "../../../components/customInput/InputComponent.jsx";
-import { formatDate } from "../../../utils/helpers/date/helpers.js";
-import validation from "../../../utils/helpers/validation/handleInput.js";
+
+import { useSubscriptionData } from "../../../hooks/supabaseAPI/useSubscriptionData";
 
 
 export default function Subscription() {
 
-    const [invoice, setInvoice] = useState();
-    const [chooseOption, setChooseOption] = useState();
-    const [message, setMessage] = useState('');
-    const [formData, setFormData] = useState({
-        invoice_number: "",
-        price: "",
-        additionalInfo: "",
-        myStatus: ""
-    });
-    const [errors, setErrors] = useState({});
-
-    useEffect(() => {
-        if (invoice) {
-            setFormData({
-                invoice_number: invoice.number_id || "",
-                price: invoice.full_price || "",
-                additionalInfo: invoice.user_subscription?.information || "",
-                myStatus: chooseOption
-            });
-        }
-    }, [invoice]);
-
-    
-
-    const handleInputChange = async (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-          ...prev,
-          [name]: value
-        }));
-        
-        const errorMessage = await validation.InputFieldValidationInvoice(name, value, invoice?.number_id);
-        setErrors(prev => ({
-        ...prev,
-        [name]: errorMessage
-        }));
-        
-        setMessage('');
-      };
+    const {
+        invoice,
+        formData,
+        errors,
+        setFormData,
+        message,
+        handleInputChange,
+        handleUpdate,
+        handleNewCode,
+        formatDate
+    } = useSubscriptionData();
 
     const status = [
         'new',
@@ -58,100 +28,8 @@ export default function Subscription() {
         'invalid'
     ];
 
-
-    const handleUpdate = async () => {
-        
-        const newErrors = {};
-        let isValid = true;
-        Object.keys(formData).forEach(field => {
-            const error =  validation.InputFieldValidation(field, formData[field], invoice?.number_id);
-            if (error) {
-                isValid = false;
-                newErrors[field] = error;
-            }
-        }
-        );
-        setErrors(newErrors);
-        if (!isValid) {
-            setMessage('Lūdzu aizpildiet visus laukus pareizi');
-            return;
-        }
-    
-        
-            
-            const { error: invoiceError } = await supabase
-                .from("invoice")
-                .update({
-                    status: formData.myStatus,
-                    full_price: formData.price,
-                    number_id: formData.invoice_number
-                })
-                .eq("id", invoice?.id);
-    
-            if (invoiceError) {
-                setMessage("Notika kluda");
-                return;
-            }
-            setMessage("Ieraksts veiksmīgi atjaunināts!");
-        
-    };
-
-
-    const handleNewCode = async (datas, email) => {
-        const d = String(datas);
-        const e = String(email);
-        console.log(d,e)
-        const { error } = await supabase.functions.invoke('sendMail', {
-            body: { 'subId': d, 'email': e},
-        });
-    
-        if (error) console.error(error);
-    }
-
-
-    
-
-    const navigate = useNavigate();
-    const { id: inId } = useParams();
-
-    useEffect(() => {
-        
-        const fetchInvoice = async () => {
-        
-            const { data, error } = await supabase
-                .from('invoice')
-                .select(`
-                    *,
-                    user_subscription:user_subscription_id (
-                        *,
-                        subscriptions:subscription_id (
-                            id,
-                            name,
-                            price,
-                            is_time,
-                            is_date
-                        ),
-                        client:client_id(*)
-                    )
-                `)
-                .eq('id', inId)
-                .single();
-
-            if (error) {
-                console.error('Notika kluda:', error);
-            } else {
-                setInvoice(data);
-                setChooseOption(data.status);
-            }
-        
-        };
-
-
-        fetchInvoice(); 
-    }, [inId, navigate]);
-
-
-  return (
+   
+    return (
     <>
         <AdminHeader />
         <div className="max-w-3xl mx-auto p-4">

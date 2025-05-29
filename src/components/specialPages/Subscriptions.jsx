@@ -7,7 +7,7 @@ import Back from "../buttons/Back";
 import { useState } from "react";
 import AdminHeader from "../pageComponents/headers/AdminHeader.jsx";
 import Dropdown from "../dropdown/Dropdown.jsx";
-import useInvoice from "../../hooks/supabaseAPI/useInvoice.jsx";
+import useInvoice from "../../hooks/supabaseAPI/useInvoice";
 
 import filterAllSubscriptions from "../../utils/helpers/filters/SubscriptionsFilters.js";
 import { filterOptions } from "../../utils/helpers/filters/filterOptions.js";

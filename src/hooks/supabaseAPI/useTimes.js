@@ -10,7 +10,6 @@ export default function useTimes(date, subscriptionId) {
     const [times, setTimes] = useState([]);
 
     const fetchTimes = async () => {
-        if (date === null || date === undefined) return;
         
         const { data, error } = await supabase
             .from('user_subscription')
@@ -20,7 +19,8 @@ export default function useTimes(date, subscriptionId) {
             .not('start_time', 'is', null);
 
         if (error) {
-            console.error('Notika kluda:', error.message);
+            console.error('Notika klūda!');
+            setTimes([]);
             return;
         }
 

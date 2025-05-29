@@ -1,4 +1,4 @@
-import useTimes from "../../hooks/supabaseAPI/useTimes";
+import useTimes from "../../hooks/supabaseAPI/useTimes.js";
 import PropTypes from 'prop-types';
 import { supabase } from "../../utils/helpers/supabase/supabase";
 import { useEffect, useState } from "react";

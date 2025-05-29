@@ -1,5 +1,5 @@
 
-import Subscriptions from "../../../components/specialPages/Subscriptions.jsx";
+import Subscriptions from "../../../components/specialPages/Subscriptions";
 
 
 export default function AllSubscriptions(){

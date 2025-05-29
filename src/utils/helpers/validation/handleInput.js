@@ -127,6 +127,17 @@ const InputFieldValidationType = (name, value) => {
     return message;
 };
 
-export default {InputFieldValidation, InputFieldValidationInvoice, InputFieldValidationType};
+const PasswordValidation = (name, value) => {
+    let message = '';
+    if(name){
+        const passwordRegex = /^(?=.*[A-Z].*)(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{10}$/; //https://stackoverflow.com/questions/5142103/regex-to-validate-password-strength
+        if(!passwordRegex.test(value)){
+            message = 'Parolei jābūt vismaz 10 simbolu garai, satur vismaz 2 lielos burtus, 2 ciparus, 2 speciālus simbolus un 3 mazos burtus';
+        }
+        return message;
+    }
+};
+
+export default {InputFieldValidation, InputFieldValidationInvoice, InputFieldValidationType, PasswordValidation};
 
 

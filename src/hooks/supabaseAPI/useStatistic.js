@@ -26,7 +26,8 @@ export default function useStatistic() {
             .order('name', {ascending: false});
 
         if (error) {
-            console.log('Notika kluda');
+            console.log('Notika kļūda!');
+            setClients([]);
         }
         else {
             const clientsForSelector = data.map(client => ({
@@ -45,16 +46,16 @@ export default function useStatistic() {
         };
 
         if (new Date(value) > new Date()) {
-            setDateError('Nevar izvēlēties nākotnes datumu');
+            setDateError('Nevar izvēlēties nākotnes datumu!');
             return;
         }
 
         if (name === 'startDate' && new Date(value) > new Date(newDate.endDate)) {
-            setDateError('Sākuma datums nevar būt vēlāks par beigu datumu');
+            setDateError('Sākuma datums nevar būt vēlāks par beigu datumu!');
             return;
         }
         if (name === 'endDate' && new Date(value) < new Date(newDate.startDate)) {
-            setDateError('Beigu datums nevar būt agrāks par sākuma datumu');
+            setDateError('Beigu datums nevar būt agrāks par sākuma datumu!');
             return;
         }
 
@@ -86,7 +87,7 @@ export default function useStatistic() {
                 .order('created_at', { ascending: false });
 
             if (error) {
-                console.log('Notika kluda:', error);
+                console.log('Notika klūda!');
             } else {
                 setPage(1);
                 if (data.length === 0) {

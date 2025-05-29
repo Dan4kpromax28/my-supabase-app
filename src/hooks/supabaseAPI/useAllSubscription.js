@@ -15,7 +15,8 @@ export default function useAllSubscription(){
             .select('*'); 
 
         if (error) {
-            console.error('Notika kluda:', error);
+            console.error('Notika kļūda');
+            setSubscriptions([]);
         } else {
             setSubscriptions(data);
         }
@@ -27,7 +28,7 @@ export default function useAllSubscription(){
 
 
     const handleDelete = async (id, name) => {
-        const confirm = window.confirm('Vai velies nodzes ierastu '+name);
+        const confirm = window.confirm('Vai vēlies nodzēst ierakstu '+name + '?');
 
         if (!confirm) return;
 
@@ -38,10 +39,11 @@ export default function useAllSubscription(){
             .eq('id', id);
 
         if (error) {
-            alert('Notika kluda');
+            alert('Notika kļūda ar dzēšanu!');
+            return;
         }
-        alert('Veiksmigi nodzests');
-        fetchSubscriptions(); // lai atjaunot
+        alert('Veiksmīgi nodzēsts!');
+        fetchSubscriptions(); 
        
     };
 
