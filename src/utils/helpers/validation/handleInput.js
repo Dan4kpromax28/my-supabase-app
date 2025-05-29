@@ -130,9 +130,9 @@ const InputFieldValidationType = (name, value) => {
 const PasswordValidation = (name, value) => {
     let message = '';
     if(name){
-        const passwordRegex = /^(?=.*[A-Z].*)(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{10}$/; //https://stackoverflow.com/questions/5142103/regex-to-validate-password-strength
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{10,}$/; 
         if(!passwordRegex.test(value)){
-            message = 'Parolei jābūt vismaz 10 simbolu garai, satur vismaz 2 lielos burtus, 2 ciparus, 2 speciālus simbolus un 3 mazos burtus';
+            message = 'Parolei jābūt vismaz 10 simbolu garai, satur vismaz 1 lielos burtus, 1 ciparu, 1 speciālu simbolu un 1 mazu burtu';
         }
         return message;
     }

@@ -1,9 +1,8 @@
 
-import { useState } from "react"
+
 import AdminHeader from '../../../components/pageComponents/headers/AdminHeader'
 import InputComponent from "../../../components/customInput/InputComponent";
-import { supabase } from '../../../utils/helpers/supabase/supabase';
-import validation from "../../../utils/helpers/validation/handleInput.js";
+
 import useAdminProfile from "../../../hooks/supabaseAPI/useAdminProfile.js";
 
 
@@ -11,7 +10,7 @@ import useAdminProfile from "../../../hooks/supabaseAPI/useAdminProfile.js";
 
 
 export default function AdminPanel(){
-    const {error, handleInputChange, handleSubmit, message} = useAdminProfil();
+    const {error, handleInputChange, handleSubmit, message, newPassword} = useAdminProfile();
 
     return(
         <div className="min-h-screen bg-stone-100 flex flex-col">

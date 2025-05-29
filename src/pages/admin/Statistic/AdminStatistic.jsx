@@ -50,7 +50,7 @@ export default function AdminStatistic() {
     });
 
     return (
-            <div className="min-h-screen bg-stone-100 flex flex-col">
+            <div className="min-h-screen flex flex-col">
                 <AdminHeader />
                 <div className="flex-grow flex justify-center">
                     <div className="max-w-4xl w-full p-4">

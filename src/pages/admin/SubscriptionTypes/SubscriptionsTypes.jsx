@@ -24,7 +24,7 @@ export default function SubscriptionTypes(){
     return(
         <>
          <AdminHeader />
-         <div className="max-w-3xl mx-auto p-4">
+         <div className="max-w-3xl mx-auto p-4 ">
          <div className='bg-sky-50 shadow-md rounded-lg p-4 mb-4 flex items-center hover:bg-sky-100'>
                 <button className='cursor-pointer' onClick={() => handleCreateSubscription()}>
                     <h2 className='font-bold text-center'>Izveidot jaunu piedavajumu</h2>

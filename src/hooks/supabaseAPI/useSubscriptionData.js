@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {  useParams } from "react-router-dom";
 import { supabase } from "../../utils/helpers/supabase/supabase.js";
 import { formatDate } from "../../utils/helpers/date/helpers.js";
 import validation from "../../utils/helpers/validation/handleInput.js";
 
 export function useSubscriptionData() {
-    //const navigate = useNavigate();
+    
     const { id: inId } = useParams();
 
     const [invoice, setInvoice] = useState();

@@ -1,5 +1,5 @@
 
-import AdminHeader from "../../../components/pageComponents/headers/AdminHeader.jsx";
+import AdminHeader from "../../../components/pageComponents/headers/AdminHeader";
 import Back from "../../../components/buttons/Back.jsx";
 import InputComponent from "../../../components/customInput/InputComponent.jsx";
 

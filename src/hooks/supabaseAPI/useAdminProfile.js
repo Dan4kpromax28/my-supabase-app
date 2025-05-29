@@ -51,5 +51,5 @@ export default function useAdminProfile(){
         setNewPassword({password: ''});
            
     };
-    return{handleSubmit, handleInputChange, message, error}
+    return{handleSubmit, handleInputChange, message, error, newPassword}
 }
