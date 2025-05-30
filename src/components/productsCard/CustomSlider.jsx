@@ -34,7 +34,7 @@ export default function CustomSlider({subscriptions}){
             }
         ]
     };
-    //https://www.npmjs.com/package/react-slick no sejenes bija panemti iestatijumi
+    //https://www.npmjs.com/package/react-slick no sejenes bija panemta dokumentacija iestarijumiem 
 
     return (
         <div className="max-w-8xl mx-auto px-4 pr-10 pl-10 md:pr-15 md:pl-15 sm:pr-8 sm:pl-8 xl:pr-30 xl:pl-30">
