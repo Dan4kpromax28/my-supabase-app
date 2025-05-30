@@ -16,7 +16,6 @@ export default function useAllSubscription(){
 
         if (error) {
             console.error('Notika kļūda');
-            setSubscriptions([]);
         } else {
             setSubscriptions(data);
         }
