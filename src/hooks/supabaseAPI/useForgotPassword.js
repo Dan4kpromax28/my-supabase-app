@@ -15,12 +15,12 @@ export default function useForgotPassword(){
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const { data, error } = await supabase.auth.resetPasswordForEmail(email, {redirectTo: "http://localhost:5173/admin/profils",} );
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {redirectTo: "http://localhost:5173/admin/profils",} );
         if (error) {
             setError("Notika kluda");
-            console.log(error);
+            return;
         }
-        console.log(data);
+        setError(null);
     };
 
     return {handleInputChange,email, error, handleSubmit };

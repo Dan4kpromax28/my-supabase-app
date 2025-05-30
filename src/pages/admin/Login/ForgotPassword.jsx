@@ -31,7 +31,7 @@ export default function ForgotPassword(){
                         value={email}
                         onChange={handleInputChange}
                     />
-                    {error && (<p>{error}</p>)}
+                    {error && (<p className="text-red-800 text-center">{error}</p>)}
                     
 
                     <div className="flex justify-center items-center">

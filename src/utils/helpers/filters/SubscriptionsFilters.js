@@ -7,11 +7,11 @@ const filterAllSubscriptions =
     "Ar informāciju" : (subscriptions) => subscriptions.filter(sub => sub.user_subscription?.information && sub.user_subscription.information.trim() !== ""),
     "Bez informācijas" : (subscriptions) => subscriptions.filter(sub => !sub.user_subscription?.information || sub.user_subscription.information.trim() === ""),
     "Jaunie" : (subscriptions) => subscriptions.filter(sub => sub.status === "new"),
-    "Rejected" : (subscriptions) => subscriptions.filter(sub => sub.status === "rejected"),
-    "Accepted" : (subscriptions) => subscriptions.filter(sub => sub.status === "accepted"),
-    "Valid" : (subscriptions) => subscriptions.filter(sub => sub.status === "valid"),
+    "Noraidīts" : (subscriptions) => subscriptions.filter(sub => sub.status === "rejected"),
+    "Pieņemts" : (subscriptions) => subscriptions.filter(sub => sub.status === "accepted"),
+    "Derīgs" : (subscriptions) => subscriptions.filter(sub => sub.status === "valid"),
     "Invalid" : (subscriptions) => subscriptions.filter(sub => sub.status === "invalid"),
-    "Visi abonimenti" : (subscriptions) => subscriptions
+    "Nederīgs" : (subscriptions) => subscriptions
 };
 
 export default filterAllSubscriptions;

@@ -36,7 +36,7 @@ export default function Tips({id}){
                             value={formData.description}
                             onChange={handleInputChange}
                             className="w-full border border-gray-300 rounded-md p-2 min-h-[100px] "
-                            placeholder="Ievadiet papildu informaciju"
+                            placeholder="Ievadiet papildu informāciju"
                         />
                     </div>
                     {errors.description
@@ -70,7 +70,7 @@ export default function Tips({id}){
                         label="additional hour price"
                         id="additionalHourPrice"
                         name="additionalHourPrice"
-                        placeholder="Cena par nakamo stundu"
+                        placeholder="Cena par nākamo stundu"
                         value={formData.additionalHourPrice}
                         onChange={handleInputChange}
                     />

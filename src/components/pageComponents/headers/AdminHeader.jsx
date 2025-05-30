@@ -26,16 +26,16 @@ export default function AdminHeader(){
                     </Link>
                     <nav className='hidden md:flex space-x-4 ml-10'>
                         <Link to="/admin/dashboard" className='hover:bg-sky-700 px-3 py-2 rounded-md text-sm font-medium'>
-                            Lietotaji
+                            Lietotāji
                         </Link>
                         <Link to="/admin/all_subscriptions" className='hover:bg-sky-700 px-3 py-2 rounded-md text-sm font-medium'>
-                            Pasutijumi
+                        Pasūtījumi
                         </Link>
                         <Link to="/admin/statistic" className='hover:bg-sky-700 px-3 py-2 rounded-md text-sm font-medium'>
                             Statistika
                         </Link>
                         <Link to="/admin/subscriptions" className='hover:bg-sky-700 px-3 py-2 rounded-md text-sm font-medium'>
-                            Piedavajums
+                        Piedāvājums
                         </Link>
                     </nav>
                 </div>
@@ -58,17 +58,17 @@ export default function AdminHeader(){
                     <div className='absolute top-0 right-0 h-screen w-full bg-white border transition-all duration-300 z-50'>
                         <div className='text-black flex flex-col'>
                         <button onClick={() => setOpenMenu(!openMenu)} className='text-center py-3 w-full bg-sky-700 hover:bg-sky-900 text-white'>Atpakal</button>
-                        <Link to="/admin/dashboard" className=' text-center py-3 w-full hover:bg-sky-100' onClick={() => setOpenMenu(!openMenu)}>Lietotaji</Link>
-                        <Link to="/admin/all_subscriptions" className='text-center py-3 w-full hover:bg-sky-100' onClick={() => setOpenMenu(!openMenu)}>Pasutijumi</Link>
+                        <Link to="/admin/dashboard" className=' text-center py-3 w-full hover:bg-sky-100' onClick={() => setOpenMenu(!openMenu)}>Lietotāji</Link>
+                        <Link to="/admin/all_subscriptions" className='text-center py-3 w-full hover:bg-sky-100' onClick={() => setOpenMenu(!openMenu)}>Pasūtījumi</Link>
                         <Link to="/admin/statistic" className='text-center py-3 w-full hover:bg-sky-100' onClick={() => setOpenMenu(!openMenu)}>Statistika</Link>
-                        <Link to="/admin/subscriptions" className='text-center py-3 w-full hover:bg-sky-100' onClick={() => setOpenMenu(!openMenu)}>Piedavajums</Link>
+                        <Link to="/admin/subscriptions" className='text-center py-3 w-full hover:bg-sky-100' onClick={() => setOpenMenu(!openMenu)}>Piedāvājums</Link>
                         <Link to="/admin/profils" className='text-center py-3 w-full hover:bg-sky-700 hover:text-white' onClick={() => setOpenMenu(!openMenu)}>Profils</Link>
                         <div className='flex justify-center'>
                             <button onClick={signOut} className='py-3 bg-red-600 hover:bg-red-900 text-white rounded text-center w-full'>
                                 Iziet
                             </button>
                         </div>
-                        {/* https://www.youtube.com/watch?feature=shared&v=y-TM-gH6I1k — dropdown no sejenes */}
+                        {/* https://www.youtube.com/watch?feature=shared&v=y-TM-gH6I1k — dropdown tika adaptets no sejenes */}
 
                         
 

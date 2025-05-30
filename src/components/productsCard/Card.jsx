@@ -35,14 +35,14 @@ export default function Card({ id, name, description, price, additional_price}) 
             )}
             {additional_price && (
                 <p className="pb-3 font-normal text-gray-700 text-center">
-                    Par katru nakamo stundu: {additional_price} eiro.
+                    Par katru nākamo stundu: {additional_price} eiro.
                 </p>
             )}
             <div className="flex justify-center items-center">
                 <button
                     onClick={handleClick}
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3 mb-6">
-                        Izveleties
+                        Izvēlēties
                 </button>
             </div>
         </div>

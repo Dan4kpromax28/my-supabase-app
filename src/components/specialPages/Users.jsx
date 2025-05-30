@@ -24,7 +24,7 @@ export default function Users({name ='', surname = '', email = '', phone = '', t
                     <InputComponent 
                         label="Klienta vards"
                         id="name"
-                        placeholder="Ievadiet klienta vardu"
+                        placeholder="Ievadiet klienta vārdu"
                         value={formData.name}
                         onChange={handleInputChange}
                     />
@@ -35,7 +35,7 @@ export default function Users({name ='', surname = '', email = '', phone = '', t
                     <InputComponent 
                         label="Klienta uzvards"
                         id="surname"
-                        placeholder="Ievadiet klienta uzvardu"
+                        placeholder="Ievadiet klienta uzvārdu"
                         value={formData.surname}
                         onChange={handleInputChange}
                     />
@@ -66,7 +66,7 @@ export default function Users({name ='', surname = '', email = '', phone = '', t
                     {formData.phone && errors.phone 
                     ? <div className='text-red-500 text-sm text-center '>{errors.phone}</div>
                     : null}
-                    {message && (<h3 className='text-center text-sm text-zinc-400'>{message}</h3>)}
+                    {message && (<h3 className='text-center text-sm text-red'>{message}</h3>)}
 
                     
                     <div className="flex justify-center items-center">

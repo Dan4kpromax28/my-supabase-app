@@ -82,7 +82,7 @@ Deno.serve(async (req) => {
           password: Deno.env.get('MY_EMAIL_PASSWORD'),
         },
       },
-    });
+    });   // dokumentacija ir apskatama seit: https://deno.land/x/denomailer@1.6.0
 
     const attachment = {
       filename: "qrcode.png",

@@ -16,6 +16,7 @@ export default function TimePicker({ date, onStartTime, onEndTime, start, subscr
       
       if (error) {
         console.log('Notika kluda');
+        setTimeValues([]);
         return;
       }
       

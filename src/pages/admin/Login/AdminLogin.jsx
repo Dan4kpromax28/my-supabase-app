@@ -37,7 +37,7 @@ export default function AdminLogin(){
                             value={loginData.password}
                             onChange={handleInputChange}
                         />
-                        {error && (<p>{error}</p>)}
+                        {error && (<p className='text-red-800 text-center'>{error}</p>)}
                     
                         <div className="flex flex-col justify-center items-center">
                             

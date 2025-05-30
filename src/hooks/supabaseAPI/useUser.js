@@ -4,6 +4,7 @@ import { supabase } from '../../utils/helpers/supabase/supabase.js';
 import validation from '../../utils/helpers/validation/handleInput.js';
 
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -11,6 +12,8 @@ import PropTypes from 'prop-types';
 export default function useUser({name ='', surname = '', email = '', phone = '', tips=''}){
     const [message, setMessage] = useState('');
     const [errors, setErrors] = useState({});
+
+    const navigate = useNavigate();
 
 
     const [formData, setFormData] = useState({
@@ -73,11 +76,12 @@ export default function useUser({name ='', surname = '', email = '', phone = '',
                 .eq('email', email);
 
             if (error) {
-                setMessage('Notika kļuda');
+                setMessage('Notika kļūda!');
                 return;
             }
 
-            setMessage("Klinets ir veiksmigi izveidots");
+            alert("Klinets ir veiksmigi atjaunots!");
+            navigate(-1);
         }
         else {
             const { error } = await supabase
@@ -91,11 +95,12 @@ export default function useUser({name ='', surname = '', email = '', phone = '',
                 .single();
 
             if (error) {
-                setMessage('Notika kļuda');
+                setMessage('Notika kļūda!');
                 return;
             }
 
-            setMessage("Klinets ir veiksmigi izveidots");
+            alert("Klinets ir veiksmigi izveidots!");
+            navigate(-1);
         }
     };
     return {message, errors, handleInputChange, handleSubmit, formData}

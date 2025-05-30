@@ -5,8 +5,8 @@ export const filterOptions = [
     "Ar informāciju",
     "Bez informācijas",
     "Jaunie",
-    "Rejected",
-    "Accepted",
-    "Valid",
-    "Invalid"
+    "Noraidīts",
+    "Pieņemts",
+    "Derīgs",
+    "Nederīgs"
 ]

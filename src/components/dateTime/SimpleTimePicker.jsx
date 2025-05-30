@@ -37,7 +37,7 @@ export default function SimpleTimePicker({ startTime, endTime, onStartTime, onEn
             ))}
           </select>
           
-          <label className="block text-gray-700 mb-1" htmlFor="endTime">Izvēlieties beigu laiku:</label>
+          <label className="block text-gray-700 mb-1" htmlFor="endTime">Izvēlieties beiga laiku:</label>
           <select
             id="endTime"
             className="cursor-pointer mr-2 mb-2 border-2 border-blue-300 rounded-md p-2"

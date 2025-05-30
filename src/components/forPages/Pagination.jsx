@@ -35,7 +35,7 @@ export default function Pagination({ objects, page, setPage, itemsInPage }) {
                             : 'bg-white text-gray-700 hover:bg-gray-100'
                     }`}
                 >
-                    Pirma lapa {1}
+                    Pirmā lapa {1}
                 </button>
                 <button
                     onClick={setPreviousPage} disabled={page === 1} className={`px-3 py-1 rounded-md ${
@@ -69,7 +69,7 @@ export default function Pagination({ objects, page, setPage, itemsInPage }) {
                             : 'bg-white text-gray-700 hover:bg-gray-100'
                     }`}
                 >
-                    Pedeja lapa {allPages === 0 ?  1 : allPages}
+                    Pēdējā lapa  {allPages === 0 ?  1 : allPages}
                 </button>
             </div>
             

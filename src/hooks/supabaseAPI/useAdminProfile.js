@@ -44,7 +44,7 @@ export default function useAdminProfile(){
         )
 
         if (error) {
-            setMessage("Notika kluda");
+            setMessage("Notika klūda");
         } else {    
             setMessage("Parole vieksmigi izmainita")
         }
